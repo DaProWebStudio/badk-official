@@ -11,8 +11,10 @@ db.sqlite3
 dump.rdb
 
 venv
-celerybeat-schedule
 .env
+
+celerybeat-schedule
+
 prod_settings.py
 local_settings.py
 */cache_file/*
@@ -37,16 +39,11 @@ media/*
 
 **/cmaps/**
 
-build
-doc
-home.rst
-make.bat
 Makefile
 
-doc-dev
-
-**/Logging/
-**/dev_templates/
+config/logging/**
+!config/logging
+!config/logging/.gitkeep
 
 static/admin
 static/ckeditor
