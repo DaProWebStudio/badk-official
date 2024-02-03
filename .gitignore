@@ -45,10 +45,4 @@ config/logging/**
 !config/logging
 !config/logging/.gitkeep
 
-static/admin
-static/ckeditor
-static/debug_toolbar
-static/fontawesomefree
-static/rest_framework
-static/mptt
 

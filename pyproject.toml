@@ -1,10 +1,9 @@
 [tool.poetry]
-name = "badk-server"
+name = "badk-official"
 version = "0.1.0"
 description = ""
 authors = ["DaProWebStudio"]
 license = "MIT"
-readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -31,6 +30,7 @@ python-json-logger = "^2.0.7"
 coverage = "^7.3.2"
 djangorestframework-simplejwt = "^5.3.1"
 django-cors-headers = "^4.3.1"
+setuptools = "^69.0.3"
 
 
 [build-system]
