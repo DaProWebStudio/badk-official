@@ -1,0 +1,8 @@
+/dist
+/node_modules
+/admin
+/ckeditor
+/mttp
+/rest_framework
+/debug_toolbar
+/fontawesomefree
