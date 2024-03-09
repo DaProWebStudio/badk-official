@@ -2094,21 +2094,21 @@
 
 
 .flipbook-menuBottom {
-    color: #1976D2;
+    color: #c9880b;
 }
 
 .flipbook-btn-active {
-    background-color: #1976D2;
+    background-color: #c9880b;
     color: #fff;
 }
 
 .fa-angle-left, .fa-angle-right, .iScrollIndicator {
-    background-color: #1976D2 !important;
+    background-color: #c9880b !important;
 }
 
 .flipbook-side-menu {
     background-color: #fff !important;
-    color: #1976D2 !important;
+    color: #c9880b !important;
 }
 
 .flipbook-main-wrapper {
