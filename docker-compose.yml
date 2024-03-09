@@ -1,0 +1,29 @@
+version: "3.5"
+services:
+  badk_official:
+    build:
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/var/www/project
+    ports:
+      - "8000:8000"
+    command: sh -c "poetry run python manage.py runserver 0.0.0.0:8000"
+    restart: always
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:14.6-alpine
+    restart: always
+    container_name: badk-db
+    hostname: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - ../badk-db-data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env
+    environment:
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${DATABASE_NAME}

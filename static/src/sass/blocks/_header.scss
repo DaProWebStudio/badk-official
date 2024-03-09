@@ -1,10 +1,10 @@
 .header {
   background-image: url("../images/bg/pattern.png");
-  background-color: $--bs-blue;
+  background-color: $--bs-official;
   margin-top: 0 !important;
   &__title {
     & h2 {
-      font-size: 50px;
+      font-size: 40px;
       font-weight: bold;
       color: $--bs-white;
     }
@@ -13,7 +13,7 @@
     }
     & .btn {
       background-color: $--bs-white;
-      color: $--bs-blue;
+      color: $--bs-official;
       &:hover {
         color: $--bs-white;
       }

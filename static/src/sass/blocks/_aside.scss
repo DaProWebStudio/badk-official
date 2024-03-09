@@ -1,7 +1,7 @@
 .widget {
   width: 100%;
   &-title {
-    background-color: $--bs-blue;
+    background-color: $--bs-official;
     color: $--bs-white;
     padding: 15px 10px;
     margin-bottom: 20px;
@@ -29,14 +29,14 @@
       width: 100px;
       height: 100%;
       z-index: 1;
-      background-color: $--bs-blue;
+      background-color: $--bs-official;
       font-size: 17px;
       color: #fff;
       border: none;
       border-radius: 0 $--bs-radius-small $--bs-radius-small 0;
       transition: all .3s ease-out;
       &:hover {
-        background-color: $--bs-dark-blue;
+        background-color: $--bs-dark-official;
       }
     }
   }

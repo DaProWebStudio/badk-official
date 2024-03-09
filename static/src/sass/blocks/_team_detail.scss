@@ -6,7 +6,7 @@
   padding: 10px;
   .resume_left {
     width: 25%;
-    background-color: $--bs-blue;
+    background-color: $--bs-official;
     overflow: hidden;
     border-radius: $--bs-radius-medium;
     .resume_image {
@@ -39,7 +39,7 @@
           border-radius: $--bs-radius-small;
           text-decoration: none;
           &:hover {
-            background-color: $--bs-dark-blue;
+            background-color: $--bs-dark-official;
             color: $--bs-white;
           }
         }

@@ -18,22 +18,22 @@
     font-size: 18px;
     line-height: 25px;
     font-weight: bold;
-    color: $--bs-blue;
+    color: $--bs-official;
     text-decoration: none;
     &:hover {
       color: $--bs-text;
     }
   }
   &__phone {
-    background-color: $--bs-blue;
+    background-color: $--bs-official;
     color: $--bs-white;
     padding: 3px;
-    border: 2px solid $--bs-blue;
+    border: 2px solid $--bs-official;
     transition: all .3s linear;
     text-decoration: none;
     &:hover {
       background: transparent;
-      color: $--bs-blue;
+      color: $--bs-official;
     }
   }
   &__list {
@@ -53,7 +53,7 @@
     top: 50px;
     h4 {
       padding: 16px 20px;
-      background: $--bs-blue;
+      background: $--bs-official;
       color: $--bs-white;
       margin-bottom: 0;
       font-weight: 700;

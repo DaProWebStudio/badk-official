@@ -23,22 +23,36 @@ SITE_URL = 1
 
 CURRENT_SITE_URL = os.environ.get('CURRENT_SITE_URL')
 
+CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS').split(' ')
 
 # Application definition
 INSTALLED_APPS = [
+    'modeltranslation',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'django.contrib.sitemaps',
     'django_cleanup',
+    'ckeditor',
+    'ckeditor_uploader',
     'imagekit',
     'mptt',
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'drf_yasg',
+
+    # my apps
+    'apps.core.apps.CoreConfig',
+    'apps.news.apps.NewsConfig',
+    'apps.specialty.apps.SpecialtyConfig',
+    'apps.employee.apps.EmployeeConfig',
+    'apps.feedback.apps.FeedbackConfig',
+    'apps.student.apps.StudentConfig',
 ]
 
 MIDDLEWARE = [
@@ -56,7 +70,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -64,6 +78,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'common.context_processors.getting_info'
             ],
         },
     },
@@ -79,7 +94,7 @@ DATABASES = {
         "NAME": os.environ.get("DATABASE_NAME", os.path.join(BASE_DIR / 'db.sqlite3')),
         "USER": os.environ.get("DATABASE_USER", "user"),
         "PASSWORD": os.environ.get("DATABASE_PASSWORD", "password"),
-        "HOST": os.environ.get("DATABASE_HOST", "localhost"),
+        "HOST": os.environ.get("DATABASE_HOST", "postgres"),
         "PORT": os.environ.get("DATABASE_PORT", "5432"),
     }
 }
@@ -118,6 +133,17 @@ USE_I18N = True
 
 USE_TZ = True
 
+gettext = lambda s: s
+LANGUAGES = (
+    ('ru', gettext('Russia')),
+    ('en', gettext('English')),
+    ('ky', gettext('Kyrgyz')),
+)
+
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale'),
+)
+
 if DEBUG:
     INSTALLED_APPS.append('debug_toolbar')
     MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
@@ -134,6 +160,10 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_DIR = MEDIA_ROOT
 MEDIA_DIRS = [MEDIA_DIR]
+
+# for version static files
+STYLE_CORE_VERSION = os.environ.get("STYLE_CORE_VERSION", "v1.0")
+STYLE_RESPONSIVE_VERSION = os.environ.get("STYLE_RESPONSIVE_VERSION", "v1.0")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -263,11 +293,12 @@ CACHES = {
     },
 }
 
+CKEDITOR_UPLOAD_PATH = "uploads/"
 
 CKEDITOR_CONFIGS = {
     'default': {
         'skin': 'moono',
-        # 'skin': 'moono-lisa',
+        # 'skin': 'office2013',
         'toolbar_Basic': [
             ['Source', '-', 'Bold', 'Italic']
         ],
@@ -298,7 +329,7 @@ CKEDITOR_CONFIGS = {
                 # put the name of your editor.ui.addButton here
                 'Preview',
                 'Maximize',
-
+                'Youtube'
             ]},
         ],
         'toolbar': 'YourCustomToolbarConfig',  # put selected toolbar config here
@@ -311,7 +342,7 @@ CKEDITOR_CONFIGS = {
         # 'mathJaxLib': '//cdn.mathjax.org/mathjax/2.2-latest/MathJax.js?config=TeX-AMS_HTML',
         'tabSpaces': 4,
         'extraPlugins': ','.join([
-            'uploadimage', # the upload image feature
+            'uploadimage',  # the upload image feature
             # your extra plugins here
             'div',
             'autolink',
@@ -324,7 +355,8 @@ CKEDITOR_CONFIGS = {
             'clipboard',
             'dialog',
             'dialogui',
-            'elementspath'
+            'elementspath',
+            'youtube'
         ]),
     }
 }

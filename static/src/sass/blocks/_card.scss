@@ -54,13 +54,13 @@
     background-color: $--bs-white;
     &_btn_left {
       background: $--bs-blue-transparent;
-      border: 1px solid $--bs-blue;
+      border: 1px solid $--bs-official;
       border-radius: $--bs-radius-small;
-      color: $--bs-blue;
+      color: $--bs-official;
       padding: 3px 10px;
     }
     &_btn_right {
-      background: $--bs-blue;
+      background: $--bs-official;
       border-radius: $--bs-radius-small;
       color: $--bs-white;
       padding: 3px 10px;
