@@ -71,7 +71,7 @@
           height: 10%;
           width: 100%;
           transition: all 0.3s ease 0s;
-          background-color: $--bs-blue;
+          background-color: $--bs-official;
         }
         &::before, &::after {content: ''}
         &::before {top: 0}
@@ -113,7 +113,7 @@
           top: 0;
           left: 0;
           height: 70px;
-          background-color: $--bs-blue;
+          background-color: $--bs-official;
           z-index: 2;
         }
       }
@@ -137,7 +137,7 @@
         font-size: 15px;
         padding: 15px;
         &:hover {
-          background-color: $--bs-blue;
+          background-color: $--bs-official;
           color: $--bs-white;
           & .nav__menu-arrow {
             border-top-color: $--bs-white;
