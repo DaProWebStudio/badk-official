@@ -3,11 +3,6 @@
   background-color: $--bs-official;
   margin-top: 0 !important;
   &__title {
-    & h2 {
-      font-size: 40px;
-      font-weight: bold;
-      color: $--bs-white;
-    }
     & .desc-body {
       color: $--bs-white;
     }
