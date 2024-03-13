@@ -1,10 +1,12 @@
 import os
+import re
 from datetime import timedelta
 
 import environs
 
 from pathlib import Path
 
+from common.utils import format_phone_number, get_generate_link_whatsapp
 from config.loginng_formatters import CustomJsonFormatter
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -19,7 +21,7 @@ DEBUG = eval(os.environ.get('DEBUG'))
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(' ')
 
-SITE_URL = 1
+SITE_ID = 1
 
 CURRENT_SITE_URL = os.environ.get('CURRENT_SITE_URL')
 
@@ -99,7 +101,6 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -165,6 +166,33 @@ MEDIA_DIRS = [MEDIA_DIR]
 STYLE_CORE_VERSION = os.environ.get("STYLE_CORE_VERSION", "v1.0")
 STYLE_RESPONSIVE_VERSION = os.environ.get("STYLE_RESPONSIVE_VERSION", "v1.0")
 
+
+CONTACTS = {
+    "phone": {
+        "link": os.environ.get("CONTACTS_PHONE", "+996000000000"),
+        "value": format_phone_number(os.environ.get("CONTACTS_PHONE", "+996000000000"))
+    },
+    "whatsapp": {
+        "link": get_generate_link_whatsapp(
+            os.environ.get("CONTACTS_WHATSAPP", "+996000000000"),
+            os.environ.get(
+                "CONTACTS_WHATSAPP_TEXT",
+                f"Здравствуйте!\n\nПишу из вашего сайта www.{os.environ.get("CONTACTS_SITE_OFFICIAL", "badk.kg")}\n")
+        ),
+        "value": format_phone_number(os.environ.get("CONTACTS_WHATSAPP", "+996000000000"))
+    },
+    "email": os.environ.get("CONTACTS_EMAIL", "info@badk.kg"),
+    "sites": {
+        "official": os.environ.get("CONTACTS_SITE_OFFICIAL", "badk.kg"),
+        "edu_gov": os.environ.get("CONTACTS_SITE_EDU_GOV", "2020.edu.gov.kg"),
+    },
+    "socials": {
+        "instagram": os.environ.get("CONTACTS_SOCIAL_INSTAGRAM", "https://www.instagram.com/"),
+        "facebook": os.environ.get("CONTACTS_SOCIAL_FACEBOOK", "https://www.facebook.com/"),
+        "youtube": os.environ.get("CONTACTS_SOCIAL_YOUTUBE", "https://www.youtube.com/"),
+    }
+}
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -196,7 +224,7 @@ CELERY_TIMEZONE = TIME_ZONE
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = (
-       'http://localhost:3000',
+    'http://localhost:3000',
 )
 
 # rest framework

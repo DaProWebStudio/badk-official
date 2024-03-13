@@ -13,7 +13,6 @@ urlpatterns = [
     path('internationals/', views.InternationalCooperationListView.as_view(), name='internationals'),
     path('internationals/<slug:slug>/', views.InternationalCooperationDetailView.as_view(), name='international_detail'),
     # More
-    path('welcoming-remarks/', views.WelcomingRemarksView.as_view(), name='welcoming_remarks'),
     path('reception-applicants/', views.ReceptionApplicantsView.as_view(), name='reception'),
     # Education Process
     path('education-processes/<int:pk>/', views.EduProcessDetailView.as_view(), name='edu_process_detail'),
