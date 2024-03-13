@@ -19,7 +19,7 @@ DEBUG = eval(os.environ.get('DEBUG'))
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(' ')
 
-SITE_URL = 1
+SITE_ID = 1
 
 CURRENT_SITE_URL = os.environ.get('CURRENT_SITE_URL')
 
