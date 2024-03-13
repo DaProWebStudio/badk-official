@@ -72,10 +72,6 @@ class InternationalCooperationDetailView(DetailView):
     template_name = 'collaborations/international-detail.html'
 
 
-class WelcomingRemarksView(TemplateView):
-    template_name = 'welcoming-remarks.html'
-
-
 class ReceptionApplicantsView(ListView):
     model = Specialty
     queryset = model.active.all()
