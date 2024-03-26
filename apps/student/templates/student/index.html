@@ -1,0 +1,39 @@
+{% extends 'base/base.html' %}
+{% load static i18n %}
+
+{% block title %}{% trans 'Студентский совет' %}{% endblock %}
+
+{% block content %}
+<section class="section team">
+    <div class="container">
+        <div class="title animate__animated animate__fadeInUp">
+            <span>{% trans 'Студентам' %}</span>
+            <h3>{% trans 'Студенческий совет' %}</h3>
+        </div>
+        <div class="history-text animate__animated animate__fadeInUp">
+        </div>
+        <div class="list_students animate__animated animate__fadeInUp">
+            {% for student in students %}
+                <a href="{{ student.get_absolute_url }}" class="card">
+                    <div class="image-content">
+                        <span class="overlay"></span>
+                        <div class="card-image">
+                            {% if student.image %}
+                                <img src="{{ student.image.url }}" class="card-img" alt="{{ student.get_full_name }}">
+                            {% elif student.gender == 'men' %}
+                                <img src="{% static 'images/more/avatar_men.webp' %}" class="card-img-top" alt="Avatar men">
+                            {% else %}
+                                <img src="{% static 'images/more/avatar_women.webp' %}" class="card-img-top" alt="Avatar women">
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h2 class="name">{{ student.get_full_name }}</h2>
+                        <p class="description">{{ student.position }}</p>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

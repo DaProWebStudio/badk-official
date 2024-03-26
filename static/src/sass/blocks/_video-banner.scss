@@ -21,8 +21,8 @@
     left: 2rem;
     width: 23%;
     height: 30%;
-    border-bottom: 3px solid $--bs-blue;
-    border-left: 3px solid $--bs-blue;
+    border-bottom: 3px solid $--bs-official;
+    border-left: 3px solid $--bs-official;
     border-bottom-left-radius: 20px;
     z-index: 2;
   }
@@ -36,12 +36,12 @@
     transform: translate(-50%, -50%);
     font-size: 40px;
     padding: 15px 40px;
-    background-color: $--bs-blue;
+    background-color: $--bs-official;
     color: $--bs-white;
     border-radius: 20px;
     transition: .3s linear;
     &:hover {
-      background-color: $--bs-dark-blue;
+      background-color: $--bs-dark-official;
       color: $--bs-white;
     }
   }

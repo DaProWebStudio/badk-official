@@ -12,9 +12,6 @@
 body {
   width: 100%;
   height: 100%;
-  background-image: url(../images/parrentBody.svg) !important;
-  background-repeat: repeat;
-  background-size: 75px 75px;
 }
 
 html {
@@ -22,7 +19,7 @@ html {
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 4px;
 }
 
 ::-webkit-scrollbar-track {
@@ -30,20 +27,15 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  background-color: $--bs-blue;
+  border-radius: 5px;
+  background-color: $--bs-official;
 }
 
 .main-wrapper {
-  max-width: 1370px !important;
   margin: auto !important;
-  background-color: $--bs-white !important;
-  box-shadow: 0 0 35px -15px $--bs-blue;
-  overflow: hidden;
-}
-
-.container {
-  max-width: 1320px !important;
+  max-width: 1400px !important;
+  background-color: $--bs-white;
+  padding: 0 20px;
 }
 
 .desc-body {
@@ -57,7 +49,7 @@ html {
   width: 45px;
   height: 45px;
   border: none;
-  background: $--bs-blue;
+  background: $--bs-official;
   display: flex;
   justify-content: center;
   align-items: center;

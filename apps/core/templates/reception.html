@@ -1,0 +1,92 @@
+{% extends 'base/base.html' %}
+{% load static i18n %}
+
+{% block title %}
+    {% trans 'Абитуриентам' %}
+{% endblock %}
+
+{% block content %}
+    <section class="section reception">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-lg-8 col-md-8">
+                    <div class="title">
+                        <span>{% trans 'Абитуриентам' %}</span>
+                        <h3>{% trans 'Уважаемые абитуриенты!' %}</h3>
+                    </div>
+                    <div class="my-3">
+                        <h5 class="reception__title">{% trans 'В настоящее время колледж ведет подготовку по специальностям:' %}</h5>
+                        <ul class="ml-4 mb-3 pl-0 mb-0">
+                            {% for specialty in specialties %}
+                                <li class="mt-2">
+                                    <a class="reception__link" href="#"><span
+                                            class="forloop">{{ forloop.counter }}.</span> {{ specialty.title }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="title">
+                        <br>
+                        <span>{% trans 'Абитуриентам' %}</span>
+                        <h3>{% trans 'Как поступить в наш колледж' %}</h3>
+                    </div>
+                    <div class="my-3">
+                        <h5 class="reception__title">{% trans 'Условия приема' %}</h5>
+                    </div>
+                    <div class="my-3">
+                        <h5 class="reception__title">{% trans 'Основной список документов для поступающих в колледж:' %}</h5>
+                        <ul class="reception__list">
+                            <li class="my-3">- {% trans 'Оригинал Аттестата и Оригинал Свидетельство об образовании;' %}</li>
+                            <li class="my-3">- {% trans 'Медицинская справка №086-У;' %}</li>
+                            <li class="my-3">- {% trans 'Свидетельства о рождении или паспорт (копия);' %}</li>
+                            <li class="my-3">- {% trans 'Фотографии 3х4 (6 штук);' %}</li>
+                            <li>- {% trans 'Скоросшиватель и конверт' %}</li>
+                        </ul>
+                    </div>
+                    <div class="my-3">
+                    </div>
+                    <div class="my-3">
+                        <h5 class="my-4 reception__title">{% trans 'Как считается средний балл аттестата' %}</h5>
+                        <p class="mt-2 reception__description">
+                            {% blocktrans %}Вам нужно подсчитать общее количество оценок, сложить все оценки вместе (найти сумму всех оценок) и разделить эту сумму на общее количество оценок. Полученное число и будет средним баллом Вашего аттестата. Средний балл ведется с точностью до сотых долей.{% endblocktrans %}
+                        </p>
+                        <p class="p-3 reception__description" style="border: 2px dotted red; text-indent: 0">
+                            <b>{% trans 'Например:' %}</b>
+                            {% blocktrans %}В Вашем аттестате стоят оценки по 12 предметам. Из них 5 пятерок, 3 четверки и 4 тройки. Найдем сумму всех оценок : 5*5 + 4*3 + 3*4 = 25 + 12 + 12= 49. Разделим сумму всех оценок на количество предметов: 49 : 12 = 4.08. Средний балл рассчитывается с точностью до сотых долей. Таким образом, средний балл Вашего аттестата – 4.08{% endblocktrans %}
+                        </p>
+                    </div>
+                </div>
+                <aside class="col-12 col-lg-4 col-md-4">
+                    <div class="reception__carousel">
+                        <div class="mt-4">
+                            <h4 class="reception__border">{% trans 'Срок обучение' %}</h4>
+                            <ul class="p-4 mb-0 reception__info">
+                                <li><span>{% trans 'На базе 9 класса' %}:</span> {% trans '2 года 10 месяцев' %}</li>
+                                <li><span>{% trans 'На базе 11 класса' %}:</span> {% trans '1 год 10 месяцев' %}</li>
+                            </ul>
+                        </div>
+                        <div class="mt-2">
+                            <h4 class="reception__border">{% trans 'Контакты' %}</h4>
+                            <ul class="p-4 mb-0 reception__info">
+                                <li><span>{% trans 'Телефон' %}:</span> <a href="tel:{{ CONTACTS.phone.link }}" target="_blank">{{ CONTACTS.phone.value }}</a></li>
+                                <li>
+                                    <span>WhatsApp:</span>
+                                    <a href="{{ CONTACTS.whatsapp.link }}" target="_blank">{{ CONTACTS.whatsapp.value }}</a>
+                                </li>
+                                <li><span>{% trans 'Сайт' %}:</span> <a
+                                        href="{{ CONTACTS.sites.edu_gov }}" target="_blank">{{ CONTACTS.sites.edu_gov }}</a>
+                                </li>
+                                <li>
+                                    <span>Email:</span>
+                                    <a href="mailto:{{ CONTACTS.email }}" target="_blank">
+                                        {{ CONTACTS.email }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </section>
+{% endblock %}

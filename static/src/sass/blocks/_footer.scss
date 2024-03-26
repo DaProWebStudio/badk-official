@@ -26,11 +26,11 @@
       height: 60px;
       font-size: 30px;
       text-decoration: none;
-      background-color: $--bs-blue;
+      background-color: $--bs-official;
       color: $--bs-white;
       border-radius: .5rem;
       &:hover {
-        background-color: $--bs-dark-blue;
+        background-color: $--bs-dark-official;
         color: $--bs-white;
       }
     }
@@ -44,7 +44,7 @@
       text-decoration: none;
       color: $--bs-text;
       &:hover {
-        color: $--bs-blue;
+        color: $--bs-official;
       }
     }
     &::marker {
