@@ -27,3 +27,9 @@ services:
       - POSTGRES_USER=${DATABASE_USER}
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
       - POSTGRES_DB=${DATABASE_NAME}
+
+  redis:
+    image: redis:7.0-alpine
+    container_name: badk-redis
+    restart: always
+    hostname: redis
