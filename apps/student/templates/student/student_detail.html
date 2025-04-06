@@ -23,14 +23,14 @@
                         <div class="role">{{ student.position }}</div>
                     </div>
                     <div class="resume_item resume_profile">
-                        <div class="resume_title">О себе</div>
+                        <div class="resume_title">{% trans 'О себе' %}</div>
                         <div class="resume_info" style='color: #fff !important'>
-                            <p class="about_p"><b>День рождения:</b> {{ student.date_of_birth }} </p>
+                            <p class="about_p"><b>{% trans 'День рождения:' %}</b> {{ student.date_of_birth }} </p>
                         </div>
                     </div>
                     {% if student.email or student.instagram or student.facebook %}
                         <div class="resume_item resume_contact">
-                            <div class="resume_title">Контакты</div>
+                            <div class="resume_title">{% trans "Контакты" %}</div>
                             <div class="resume_info">
                                 {% if student.email %}
                                     <div class="resume_subtitle">Email:</div>

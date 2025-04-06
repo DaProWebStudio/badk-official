@@ -23,14 +23,14 @@
                         <div class="role">{{ employee.position }}</div>
                     </div>
                     <div class="resume_item resume_profile">
-                        <div class="resume_title">О себе</div>
+                        <div class="resume_title">{% trans "О себе" %}</div>
                         <div class="resume_info" style='color: #fff !important'>
-                            <p class="about_p"><b>День рождения:</b> {{ employee.date_of_birth }} </p>
+                            <p class="about_p"><b>{% trans "День рождения:" %}</b> {{ employee.date_of_birth }} </p>
                         </div>
                     </div>
                     {% if employee.email or employee.instagram or employee.facebook %}
                         <div class="resume_item resume_contact">
-                            <div class="resume_title">Контакты</div>
+                            <div class="resume_title">{% trans "Контакты" %}</div>
                             <div class="resume_info">
                                 {% if employee.email %}
                                     <div class="resume_subtitle">Email:</div>
@@ -64,7 +64,7 @@
                     </div>
                 </div>
                 <div class="resume_item resume_skills">
-                    <div class="resume_title">Навыки</div>
+                    <div class="resume_title">{% trans "Навыки" %}</div>
                     <div class="resume_info">
                         {% autoescape off %}{{ employee.work_skills }}{% endautoescape %}
                     </div>
