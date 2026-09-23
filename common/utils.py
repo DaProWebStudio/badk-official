@@ -1,10 +1,9 @@
 import re
-from random import randint
+from random import choice
 from urllib.parse import quote
 
 import transliterate
 
-from django.db.models import Max
 from django.utils.text import slugify
 
 
@@ -19,13 +18,15 @@ def get_english_translit(text: str, slug: bool = True):
     return slugify(translit) if slug else translit
 
 
-def get_random_model(model):
-    max_id = model.objects.all().aggregate(max_id=Max("id"))['max_id']
-    while True:
-        pk = randint(1, max_id)
-        item = model.objects.filter(pk=pk).first()
-        if item:
-            return item
+def get_random_model(model, exclude_pk=None):
+    """Случайная запись модели или None, если записей нет."""
+    pks = list(model.objects.exclude(pk=exclude_pk).values_list('pk', flat=True))
+    if not pks:
+        # Единственная запись — лучше показать её повторно, чем остаться без капчи
+        pks = list(model.objects.values_list('pk', flat=True))
+    if not pks:
+        return None
+    return model.objects.get(pk=choice(pks))
 
 
 def format_phone_number(phone_number):

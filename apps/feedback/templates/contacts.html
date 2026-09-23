@@ -49,6 +49,13 @@
             <p class="eyebrow">{% trans 'Система Обратной Связи' %}</p>
             <h2 class="section-title">{% trans 'Есть идея' %}</h2>
 
+            {% for message in messages %}
+                <div class="mt-6 flex items-center gap-3 rounded-2xl bg-white p-4 text-[15px] font-semibold text-navy shadow-float" role="status">
+                    <span class="grid size-9 shrink-0 place-items-center rounded-full bg-gold text-white">{% icon 'check' 'size-4' %}</span>
+                    {{ message }}
+                </div>
+            {% endfor %}
+
             <form action="{% url 'contacts' %}#feedback" method="post" class="mt-8 grid gap-5 sm:grid-cols-2" novalidate>
                 {% csrf_token %}
                 {% with lbl='mb-2 block text-sm font-bold text-navy' err='mt-2 text-sm font-semibold text-red-600' %}
@@ -71,6 +78,7 @@
                     {% for error in form.message.errors %}<p class="{{ err }}">{{ error }}</p>{% endfor %}
                 </div>
 
+                {% if form.user_answer %}
                 <div class="sm:col-span-2">
                     <span class="{{ lbl }}">{% trans 'Напишите ответ' %}</span>
                     <div class="grid items-start gap-3 sm:grid-cols-[350px_minmax(0,1fr)]">
@@ -84,6 +92,7 @@
                         </div>
                     </div>
                 </div>
+                {% endif %}
 
                 <label for="agree" class="flex cursor-pointer items-start gap-3 text-sm text-muted sm:col-span-2">
                     <input id="agree" required type="checkbox" class="mt-0.5 size-5 shrink-0 cursor-pointer rounded accent-gold">

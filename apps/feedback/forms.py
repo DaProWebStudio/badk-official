@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.forms import ModelForm, Textarea, TextInput, EmailInput, IntegerField, NumberInput
 from django.utils.translation import gettext_lazy as _
 
@@ -13,12 +14,22 @@ TEXTAREA_CLASS = INPUT_CLASS.replace('h-12', 'min-h-40 py-3 leading-relaxed')
 
 
 class CreateFeedBackForm(ModelForm):
-    def __init__(self, *args, **kwargs):
+    user_answer = IntegerField(widget=NumberInput(attrs={'class': INPUT_CLASS, 'placeholder': _('Напишите ответ')}))
+
+    def __init__(self, *args, captcha=None, captcha_required=True, **kwargs):
+        self.captcha = captcha
         super().__init__(*args, **kwargs)
+        if not captcha_required:
+            del self.fields['user_answer']
         for visible in self.visible_fields():
             visible.field.widget.attrs['required'] = 'required'
 
-    user_answer = IntegerField(widget=NumberInput(attrs={'class': INPUT_CLASS, 'placeholder': _('Напишите ответ')}))
+    def clean_user_answer(self):
+        answer = self.cleaned_data['user_answer']
+        # Нет капчи в сессии — сессия истекла или форму отправили не со страницы
+        if self.captcha is None or answer != self.captcha.answer:
+            raise ValidationError(_('Не правильный ответ'))
+        return answer
 
     class Meta:
         model = FeedBack
