@@ -1,43 +1,14 @@
 {% load static i18n icons %}
 {% get_current_language as LANGUAGE_CODE %}
 
-
-<div class="flex h-10 items-center justify-between gap-6 px-1 text-[13px] text-muted sm:h-11 sm:px-2">
-    <div class="flex min-w-0 items-center gap-6">
-        <a href="tel:{{ CONTACTS.phone.link }}" class="inline-flex items-center gap-2 py-2 transition-colors hover:text-navy">
-            {% icon 'phone' 'size-3.5 text-gold' %}{{ CONTACTS.phone.value }}
-        </a>
-        <a href="mailto:{{ CONTACTS.email }}" class="hidden items-center gap-2 transition-colors hover:text-navy sm:inline-flex">
-            {% icon 'mail' 'size-3.5 text-gold' %}{{ CONTACTS.email }}
-        </a>
-        <a href="https://go.2gis.com/6t1t2" target="_blank" rel="noopener" class="hidden min-w-0 items-center gap-2 transition-colors hover:text-navy xl:inline-flex">
-            {% icon 'map-pin' 'size-3.5 shrink-0 text-gold' %}<span class="truncate">{% trans 'г. Бишкек, проспект Чынгыза Айтматова 52' %}</span>
-        </a>
-    </div>
-    <div class="flex items-center gap-6">
-        <a href="https://avn.badk.kg/" target="_blank" rel="noopener" class="hidden items-center gap-2 font-bold text-navy sm:inline-flex">
-            {% icon 'laptop' 'size-3.5 text-gold' %}AVN
-        </a>
-        <form action="{% url 'set_language' %}" method="post" class="flex gap-0.5 rounded-full bg-tint p-[3px]">{% csrf_token %}
-            <input name="next" type="hidden" value="{{ request.get_full_path }}">
-            {% get_available_languages as LANGUAGES %}
-            {% for code, name in LANGUAGES %}
-                <button type="submit" name="language" value="{{ code }}" title="{{ name }}"
-                        class="h-8 min-w-10 cursor-pointer rounded-full px-2.5 sm:h-[26px] sm:min-w-9 text-xs font-bold tracking-wide transition-colors {% if code == LANGUAGE_CODE %}bg-white text-navy shadow-[0_1px_3px_rgb(15_29_58/.12)]{% else %}text-muted hover:text-navy{% endif %}"
-                        {% if code == LANGUAGE_CODE %}aria-current="true"{% endif %}>{{ code|upper }}</button>
-            {% endfor %}
-        </form>
-    </div>
-</div>
-
 <header id="site-header"
-        class="group/header sticky top-2 z-50 flex h-16 items-center gap-3 rounded-2xl border border-line bg-white px-2.5 transition-[box-shadow,border-color] duration-300 sm:h-[68px] xl:top-2.5 xl:h-[76px] xl:gap-6 xl:rounded-[20px] xl:bg-white/90 xl:pr-5 xl:pl-3.5 xl:backdrop-blur-md xl:backdrop-saturate-150 [&.is-scrolled]:border-transparent [&.is-scrolled]:shadow-float before:pointer-events-none before:absolute before:inset-x-0 before:-top-3 before:-z-10 before:h-3 before:bg-white">
+        class="group/header sticky top-2 z-50 mt-2 flex h-16 items-center gap-3 rounded-2xl border border-line bg-white px-2.5 transition-[box-shadow,border-color] duration-300 sm:h-[68px] xl:top-2.5 xl:h-[76px] xl:gap-6 xl:rounded-[20px] xl:bg-white/90 xl:pr-5 xl:pl-3.5 xl:backdrop-blur-md xl:backdrop-saturate-150 [&.is-scrolled]:border-transparent [&.is-scrolled]:shadow-float">
 
     <a href="{% url 'index' %}" class="flex shrink-0 items-center gap-3" aria-label="{% trans 'Главная' %}">
         <img src="{% static 'images/logo/logo-official-badk.webp' %}" alt="" width="52" height="52" class="size-11 object-contain xl:size-[52px]">
         <span class="flex flex-col leading-[1.15]">
             <strong class="text-xl font-extrabold tracking-wide text-navy">{% trans 'БАДК' %}</strong>
-            <small class="mt-0.5 hidden max-w-[170px] text-xs font-medium text-muted sm:block">{% trans 'Автомобильно-дорожный колледж' %}</small>
+            <small class="mt-0.5 hidden text-xs font-medium whitespace-nowrap text-muted sm:block">{% trans 'Автомобильно-дорожный колледж' %}</small>
         </span>
     </a>
 
@@ -101,10 +72,39 @@
         <div class="flex flex-col gap-4 xl:hidden">
             <a href="{% url 'reception' %}" class="btn btn-dark h-14 text-base">{% trans 'Поступить' %}{% icon 'arrow-right' 'arrow text-gold-2' %}</a>
             <a href="tel:{{ CONTACTS.phone.link }}" class="inline-flex items-center justify-center gap-2.5 font-bold text-navy">{% icon 'phone' 'size-4 text-gold' %}{{ CONTACTS.phone.value }}</a>
+            {% get_available_languages as LANGUAGES %}
+            <form action="{% url 'set_language' %}" method="post" class="grid grid-cols-3 gap-1 rounded-2xl bg-tint p-1">{% csrf_token %}
+                <input name="next" type="hidden" value="{{ request.get_full_path }}">
+                {% for code, name in LANGUAGES %}
+                    <button type="submit" name="language" value="{{ code }}"
+                            class="h-11 cursor-pointer rounded-xl text-sm font-bold transition-colors {% if code == LANGUAGE_CODE %}bg-white text-navy shadow-[0_1px_3px_rgb(15_29_58/.12)]{% else %}text-muted{% endif %}"
+                            {% if code == LANGUAGE_CODE %}aria-current="true"{% endif %}>{{ code|upper }}</button>
+                {% endfor %}
+            </form>
         </div>
     </nav>
 
-    <div class="ml-auto flex shrink-0 items-center gap-2.5 xl:ml-0">
+    <div class="ml-auto flex shrink-0 items-center gap-1.5 xl:ml-0">
+        {% get_available_languages as LANGUAGES %}
+        <div class="group/dd relative hidden xl:block" data-dropdown>
+            <button type="button" aria-expanded="false" aria-label="{% trans 'Язык' %}"
+                    class="inline-flex h-[46px] cursor-pointer items-center gap-1.5 rounded-full px-3.5 text-sm font-bold text-navy transition-colors hover:bg-tint">
+                {% icon 'globe' 'size-4 text-gold' %}{{ LANGUAGE_CODE|upper }}{% icon 'chevron-down' 'size-3.5 text-gold transition-transform duration-200 group-hover/dd:rotate-180 group-[.is-open]/dd:rotate-180' %}
+            </button>
+            <form action="{% url 'set_language' %}" method="post"
+                  class="invisible absolute top-[calc(100%+10px)] right-0 w-44 translate-y-1.5 rounded-2xl border border-line bg-white p-1.5 opacity-0 shadow-[0_20px_50px_rgb(15_29_58/.14)] transition duration-200 before:absolute before:inset-x-0 before:-top-3 before:h-3 group-hover/dd:visible group-hover/dd:translate-y-0 group-hover/dd:opacity-100 group-focus-within/dd:visible group-focus-within/dd:translate-y-0 group-focus-within/dd:opacity-100 group-[.is-open]/dd:visible group-[.is-open]/dd:translate-y-0 group-[.is-open]/dd:opacity-100">{% csrf_token %}
+                <input name="next" type="hidden" value="{{ request.get_full_path }}">
+                {% get_language_info_list for LANGUAGES as languages %}
+                {% for lang in languages %}
+                    <button type="submit" name="language" value="{{ lang.code }}"
+                            class="flex w-full cursor-pointer items-center justify-between rounded-[10px] px-3 py-2.5 text-sm font-semibold transition-colors hover:bg-tint {% if lang.code == LANGUAGE_CODE %}text-gold{% else %}text-navy{% endif %}"
+                            {% if lang.code == LANGUAGE_CODE %}aria-current="true"{% endif %}>
+                        {{ lang.name_local|capfirst }}
+                        {% if lang.code == LANGUAGE_CODE %}{% icon 'check' 'size-4' %}{% else %}<span class="text-xs text-muted">{{ lang.code|upper }}</span>{% endif %}
+                    </button>
+                {% endfor %}
+            </form>
+        </div>
         <a href="{% url 'reception' %}" class="btn btn-dark hidden h-[46px] px-[22px] hover:bg-gold xl:inline-flex">{% trans 'Поступить' %}{% icon 'arrow-right' 'arrow text-gold-2' %}</a>
         <button type="button" id="site-burger" aria-controls="site-nav" aria-expanded="false" aria-label="{% trans 'Меню' %}"
                 class="group/burger relative size-[46px] cursor-pointer rounded-[14px] bg-tint xl:hidden">
