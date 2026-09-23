@@ -1,0 +1,102 @@
+@import "tailwindcss" source(none);
+@plugin "@tailwindcss/typography";
+
+/* Где искать классы: шаблоны и python-код (тег {% icon %} с классом по умолчанию) */
+@source "../../../templates";
+@source "../../../apps";
+
+@theme {
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+
+  --color-navy: #0f1d3a;
+  --color-navy-2: #1c2d57;
+  --color-gold: #c9880b;
+  --color-gold-dark: #b27707;
+  --color-gold-2: #e3a624;
+  --color-gold-soft: #fbf3e2;
+  --color-ink: #111827;
+  --color-muted: #5b6475;
+  --color-line: #e8e4db;
+  --color-tint: #f7f5f0;
+
+  --radius-card: 20px;
+  --radius-section: 28px;
+
+  --shadow-lift: 0 2px 4px rgb(15 29 58 / .08), 0 18px 40px rgb(15 29 58 / .12);
+  --shadow-float: 0 8px 30px rgb(15 29 58 / .1);
+
+  --ease-soft: cubic-bezier(.2, .7, .2, 1);
+
+  --animate-hero-in: hero-in 1.6s var(--ease-soft) both;
+
+  @keyframes hero-in {
+    from { transform: scale(1.08); }
+    to { transform: scale(1.02); }
+  }
+}
+
+@layer base {
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body { @apply bg-white font-sans text-ink antialiased; }
+  ::selection { @apply bg-gold-soft text-navy; }
+  [x-cloak] { display: none !important; }
+}
+
+@layer components {
+  /* Контейнер страницы */
+  .site { @apply mx-auto w-full max-w-[1400px] px-4 sm:px-5; }
+
+  /* Кнопки */
+  .btn {
+    @apply inline-flex h-12 items-center justify-center gap-2.5 rounded-full border-[1.5px] border-transparent px-6 text-[15px] font-bold whitespace-nowrap transition duration-200 ease-(--ease-soft) hover:-translate-y-0.5 active:translate-y-0;
+  }
+  .btn svg { @apply size-4 transition-transform duration-200 ease-(--ease-soft); }
+  .btn:hover svg.arrow { @apply translate-x-[3px]; }
+  .btn-gold { @apply bg-gold text-white shadow-[0_8px_20px_rgb(201_136_11/.35)] hover:bg-gold-dark; }
+  .btn-dark { @apply bg-navy text-white hover:bg-navy-2; }
+  .btn-ghost { @apply border-white/45 bg-white/10 text-white backdrop-blur-sm hover:border-white hover:bg-white/20; }
+  .btn-outline { @apply border-navy/20 text-navy hover:border-navy; }
+
+  /* Ссылка «Смотреть все →» */
+  .link-more { @apply inline-flex items-center gap-2 text-[15px] font-bold whitespace-nowrap text-navy transition-colors hover:text-gold; }
+  .link-more svg { @apply size-4 text-gold transition-transform duration-200; }
+  .link-more:hover svg { @apply translate-x-1; }
+
+  /* Надзаголовок с чертой и заголовок секции */
+  .eyebrow { @apply mb-3 inline-flex items-center gap-2.5 text-[13px] font-bold tracking-[.08em] text-gold uppercase before:h-0.5 before:w-6 before:rounded-full before:bg-current; }
+  .eyebrow-light { @apply text-gold-2; }
+  .section-title { @apply text-[clamp(28px,3.2vw,40px)] leading-[1.15] font-extrabold tracking-[-.02em] text-navy text-balance; }
+  .page-title { @apply text-[clamp(30px,4vw,52px)] leading-[1.08] font-extrabold tracking-[-.025em] text-navy text-balance; }
+
+  .chip { @apply inline-flex h-7 items-center rounded-full bg-tint px-3 text-[13px] font-semibold text-muted; }
+
+  /* Карточка с подъёмом при наведении */
+  .card-lift { @apply overflow-hidden rounded-card border border-line bg-white transition duration-300 ease-(--ease-soft) hover:-translate-y-1 hover:border-transparent hover:shadow-lift; }
+  .card-lift .zoom { @apply transition-transform duration-[600ms] ease-(--ease-soft); }
+  .card-lift:hover .zoom { @apply scale-105; }
+
+  /* Горизонтальная лента со snap-прокруткой */
+  .rail { @apply -mx-1 grid auto-cols-[72%] grid-flow-col gap-5 overflow-x-auto px-1 pt-1 pb-3 [scrollbar-width:none] snap-x snap-mandatory sm:auto-cols-[calc((100%-2*20px)/3)] xl:auto-cols-[calc((100%-3*20px)/4)]; }
+  .rail::-webkit-scrollbar { display: none; }
+  .rail > * { @apply snap-start; }
+
+  .rail-btn { @apply grid size-11 cursor-pointer place-items-center rounded-full border-[1.5px] border-line bg-white text-navy transition-colors enabled:hover:border-navy enabled:hover:bg-navy enabled:hover:text-white disabled:cursor-default disabled:opacity-35; }
+
+  /* Текст из CKEditor */
+  .rich { @apply prose max-w-none prose-slate prose-headings:font-extrabold prose-headings:text-navy prose-a:text-gold prose-a:no-underline hover:prose-a:underline prose-img:rounded-card prose-p:text-muted prose-p:leading-[1.75] prose-li:text-muted; }
+  .rich table { @apply block overflow-x-auto; }
+}
+
+/* Появление блоков при прокрутке. Скрываем, только когда JS добавил .reveal-on */
+.reveal-on [data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity .7s var(--ease-soft), transform .7s var(--ease-soft);
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+.reveal-on [data-reveal].is-in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .reveal-on [data-reveal] { opacity: 1; transform: none; }
+}

@@ -1,24 +1,35 @@
 {% extends 'base/base.html' %}
-{% load static i18n %}
+{% load static i18n icons %}
 
 {% block title %}
     {% trans 'Нормативные документы' %}
 {% endblock %}
 
 {% block content %}
-    <section class="section documents">
-        <div class="container">
-            <div class="title">
-                <span>{% trans 'О Колледже' %}</span>
-                <h3>{% trans 'Нормативные документы' %}</h3>
-            </div>
-            <div class="documents__card">
+    {% trans 'О Колледже' as eyebrow %}
+    {% trans 'Нормативные документы' as title %}
+    {% include 'core/_page_head.html' with eyebrow=eyebrow title=title parent_title=eyebrow %}
+
+    <section class="px-1 pb-16 sm:px-4">
+        {% if documents %}
+            <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {% for document in documents %}
-                    <div class="documents__card-item">
-                        <a href="{% url 'documents_detail' document.pk %}">{{ document}}</a>
-                    </div>
+                    <li data-reveal>
+                        <a href="{% url 'documents_detail' document.pk %}"
+                           class="group flex h-full flex-col justify-between gap-8 rounded-card border border-line bg-white p-6 transition duration-300 ease-(--ease-soft) hover:-translate-y-1 hover:border-transparent hover:shadow-lift">
+                            <span class="grid size-12 place-items-center rounded-[14px] bg-gold-soft text-gold transition-colors group-hover:bg-gold group-hover:text-white">
+                                {% icon 'file-text' 'size-5' %}
+                            </span>
+                            <span class="flex items-end justify-between gap-4">
+                                <span class="text-lg leading-snug font-bold text-navy transition-colors group-hover:text-gold">{{ document }}</span>
+                                {% icon 'arrow-right' 'size-5 shrink-0 text-gold transition-transform group-hover:translate-x-1' %}
+                            </span>
+                        </a>
+                    </li>
                 {% endfor %}
-            </div>
-        </div>
+            </ul>
+        {% else %}
+            {% include 'core/_file_list.html' with files=None %}
+        {% endif %}
     </section>
 {% endblock %}

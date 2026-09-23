@@ -1,4 +1,5 @@
 import os
+from datetime import date
 
 from django.db.models import Prefetch
 from django.shortcuts import render, redirect
@@ -24,6 +25,10 @@ class IndexView(TemplateView):
         context["employees"] = Employee.active.select_related('position')[:9]
         context["students"] = StudentCouncil.active.all()[:9]
         context["internationals"] = InternationalCooperation.objects.all()
+        context["specialties_count"] = Specialty.active.count()
+        context["employees_count"] = Employee.active.count()
+        context["founded_year"] = 1939
+        context["years_count"] = date.today().year - 1939
         return context
 
 

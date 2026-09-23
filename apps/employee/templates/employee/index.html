@@ -1,136 +1,50 @@
 {% extends 'base/base.html' %}
-{% load static i18n %}
+{% load static i18n icons %}
 
-{% block title %}{% trans 'Студентский совет' %}{% endblock %}
+{% block title %}{% trans 'Структура' %}{% endblock %}
 
 {% block content %}
-<section class="section team">
-    <div class="container">
-        <div class="title animate__animated animate__fadeInUp">
-            <span>{% trans 'О колледже' %}</span>
-            <h3>{% trans 'Структура' %}</h3>
-        </div>
+<section class="px-1 pt-10 pb-8 sm:px-4 sm:pt-14 sm:pb-10">
+    <nav class="mb-5 flex flex-wrap items-center gap-2 text-sm text-muted" aria-label="breadcrumb">
+        <a href="{% url 'index' %}" class="transition-colors hover:text-navy">{% trans 'Главная' %}</a>
+        {% icon 'chevron-right' 'size-3.5' %}
+        <span class="text-navy">{% trans 'Структура' %}</span>
+    </nav>
+    <p class="eyebrow">{% trans 'О колледже' %}</p>
+    <h1 class="page-title">{% trans 'Структура' %}</h1>
+</section>
+
+{% for employee in employees %}
+    {% if employee.number == 0 %}
+        <a href="{{ employee.get_absolute_url }}" data-reveal
+           class="group mb-4 grid items-center gap-6 overflow-hidden rounded-section bg-navy p-4 text-white sm:grid-cols-[minmax(0,280px)_1fr] sm:gap-10 sm:p-5 lg:mb-6">
+            <div class="aspect-square overflow-hidden rounded-card bg-navy-2">
+                {% if employee.image %}
+                    <img src="{{ employee.image.url }}" alt="{{ employee.get_full_name }}" class="size-full object-cover object-[center_20%] transition-transform duration-[600ms] ease-(--ease-soft) group-hover:scale-105">
+                {% elif employee.gender == 'men' %}
+                    <img src="{% static 'images/more/avatar_men.webp' %}" alt="" class="size-full object-cover">
+                {% else %}
+                    <img src="{% static 'images/more/avatar_women.webp' %}" alt="" class="size-full object-cover">
+                {% endif %}
+            </div>
+            <div class="px-2 pb-4 sm:px-0 sm:pb-0">
+                <p class="eyebrow eyebrow-light">{{ employee.position }}</p>
+                <h2 class="text-[clamp(26px,3vw,40px)] leading-tight font-extrabold tracking-[-.02em] text-balance">{{ employee.get_full_name }}</h2>
+                <span class="mt-6 inline-flex items-center gap-2 font-bold text-gold-2">
+                    {% trans 'Подробно' %}{% icon 'arrow-right' 'size-4 transition-transform group-hover:translate-x-1' %}
+                </span>
+            </div>
+        </a>
+    {% endif %}
+{% endfor %}
+
+<section class="rounded-section bg-tint px-4 py-10 sm:px-[clamp(20px,4vw,56px)] sm:py-14">
+    <div class="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-5 lg:grid-cols-4">
         {% for employee in employees %}
-            {% if employee.number == 0 %}
-                <div class="list_employee animate__animated animate__fadeInUp">
-                    <a href="{{ employee.get_absolute_url }}" class="card">
-                        <div class="image-content">
-                            <span class="overlay"></span>
-                            <div class="card-image">
-                                {% if employee.image %}
-                                    <img src="{{ employee.image.url }}" class="card-img" alt="{{ student.get_full_name }}">
-                                {% elif employee.gender == 'men' %}
-                                    <img src="{% static 'images/more/avatar_men.webp' %}" class="card-img-top" alt="Avatar men">
-                                {% else %}
-                                    <img src="{% static 'images/more/avatar_women.webp' %}" class="card-img-top" alt="Avatar women">
-                                {% endif %}
-                            </div>
-                        </div>
-                        <div class="card-content">
-                            <h2 class="name">{{ employee.get_full_name }}</h2>
-                            <p class="description">{{ employee.position }}</p>
-                        </div>
-                    </a>
-                </div>
+            {% if employee.number != 0 %}
+                {% include 'employee/_person_card.html' with person=employee role=employee.position %}
             {% endif %}
         {% endfor %}
-
-        <div class="list_employee animate__animated animate__fadeInUp">
-            {% for employee in employees %}
-                {% if 1 <= employee.number and employee.number <= 10 %}
-                        <a href="{{ employee.get_absolute_url }}" class="card">
-                            <div class="image-content">
-                                <span class="overlay"></span>
-                                <div class="card-image">
-                                    {% if employee.image %}
-                                        <img src="{{ employee.image.url }}" class="card-img" alt="{{ student.get_full_name }}">
-                                    {% elif employee.gender == 'men' %}
-                                        <img src="{% static 'images/more/avatar_men.webp' %}" class="card-img-top" alt="Avatar men">
-                                    {% else %}
-                                        <img src="{% static 'images/more/avatar_women.webp' %}" class="card-img-top" alt="Avatar women">
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <div class="card-content">
-                                <h2 class="name">{{ employee.get_full_name }}</h2>
-                                <p class="description">{{ employee.position }}</p>
-                            </div>
-                        </a>
-                {% endif %}
-            {% endfor %}
-        </div>
-        <div class="list_employee animate__animated animate__fadeInUp">
-            {% for employee in employees %}
-                {% if 11 <= employee.number and employee.number <= 20 %}
-                        <a href="{{ employee.get_absolute_url }}" class="card">
-                            <div class="image-content">
-                                <span class="overlay"></span>
-                                <div class="card-image">
-                                    {% if employee.image %}
-                                        <img src="{{ employee.image.url }}" class="card-img" alt="{{ student.get_full_name }}">
-                                    {% elif employee.gender == 'men' %}
-                                        <img src="{% static 'images/more/avatar_men.webp' %}" class="card-img-top" alt="Avatar men">
-                                    {% else %}
-                                        <img src="{% static 'images/more/avatar_women.webp' %}" class="card-img-top" alt="Avatar women">
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <div class="card-content">
-                                <h2 class="name">{{ employee.get_full_name }}</h2>
-                                <p class="description">{{ employee.position }}</p>
-                            </div>
-                        </a>
-                {% endif %}
-            {% endfor %}
-        </div>
-        <div class="list_employee animate__animated animate__fadeInUp">
-            {% for employee in employees %}
-                {% if 21 <= employee.number and employee.number <= 30 %}
-                        <a href="{{ employee.get_absolute_url }}" class="card">
-                            <div class="image-content">
-                                <span class="overlay"></span>
-                                <div class="card-image">
-                                    {% if employee.image %}
-                                        <img src="{{ employee.image.url }}" class="card-img" alt="{{ student.get_full_name }}">
-                                    {% elif employee.gender == 'men' %}
-                                        <img src="{% static 'images/more/avatar_men.webp' %}" class="card-img-top" alt="Avatar men">
-                                    {% else %}
-                                        <img src="{% static 'images/more/avatar_women.webp' %}" class="card-img-top" alt="Avatar women">
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <div class="card-content">
-                                <h2 class="name">{{ employee.get_full_name }}</h2>
-                                <p class="description">{{ employee.position }}</p>
-                            </div>
-                        </a>
-                {% endif %}
-            {% endfor %}
-        </div>
-        <div class="list_employee animate__animated animate__fadeInUp">
-            {% for employee in employees %}
-                {% if 31 <= employee.number %}
-                        <a href="{{ employee.get_absolute_url }}" class="card">
-                            <div class="image-content">
-                                <span class="overlay"></span>
-                                <div class="card-image">
-                                    {% if employee.image %}
-                                        <img src="{{ employee.image.url }}" class="card-img" alt="{{ student.get_full_name }}">
-                                    {% elif employee.gender == 'men' %}
-                                        <img src="{% static 'images/more/avatar_men.webp' %}" class="card-img-top" alt="Avatar men">
-                                    {% else %}
-                                        <img src="{% static 'images/more/avatar_women.webp' %}" class="card-img-top" alt="Avatar women">
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <div class="card-content">
-                                <h2 class="name">{{ employee.get_full_name }}</h2>
-                                <p class="description">{{ employee.position }}</p>
-                            </div>
-                        </a>
-                {% endif %}
-            {% endfor %}
-        </div>
     </div>
 </section>
 {% endblock %}

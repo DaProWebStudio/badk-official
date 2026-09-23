@@ -1,37 +1,44 @@
 {% extends 'base/base.html' %}
-{% load static i18n imagekit %}
+{% load static i18n imagekit icons %}
 
 {% block title %}{% trans 'Наши специальности' %}{% endblock %}
 
 {% block content %}
-    <section class="section specialization">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="title mb-3">
-                        <span>{% trans 'Что мы вам предлагаем' %}</span>
-                        <h3>{% trans 'Наши специальности' %}</h3>
-                    </div>
-                </div>
+    <section class="px-1 pt-10 pb-8 sm:px-4 sm:pt-14 sm:pb-10">
+        <nav class="mb-5 flex flex-wrap items-center gap-2 text-sm text-muted" aria-label="breadcrumb">
+            <a href="{% url 'index' %}" class="transition-colors hover:text-gold">{% trans 'Главная' %}</a>
+            {% icon 'chevron-right' 'size-3.5' %}
+            <span class="text-navy">{% trans 'Наши специальности' %}</span>
+        </nav>
+        <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+                <p class="eyebrow">{% trans 'Что мы вам предлагаем' %}</p>
+                <h1 class="page-title">{% trans 'Наши специальности' %}</h1>
             </div>
-            <div class="specialties__wrap">
+            <a href="{% url 'reception' %}" class="btn btn-dark self-start lg:self-auto">{% trans 'Приемная комиссия' %}{% icon 'arrow-right' 'arrow text-gold-2' %}</a>
+        </div>
+    </section>
+
+    <section class="rounded-section bg-tint px-4 py-10 sm:px-8 sm:py-14 lg:px-14">
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
             {% for specialty in specialties %}
-                <div class="card">
-                    <a href="{{ specialty.get_absolute_url }}" class="card-link">
-                        <div class="card-img">
-                            {% generateimage 'main:thumbnail' source=specialty.image -- class="mypicture" %}
+                <a href="{{ specialty.get_absolute_url }}" class="group card-lift flex flex-col border-transparent" data-reveal>
+                    <div class="relative aspect-[16/10] overflow-hidden bg-line">
+                        {% generateimage 'main:thumbnail' source=specialty.image -- alt=specialty.title loading="lazy" class="zoom size-full object-cover" %}
+                        <span class="absolute bottom-3.5 left-3.5 rounded-full bg-white/95 px-3 py-1.5 text-[13px] font-bold text-navy backdrop-blur-sm">{{ specialty.contract }} {% trans 'сом' %}</span>
+                    </div>
+                    <div class="flex flex-1 flex-col gap-4 px-[22px] pt-5 pb-[22px]">
+                        <h2 class="line-clamp-3 text-[17px] leading-snug font-bold text-navy transition-colors group-hover:text-gold">{{ specialty.title }}</h2>
+                        <div class="mt-auto flex flex-wrap items-center gap-2">
+                            <span class="chip">{{ specialty.form_verbose }}</span>
+                            <span class="chip">{{ specialty.basis_verbose }}</span>
+                            <span class="ml-auto grid size-9 place-items-center rounded-full bg-tint text-navy transition-colors group-hover:bg-navy group-hover:text-white">{% icon 'arrow-up-right' 'size-4' %}</span>
                         </div>
-                        <div class="card-body">
-                            <h4 class="card-title">{{ specialty.title|truncatechars:63 }}</h4>
-                        </div>
-                        <div class="card-inner">
-                            <span class="card-inner_btn_left">{{ specialty.form_verbose }}</span>
-                                <span class="card-inner_btn_right">{{ specialty.contract }} {% trans 'сом' %}</span>
-                        </div>
-                    </a>
-                </div>
+                    </div>
+                </a>
+            {% empty %}
+                <p class="col-span-full py-16 text-center text-lg font-bold text-navy">{% trans 'Ничего не найдено' %}</p>
             {% endfor %}
-            </div>
         </div>
     </section>
 {% endblock %}

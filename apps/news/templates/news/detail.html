@@ -1,65 +1,87 @@
 {% extends 'base/base.html' %}
-{% load static i18n imagekit %}
+{% load static i18n imagekit icons %}
 
-{% block title %}
-    {{ item.title }}
-{% endblock %}
+{% block title %}{{ item.title }}{% endblock %}
 
 {% block links %}
-    <link rel="stylesheet" href="{% static 'libs/magnific-popper/main.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/glightbox/glightbox.css' %}">
 {% endblock links %}
 
 {% block content %}
-    <section class="section detail">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-sm-7 col-12">
-                    <div class="detail__img">
-                        <img src="{{ item.image.url }}" alt="image" class="w-100">
-                    </div>
-                    <div class="title mt-3">
-                        <span>{{ title }}</span>
-                        <h1 class="font-weight-bold news-title">{{ item.title }}</h1>
-                        <p style="color: #0d6efd">{% trans 'Добавлено' %}: {{ item.created|date }}</p>
-                    </div>
-                    <div class="content_dynamic_block">
-                        {% autoescape off %}{{ item.description }}{% endautoescape %}
-                    </div>
-                    <div class="detail__images mt-4">
-                        {% if item.images.all %}
-                            <div class="title">
-                                <h3>{% trans 'Фотогалерея' %}</h3>
-                            </div>
-                            <div class="row gallery-list">
-                                {% for foo in item.images.all %}
-                                    <div class="col-6 col-md-6 col-lg-4 p-1">
-                                        <a class="gallery-item" href="{{ foo.image.url }}">
-                                            <span class="gallery-item-hover">{% trans 'Посмотреть' %}</span>
-                                            {% generateimage 'main:thumbnail' source=foo.image -- class="mypicture" %}
-                                        </a>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                    </div>
-                </div>
-                <aside class="col-lg-4 col-sm-5 col-12">
-                    {% include 'news/aside.html' %}
-                </aside>
-            </div>
-        </div>
+    {% if request.resolver_match.url_name == 'student_live_detail' %}
+        {% url 'student_live_list' as list_url %}
+    {% else %}
+        {% url 'news_list' as list_url %}
+    {% endif %}
+
+    <section class="px-1 pt-10 pb-8 sm:px-4 sm:pt-14 sm:pb-10">
+        <nav class="mb-5 flex flex-wrap items-center gap-2 text-sm text-muted" aria-label="breadcrumb">
+            <a href="{% url 'index' %}" class="transition-colors hover:text-gold">{% trans 'Главная' %}</a>
+            {% icon 'chevron-right' 'size-3.5' %}
+            <a href="{{ list_url }}" class="transition-colors hover:text-gold">{{ title }}</a>
+        </nav>
+        <p class="eyebrow">{{ title }}</p>
+        <h1 class="page-title max-w-4xl">{{ item.title }}</h1>
+        <p class="mt-5 inline-flex items-center gap-2 text-[15px] font-semibold text-muted">
+            {% icon 'calendar' 'size-4 text-gold' %}
+            {% trans 'Добавлено' %}: <time datetime="{{ item.created|date:'c' }}" class="text-navy">{{ item.created|date:"j E Y" }}</time>
+        </p>
     </section>
+
+    <div class="grid gap-10 px-1 pb-6 sm:px-4 lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-12">
+        <article class="min-w-0">
+            <figure class="overflow-hidden rounded-card bg-tint sm:rounded-section">
+                <img src="{{ item.image.url }}" alt="{{ item.title }}" class="aspect-[16/9] w-full object-cover">
+            </figure>
+
+            {% if item.youtube %}
+                <a href="{{ item.youtube }}" class="glightbox-video group mt-6 flex items-center gap-4 rounded-card bg-navy p-4 text-white transition-colors hover:bg-navy-2 sm:p-5">
+                    <span class="grid size-14 shrink-0 place-items-center rounded-full bg-white text-navy shadow-[0_0_0_8px_rgb(255_255_255/.15)] transition-transform group-hover:scale-105">{% icon 'play' 'size-6 translate-x-0.5' %}</span>
+                    <span class="font-bold">{% trans 'Смотреть видео' %}</span>
+                </a>
+            {% endif %}
+
+            {% if item.description %}
+                <div class="rich mt-8 sm:mt-10 [&_*]:[font-family:inherit]! [&_span]:[font-size:inherit]!">
+                    {% autoescape off %}{{ item.description }}{% endautoescape %}
+                </div>
+            {% endif %}
+
+            {% if item.images.all %}
+                <section class="mt-12">
+                    <h2 class="section-title mb-6 !text-[clamp(24px,2.4vw,32px)]">{% trans 'Фотогалерея' %}</h2>
+                    <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
+                        {% for foo in item.images.all %}
+                            <a class="glightbox group relative block aspect-[4/3] overflow-hidden rounded-2xl bg-tint" href="{{ foo.image.url }}" data-gallery="item-{{ item.pk }}" data-reveal>
+                                {% generateimage 'main:thumbnail' source=foo.image -- alt=item.title loading="lazy" class="size-full object-cover transition-transform duration-[600ms] ease-(--ease-soft) group-hover:scale-105" %}
+                                <span class="absolute inset-0 grid place-items-center bg-navy/0 text-sm font-bold text-white opacity-0 transition duration-300 group-hover:bg-navy/45 group-hover:opacity-100">
+                                    <span class="inline-flex items-center gap-2">{% icon 'image' 'size-4' %}{% trans 'Посмотреть' %}</span>
+                                </span>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </section>
+            {% endif %}
+        </article>
+
+        <aside class="flex flex-col gap-5 lg:sticky lg:top-28 lg:self-start">
+            {% include 'news/aside.html' %}
+            <a href="{{ list_url }}" class="group flex items-center justify-between gap-4 rounded-card border border-line p-5 transition hover:border-transparent hover:shadow-lift sm:p-6">
+                <span>
+                    <span class="block text-[13px] font-bold tracking-[.08em] text-gold uppercase">{{ title }}</span>
+                    <span class="mt-1 block font-bold text-navy">{% trans 'Смотреть все' %}</span>
+                </span>
+                <span class="grid size-11 shrink-0 place-items-center rounded-full bg-tint text-navy transition-colors group-hover:bg-navy group-hover:text-white">{% icon 'arrow-right' 'size-4' %}</span>
+            </a>
+        </aside>
+    </div>
 {% endblock %}
 
 {% block scripts %}
-    <script src="{% static 'libs/magnific-popper/main.min.js' %}"></script>
+    <script src="{% static 'libs/glightbox/glightbox.min.js' %}"></script>
     <script>
-        $(".gallery-list").magnificPopup({
-            delegate: "a",
-            type: "image",
-            gallery: {
-                enabled: true
-            }
-        });
+        // GLightbox падает, если по селектору нет элементов
+        if (document.querySelector('.glightbox')) GLightbox({selector: '.glightbox'});
+        if (document.querySelector('.glightbox-video')) GLightbox({selector: '.glightbox-video', autoplayVideos: true, width: '900px'});
     </script>
 {% endblock scripts %}

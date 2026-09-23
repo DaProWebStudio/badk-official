@@ -1,79 +1,61 @@
-{% load i18n %}
-<footer class="footer">
-    <div class="footer__info">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 col-lg-6 col-md-12">
-                    <h3 class="footer-title">
-                        {% trans 'Бишкекский автомобильно-дорожный колледж' %}
-                    </h3>
-                    <p class="footer-desc">
-                        {% trans 'Миссия колледжа' %}:
-                        {% blocktrans %}Обеспечить высокое качество образования, вдохновляя студентов и преподавателей к постоянному развитию и достижению успеха.{% endblocktrans %}
-                    </p>
-                    <h3 class="footer-title">{% trans 'Наши социальные сети' %}</h3>
-                    <div class="footer__social">
-                        <a href="{{ CONTACTS.socials.instagram }}" target="_blank"
-                           class="footer__social-instagram">
-                            <i class="fa fa-instagram"></i>
-                        </a>
-                        <a href="{{ CONTACTS.socials.facebook }}" target="_blank" class="footer__social-facebook">
-                            <i class="fa fa-facebook"></i>
-                        </a>
-                        <a href="{{ CONTACTS.socials.youtube }}" target="_blank" class="footer__social-youtube">
-                            <i class="fa fa-youtube-play"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-12 col-lg-3 col-md-6">
-                    <h3 class="footer-title">{% trans 'Быстрое меню' %}</h3>
-                    <ul class="footer__fast-menu">
-                        <li class="footer__fast-menu-item"><a href="{% url 'history' %}">{% trans 'О Нас' %}</a></li>
-                        <li class="footer__fast-menu-item"><a href="{% url 'news_list' %}">{% trans 'Новости' %}</a></li>
-                        <li class="footer__fast-menu-item"><a href="{% url 'reception' %}">{% trans 'Абитуриентам' %}</a></li>
-                        <li class="footer__fast-menu-item"><a href="{% url 'specialties_list' %}">{% trans 'Наши специальности' %}</a></li>
-                        <li class="footer__fast-menu-item"><a href="{% url 'cooperation' %}">{% trans 'Сотрудничество' %}</a></li>
-                    </ul>
-                </div>
-                <div class="col-12 col-lg-3 col-md-6">
-                    <h3 class="footer-title">{% trans 'Контакты' %}</h3>
-                    <ul class="footer__contacts">
-                        <li class="footer__contacts-item">
-                            <a href="tel:{{ CONTACTS.phone.link }}" target="_blank">
-                                <i class="fa fa-phone mr-2"></i>
-                                {{ CONTACTS.phone.value }}
-                            </a>
-                        </li>
-                        <li class="footer__contacts-item">
-                            <a href="{{ CONTACTS.whatsapp.link }}" target="_blank">
-                                <i class="fa fa-whatsapp mr-2"></i>
-                                {{ CONTACTS.whatsapp.value }}
-                            </a>
-                        </li>
-                        <li class="footer__contacts-item">
-                            <a href="mailto:{{ CONTACTS.email }}" target="_blank">
-                                <i class="fa fa-envelope mr-2"></i>
-                                {{ CONTACTS.email }}
-                            </a>
-                        </li>
-                        <li class="footer__contacts-item">
-                            <a href="https://go.2gis.com/6t1t2" target="_blank">
-                                <i class="fa fa-map mr-2"></i>
-                                {% trans 'г. Бишкек, проспект Чынгыза Айтматова 52' %}
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+{% load static i18n icons %}
+{% with col_title='mb-[18px] text-[13px] font-bold tracking-[.08em] text-gold-2 uppercase' col_link='text-[15px] leading-snug text-white/75 transition-colors hover:text-gold-2' %}
+<footer class="mt-6 mb-5 rounded-[20px] bg-navy px-6 pt-10 pb-7 text-white/70 sm:rounded-section sm:px-[clamp(24px,5vw,64px)] sm:pt-[clamp(40px,5vw,64px)]">
+    <div class="grid grid-cols-2 gap-x-5 gap-y-8 border-b border-white/10 pb-10 md:grid-cols-3 xl:grid-cols-[minmax(0,1.5fr)_repeat(3,minmax(0,1fr))] xl:gap-10">
+        <div class="col-span-full xl:col-span-1">
+            <a href="{% url 'index' %}" class="flex items-center gap-3.5 text-white">
+                <img src="{% static 'images/logo/logo-official-badk.webp' %}" alt="" width="56" height="56" loading="lazy" class="size-14 rounded-full bg-white p-1">
+                <span class="max-w-60 text-[17px] leading-tight font-extrabold">{% trans 'Бишкекский автомобильно-дорожный колледж' %}</span>
+            </a>
+            <p class="mt-5 mb-6 max-w-sm text-sm leading-relaxed">
+                {% trans 'Миссия колледжа' %}:
+                {% blocktrans %}Обеспечить высокое качество образования, вдохновляя студентов и преподавателей к постоянному развитию и достижению успеха.{% endblocktrans %}
+            </p>
+            <div class="flex gap-2.5">
+                {% with social='grid size-[42px] place-items-center rounded-xl bg-white/10 text-white transition duration-200 hover:-translate-y-0.5 hover:bg-gold' %}
+                <a href="{{ CONTACTS.socials.instagram }}" target="_blank" rel="noopener" aria-label="Instagram" class="{{ social }}">{% icon 'brand-instagram' 'size-[18px]' %}</a>
+                <a href="{{ CONTACTS.socials.facebook }}" target="_blank" rel="noopener" aria-label="Facebook" class="{{ social }}">{% icon 'brand-facebook' 'size-[18px]' %}</a>
+                <a href="{{ CONTACTS.socials.youtube }}" target="_blank" rel="noopener" aria-label="YouTube" class="{{ social }}">{% icon 'brand-youtube' 'size-[18px]' %}</a>
+                {% endwith %}
             </div>
+        </div>
+
+        <div>
+            <h3 class="{{ col_title }}">{% trans 'О колледже' %}</h3>
+            <ul class="space-y-3">
+                <li><a class="{{ col_link }}" href="{% url 'history' %}">{% trans 'История' %}</a></li>
+                <li><a class="{{ col_link }}" href="{% url 'employees' %}">{% trans 'Структура' %}</a></li>
+                <li><a class="{{ col_link }}" href="{% url 'news_list' %}">{% trans 'Новости' %}</a></li>
+                <li><a class="{{ col_link }}" href="{% url 'documents_list' %}">{% trans 'Нормативные документы' %}</a></li>
+                <li><a class="{{ col_link }}" href="{% url 'cooperation' %}">{% trans 'Сотрудничество' %}</a></li>
+            </ul>
+        </div>
+
+        <div>
+            <h3 class="{{ col_title }}">{% trans 'Обучение' %}</h3>
+            <ul class="space-y-3">
+                <li><a class="{{ col_link }}" href="{% url 'reception' %}">{% trans 'Приемная комиссия' %}</a></li>
+                <li><a class="{{ col_link }}" href="{% url 'specialties_list' %}">{% trans 'Наши специальности' %}</a></li>
+                <li><a class="{{ col_link }}" href="{% url 'students' %}">{% trans 'Студенческий совет' %}</a></li>
+                <li><a class="{{ col_link }}" href="{% url 'student_live_list' %}">{% trans 'Студенческая жизнь' %}</a></li>
+                <li><a class="{{ col_link }}" href="https://avn.badk.kg/" target="_blank" rel="noopener">AVN</a></li>
+            </ul>
+        </div>
+
+        <div class="col-span-full md:col-span-1">
+            <h3 class="{{ col_title }}">{% trans 'Контакты' %}</h3>
+            <ul class="space-y-3">
+                <li><a class="{{ col_link }} flex gap-3" href="tel:{{ CONTACTS.phone.link }}">{% icon 'phone' 'mt-0.5 size-4 shrink-0 text-gold-2' %}{{ CONTACTS.phone.value }}</a></li>
+                <li><a class="{{ col_link }} flex gap-3" href="{{ CONTACTS.whatsapp.link }}" target="_blank" rel="noopener">{% icon 'brand-whatsapp' 'mt-0.5 size-4 shrink-0 text-gold-2' %}{{ CONTACTS.whatsapp.value }}</a></li>
+                <li><a class="{{ col_link }} flex gap-3" href="mailto:{{ CONTACTS.email }}">{% icon 'mail' 'mt-0.5 size-4 shrink-0 text-gold-2' %}{{ CONTACTS.email }}</a></li>
+                <li><a class="{{ col_link }} flex gap-3" href="https://go.2gis.com/6t1t2" target="_blank" rel="noopener">{% icon 'map-pin' 'mt-0.5 size-4 shrink-0 text-gold-2' %}{% trans 'г. Бишкек, проспект Чынгыза Айтматова 52' %}</a></li>
+            </ul>
         </div>
     </div>
-    <div class="footer__wrapper">
-        <div class="container">
-            <div class="footer__inner">
-                <div class="footer__inner-copyright">
-                    Copyright © <span class="current-year">2023</span> {% trans '«БАДК» - Все права защищены.' %}
-                </div>
-            </div>
-        </div>
+
+    <div class="flex flex-wrap justify-between gap-3 pt-6 text-[13px] text-white/50">
+        <span>© {% now "Y" %} {% trans '«БАДК» - Все права защищены.' %}</span>
+        <a href="https://{{ CONTACTS.sites.edu_gov }}" target="_blank" rel="noopener" class="transition-colors hover:text-gold-2">{{ CONTACTS.sites.edu_gov }}</a>
     </div>
 </footer>
+{% endwith %}

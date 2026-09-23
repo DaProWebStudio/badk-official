@@ -1,0 +1,17 @@
+{% load i18n icons %}
+{# Заголовок секции: eyebrow, title, link (url), link_text, rail (id ленты для стрелок) #}
+<header class="mb-7 flex flex-col items-start justify-between gap-3 sm:mb-10 sm:flex-row sm:items-end sm:gap-6" data-reveal>
+    <div>
+        <p class="eyebrow">{{ eyebrow }}</p>
+        <h2 class="section-title">{{ title }}</h2>
+    </div>
+    <div class="flex w-full items-center justify-between gap-6 sm:w-auto">
+        {% if link %}<a href="{{ link }}" class="link-more">{{ link_text }}{% icon 'arrow-right' %}</a>{% endif %}
+        {% if rail %}
+            <div class="flex gap-2" data-rail-for="{{ rail }}">
+                <button type="button" class="rail-btn" data-dir="-1" aria-label="{% trans 'Назад' %}">{% icon 'chevron-left' 'size-4' %}</button>
+                <button type="button" class="rail-btn" data-dir="1" aria-label="{% trans 'Вперёд' %}">{% icon 'chevron-right' 'size-4' %}</button>
+            </div>
+        {% endif %}
+    </div>
+</header>

@@ -1,46 +1,83 @@
 {% extends 'base/base.html' %}
-{% load static i18n imagekit %}
+{% load static i18n imagekit icons %}
 
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-    <section class="section news">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="title mb-3">
-                        <span>{{ sub_title }}</span>
-                        <h3>{{ title }}</h3>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12 col-md-12 col-lg-8">
-                    <div class="news-card-wrap m-auto">
-                        {% for item in news %}
-                            <div class="card">
-                                <a href="{{ item.get_absolute_url }}" class="card-link">
-                                    <div class="card-img">
-                                        {% generateimage 'main:thumbnail' source=item.image -- class="mypicture" %}
-                                    </div>
-                                    <div class="card-body">
-                                        <h4 class="card-title">{{ item.title|truncatechars:63 }}</h4>
-                                    </div>
-                                    <div class="card-inner">
-                                        <span class="card-inner_btn_right">{{ item.created|date }}</span>
-                                    </div>
-                                </a>
-                            </div>
-                        {% endfor %}
-                    </div>
-                    <div class="news_paginates">
+    {% if request.resolver_match.url_name == 'student_live_list' %}
+        {% url 'student_live_list' as list_url %}
+    {% else %}
+        {% url 'news_list' as list_url %}
+    {% endif %}
 
-                    </div>
-                </div>
-                <aside class="col-12 col-md-12 col-lg-4">
-                    {% include 'news/aside.html' %}
-                </aside>
+    <section class="px-1 pt-10 pb-8 sm:px-4 sm:pt-14 sm:pb-10">
+        <nav class="mb-5 flex flex-wrap items-center gap-2 text-sm text-muted" aria-label="breadcrumb">
+            <a href="{% url 'index' %}" class="transition-colors hover:text-gold">{% trans 'Главная' %}</a>
+            {% icon 'chevron-right' 'size-3.5' %}
+            <span class="text-navy">{{ title }}</span>
+        </nav>
+        <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+                <p class="eyebrow">{{ sub_title }}</p>
+                <h1 class="page-title">{{ title }}</h1>
+            </div>
+            <div class="w-full lg:max-w-md">
+                {% include 'news/aside.html' %}
             </div>
         </div>
+    </section>
+
+    <section class="rounded-section bg-tint px-4 py-10 sm:px-8 sm:py-14 lg:px-14">
+        {% if query %}
+            <p class="mb-6 flex flex-wrap items-center gap-3 text-[15px] text-muted">
+                {% trans 'Поиск' %}: <span class="font-bold text-navy">«{{ query }}»</span>
+                <a href="{{ list_url }}" class="inline-flex items-center gap-1 font-semibold text-gold hover:underline">{% icon 'x' 'size-4' %}</a>
+            </p>
+        {% endif %}
+
+        {% if news %}
+            <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+                {% for item in news %}
+                    <a href="{{ item.get_absolute_url }}" data-reveal
+                       class="group card-lift flex flex-col border-transparent">
+                        <div class="aspect-[16/10] overflow-hidden bg-line">
+                            {% generateimage 'main:thumbnail' source=item.image -- alt=item.title loading="lazy" class="zoom size-full object-cover" %}
+                        </div>
+                        <div class="flex flex-1 flex-col px-5 pt-[18px] pb-6">
+                            <time datetime="{{ item.created|date:'c' }}" class="mb-2 inline-flex items-center gap-1.5 text-[13px] font-semibold text-gold">
+                                {% icon 'calendar' 'size-3.5' %}{{ item.created|date:"j E Y" }}
+                            </time>
+                            <h2 class="line-clamp-3 text-[17px] leading-snug font-bold text-navy transition-colors group-hover:text-gold">{{ item.title }}</h2>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+
+            {% if is_paginated %}
+                <nav class="mt-10 flex flex-wrap items-center justify-center gap-2" aria-label="pagination">
+                    {% with base='grid h-11 min-w-11 place-items-center rounded-full px-3 text-[15px] font-bold transition-colors' %}
+                    {% if page_obj.has_previous %}
+                        <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query|urlencode }}{% endif %}" class="{{ base }} bg-white text-navy hover:bg-navy hover:text-white" aria-label="{% trans 'Назад' %}">{% icon 'chevron-left' 'size-4' %}</a>
+                    {% endif %}
+                    {% for num in paginator.page_range %}
+                        {% if num == page_obj.number %}
+                            <span class="{{ base }} bg-navy text-white" aria-current="page">{{ num }}</span>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' or num == 1 or num == paginator.num_pages %}
+                            <a href="?page={{ num }}{% if query %}&q={{ query|urlencode }}{% endif %}" class="{{ base }} bg-white text-navy hover:bg-navy hover:text-white">{{ num }}</a>
+                        {% endif %}
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query|urlencode }}{% endif %}" class="{{ base }} bg-white text-navy hover:bg-navy hover:text-white" aria-label="{% trans 'Вперёд' %}">{% icon 'chevron-right' 'size-4' %}</a>
+                    {% endif %}
+                    {% endwith %}
+                </nav>
+            {% endif %}
+        {% else %}
+            <div class="flex flex-col items-center gap-4 py-16 text-center">
+                <span class="grid size-14 place-items-center rounded-2xl bg-white text-gold">{% icon 'search' 'size-6' %}</span>
+                <p class="text-lg font-bold text-navy">{% trans 'Ничего не найдено' %}</p>
+                {% if query %}<a href="{{ list_url }}" class="link-more">{{ title }}{% icon 'arrow-right' %}</a>{% endif %}
+            </div>
+        {% endif %}
     </section>
 {% endblock %}

@@ -1,0 +1,68 @@
+{% load static i18n icons %}
+{# Резюме: person, role, list_url, list_title, skills (необязательно) #}
+<section class="px-1 pt-10 pb-8 sm:px-4 sm:pt-14 sm:pb-10">
+    <nav class="flex flex-wrap items-center gap-2 text-sm text-muted" aria-label="breadcrumb">
+        <a href="{% url 'index' %}" class="transition-colors hover:text-navy">{% trans 'Главная' %}</a>
+        {% icon 'chevron-right' 'size-3.5' %}
+        <a href="{{ list_url }}" class="transition-colors hover:text-navy">{{ list_title }}</a>
+        {% icon 'chevron-right' 'size-3.5' %}
+        <span class="text-navy">{{ person.get_full_name }}</span>
+    </nav>
+</section>
+
+<section class="grid items-start gap-8 px-1 sm:px-4 lg:grid-cols-[minmax(0,380px)_1fr] lg:gap-14">
+    <div class="lg:sticky lg:top-28">
+        <div class="aspect-square overflow-hidden rounded-section bg-line sm:max-w-[380px]">
+            {% if person.image %}
+                <img src="{{ person.image.url }}" alt="{{ person.get_full_name }}" class="size-full object-cover object-[center_20%]">
+            {% elif person.gender == 'men' %}
+                <img src="{% static 'images/more/avatar_men.webp' %}" alt="" class="size-full object-cover">
+            {% else %}
+                <img src="{% static 'images/more/avatar_women.webp' %}" alt="" class="size-full object-cover">
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="min-w-0">
+        {% if role %}<p class="eyebrow">{{ role }}</p>{% endif %}
+        <h1 class="page-title">{{ person.get_full_name }}</h1>
+
+        <div class="mt-6 flex flex-wrap gap-2">
+            {% if person.date_of_birth %}
+                <span class="chip h-9 gap-2 px-4 text-sm">{% icon 'cake' 'size-4 text-gold' %}{% trans 'День рождения:' %} <b class="font-bold text-navy">{{ person.date_of_birth }}</b></span>
+            {% endif %}
+            {% if person.nationality %}
+                <span class="chip h-9 gap-2 px-4 text-sm">{% icon 'flag' 'size-4 text-gold' %}{{ person.nationality }}</span>
+            {% endif %}
+        </div>
+
+        {% if person.email or person.instagram or person.facebook %}
+            <div class="mt-6 flex flex-wrap gap-3">
+                {% if person.email %}
+                    <a href="mailto:{{ person.email }}" class="btn btn-outline h-11 px-5 text-sm">{% icon 'mail' 'size-4 text-gold' %}{{ person.email }}</a>
+                {% endif %}
+                {% if person.instagram %}
+                    <a href="{{ person.instagram }}" target="_blank" rel="noopener" aria-label="Instagram" class="btn btn-outline size-11 px-0">{% icon 'brand-instagram' 'size-[18px]' %}</a>
+                {% endif %}
+                {% if person.facebook %}
+                    <a href="{{ person.facebook }}" target="_blank" rel="noopener" aria-label="Facebook" class="btn btn-outline size-11 px-0">{% icon 'brand-facebook' 'size-[18px]' %}</a>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        {% if person.description %}
+            <div class="rich mt-10 border-t border-line pt-8 [&>:first-child]:mt-0 [&>:last-child]:mb-0 [&_p:empty]:hidden">
+                {% autoescape off %}{{ person.description }}{% endautoescape %}
+            </div>
+        {% endif %}
+
+        {% if skills %}
+            <div class="mt-10 rounded-card bg-tint p-6 sm:p-8">
+                <h2 class="mb-4 text-xl font-extrabold text-navy">{% trans "Навыки" %}</h2>
+                <div class="rich">{% autoescape off %}{{ skills|linebreaks }}{% endautoescape %}</div>
+            </div>
+        {% endif %}
+
+        <a href="{{ list_url }}" class="link-more mt-10 [&_svg]:rotate-180">{% icon 'arrow-right' %}{{ list_title }}</a>
+    </div>
+</section>

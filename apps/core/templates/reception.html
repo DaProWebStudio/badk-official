@@ -1,91 +1,95 @@
 {% extends 'base/base.html' %}
-{% load static i18n %}
+{% load static i18n icons %}
 
 {% block title %}
     {% trans 'Абитуриентам' %}
 {% endblock %}
 
 {% block content %}
-    <section class="section reception">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 col-lg-8 col-md-8">
-                    <div class="title">
-                        <span>{% trans 'Абитуриентам' %}</span>
-                        <h3>{% trans 'Уважаемые абитуриенты!' %}</h3>
-                    </div>
-                    <div class="my-3">
-                        <h5 class="reception__title">{% trans 'В настоящее время колледж ведет подготовку по специальностям:' %}</h5>
-                        <ul class="ml-4 mb-3 pl-0 mb-0">
-                            {% for specialty in specialties %}
-                                <li class="mt-2">
-                                    <a class="reception__link" href="#"><span
-                                            class="forloop">{{ forloop.counter }}.</span> {{ specialty.title }}</a>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    <div class="title">
-                        <br>
-                        <span>{% trans 'Абитуриентам' %}</span>
-                        <h3>{% trans 'Как поступить в наш колледж' %}</h3>
-                    </div>
-                    <div class="my-3">
-                        <h5 class="reception__title">{% trans 'Условия приема' %}</h5>
-                    </div>
-                    <div class="my-3">
-                        <h5 class="reception__title">{% trans 'Основной список документов для поступающих в колледж:' %}</h5>
-                        <ul class="reception__list">
-                            <li class="my-3">- {% trans 'Оригинал Аттестата и Оригинал Свидетельство об образовании;' %}</li>
-                            <li class="my-3">- {% trans 'Свидетельства о рождении или паспорт (копия);' %}</li>
-                            <li class="my-3">- {% trans 'Фотографии 3х4 (6 штук);' %}</li>
-                            <li>- {% trans 'Скоросшиватель и конверт' %}</li>
-                        </ul>
-                    </div>
-                    <div class="my-3">
-                    </div>
-                    <div class="my-3">
-                        <h5 class="my-4 reception__title">{% trans 'Как считается средний балл аттестата' %}</h5>
-                        <p class="mt-2 reception__description">
-                            {% blocktrans %}Вам нужно подсчитать общее количество оценок, сложить все оценки вместе (найти сумму всех оценок) и разделить эту сумму на общее количество оценок. Полученное число и будет средним баллом Вашего аттестата. Средний балл ведется с точностью до сотых долей.{% endblocktrans %}
-                        </p>
-                        <p class="p-3 reception__description" style="border: 2px dotted red; text-indent: 0">
-                            <b>{% trans 'Например:' %}</b>
-                            {% blocktrans %}В Вашем аттестате стоят оценки по 12 предметам. Из них 5 пятерок, 3 четверки и 4 тройки. Найдем сумму всех оценок : 5*5 + 4*3 + 3*4 = 25 + 12 + 12= 49. Разделим сумму всех оценок на количество предметов: 49 : 12 = 4.08. Средний балл рассчитывается с точностью до сотых долей. Таким образом, средний балл Вашего аттестата – 4.08{% endblocktrans %}
-                        </p>
-                    </div>
+    {% trans 'Абитуриентам' as eyebrow %}
+    {% trans 'Уважаемые абитуриенты!' as title %}
+    {% include 'core/_page_head.html' with eyebrow=eyebrow title=title parent_title=eyebrow %}
+
+    <div class="grid gap-10 px-1 pb-16 sm:px-4 lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-14">
+        <div class="min-w-0 space-y-14">
+            {# Специальности #}
+            <section>
+                <h2 class="mb-6 text-2xl leading-tight font-extrabold text-navy sm:text-[28px]">{% trans 'В настоящее время колледж ведет подготовку по специальностям:' %}</h2>
+                <ol class="grid gap-3">
+                    {% for specialty in specialties %}
+                        <li data-reveal>
+                            <a href="{{ specialty.get_absolute_url }}"
+                               class="group flex items-center gap-4 rounded-card border border-line bg-white p-4 transition duration-300 ease-(--ease-soft) hover:-translate-y-0.5 hover:border-transparent hover:shadow-lift sm:px-5">
+                                <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-gold-soft text-sm font-extrabold text-gold transition-colors group-hover:bg-gold group-hover:text-white">{{ forloop.counter }}</span>
+                                <span class="flex-1 text-[15px] leading-snug font-bold text-navy transition-colors group-hover:text-gold">{{ specialty.title }}</span>
+                                {% icon 'arrow-right' 'size-4 shrink-0 text-gold transition-transform group-hover:translate-x-1' %}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ol>
+            </section>
+
+            {# Как поступить #}
+            <section>
+                <p class="eyebrow">{% trans 'Абитуриентам' %}</p>
+                <h2 class="section-title">{% trans 'Как поступить в наш колледж' %}</h2>
+                <h3 class="mt-3 text-lg font-bold text-muted">{% trans 'Условия приема' %}</h3>
+
+                <div class="mt-8 rounded-card bg-tint p-6 sm:p-8">
+                    <h3 class="mb-5 text-lg font-extrabold text-navy">{% trans 'Основной список документов для поступающих в колледж:' %}</h3>
+                    <ul class="grid gap-3 sm:grid-cols-2">
+                        {% with li='flex items-start gap-3 rounded-2xl bg-white p-4 text-[15px] leading-snug text-ink' check='mt-0.5 size-5 shrink-0 rounded-full bg-gold p-1 text-white' %}
+                        <li class="{{ li }}">{% icon 'check' check 3 %}{% trans 'Оригинал Аттестата и Оригинал Свидетельство об образовании;' %}</li>
+                        <li class="{{ li }}">{% icon 'check' check 3 %}{% trans 'Свидетельства о рождении или паспорт (копия);' %}</li>
+                        <li class="{{ li }}">{% icon 'check' check 3 %}{% trans 'Фотографии 3х4 (6 штук);' %}</li>
+                        <li class="{{ li }}">{% icon 'check' check 3 %}{% trans 'Скоросшиватель и конверт' %}</li>
+                        {% endwith %}
+                    </ul>
                 </div>
-                <aside class="col-12 col-lg-4 col-md-4">
-                    <div class="reception__carousel">
-                        <div class="mt-4">
-                            <h4 class="reception__border">{% trans 'Срок обучение' %}</h4>
-                            <ul class="p-4 mb-0 reception__info">
-                                <li><span>{% trans 'На базе 9 класса' %}:</span> {% trans '2 года 10 месяцев' %}</li>
-                                <li><span>{% trans 'На базе 11 класса' %}:</span> {% trans '1 год 10 месяцев' %}</li>
-                            </ul>
-                        </div>
-                        <div class="mt-2">
-                            <h4 class="reception__border">{% trans 'Контакты' %}</h4>
-                            <ul class="p-4 mb-0 reception__info">
-                                <li><span>{% trans 'Телефон' %}:</span> <a href="tel:{{ CONTACTS.phone.link }}" target="_blank">{{ CONTACTS.phone.value }}</a></li>
-                                <li>
-                                    <span>WhatsApp:</span>
-                                    <a href="{{ CONTACTS.whatsapp.link }}" target="_blank">{{ CONTACTS.whatsapp.value }}</a>
-                                </li>
-                                <li><span>{% trans 'Сайт' %}:</span> <a
-                                        href="{{ CONTACTS.sites.edu_gov }}" target="_blank">{{ CONTACTS.sites.edu_gov }}</a>
-                                </li>
-                                <li>
-                                    <span>Email:</span>
-                                    <a href="mailto:{{ CONTACTS.email }}" target="_blank">
-                                        {{ CONTACTS.email }}
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </aside>
-            </div>
+            </section>
+
+            {# Средний балл #}
+            <section>
+                <h2 class="text-2xl leading-tight font-extrabold text-navy sm:text-[28px]">{% trans 'Как считается средний балл аттестата' %}</h2>
+                <p class="mt-4 text-[17px] leading-[1.75] text-muted">
+                    {% blocktrans %}Вам нужно подсчитать общее количество оценок, сложить все оценки вместе (найти сумму всех оценок) и разделить эту сумму на общее количество оценок. Полученное число и будет средним баллом Вашего аттестата. Средний балл ведется с точностью до сотых долей.{% endblocktrans %}
+                </p>
+                <div class="mt-6 rounded-card border-l-4 border-gold bg-gold-soft p-6">
+                    <p class="text-[15px] leading-[1.75] text-ink">
+                        <b class="text-navy">{% trans 'Например:' %}</b>
+                        {% blocktrans %}В Вашем аттестате стоят оценки по 12 предметам. Из них 5 пятерок, 3 четверки и 4 тройки. Найдем сумму всех оценок : 5*5 + 4*3 + 3*4 = 25 + 12 + 12= 49. Разделим сумму всех оценок на количество предметов: 49 : 12 = 4.08. Средний балл рассчитывается с точностью до сотых долей. Таким образом, средний балл Вашего аттестата – 4.08{% endblocktrans %}
+                    </p>
+                </div>
+            </section>
         </div>
-    </section>
+
+        <aside class="space-y-5 lg:sticky lg:top-28 lg:self-start">
+            <div class="rounded-card bg-navy p-7 text-white">
+                <h2 class="flex items-center gap-3 text-lg font-extrabold">{% icon 'clock' 'size-5 text-gold-2' %}{% trans 'Срок обучение' %}</h2>
+                <dl class="mt-5 space-y-4">
+                    <div class="flex items-baseline justify-between gap-4 border-b border-white/10 pb-4">
+                        <dt class="text-sm text-white/70">{% trans 'На базе 9 класса' %}</dt>
+                        <dd class="text-right font-bold">{% trans '2 года 10 месяцев' %}</dd>
+                    </div>
+                    <div class="flex items-baseline justify-between gap-4">
+                        <dt class="text-sm text-white/70">{% trans 'На базе 11 класса' %}</dt>
+                        <dd class="text-right font-bold">{% trans '1 год 10 месяцев' %}</dd>
+                    </div>
+                </dl>
+            </div>
+
+            <div class="rounded-card border border-line p-7">
+                <h2 class="text-lg font-extrabold text-navy">{% trans 'Контакты' %}</h2>
+                <ul class="mt-5 space-y-4 text-[15px]">
+                    {% with row='group flex items-center gap-3 text-navy transition-colors hover:text-gold' ic='grid size-10 shrink-0 place-items-center rounded-xl bg-gold-soft text-gold' %}
+                    <li><a class="{{ row }}" href="tel:{{ CONTACTS.phone.link }}"><span class="{{ ic }}">{% icon 'phone' 'size-4' %}</span><span><small class="block text-xs text-muted">{% trans 'Телефон' %}</small><b>{{ CONTACTS.phone.value }}</b></span></a></li>
+                    <li><a class="{{ row }}" href="{{ CONTACTS.whatsapp.link }}" target="_blank" rel="noopener"><span class="{{ ic }}">{% icon 'brand-whatsapp' 'size-4' %}</span><span><small class="block text-xs text-muted">WhatsApp</small><b>{{ CONTACTS.whatsapp.value }}</b></span></a></li>
+                    <li><a class="{{ row }}" href="https://{{ CONTACTS.sites.edu_gov }}" target="_blank" rel="noopener"><span class="{{ ic }}">{% icon 'globe' 'size-4' %}</span><span><small class="block text-xs text-muted">{% trans 'Сайт' %}</small><b>{{ CONTACTS.sites.edu_gov }}</b></span></a></li>
+                    <li><a class="{{ row }}" href="mailto:{{ CONTACTS.email }}"><span class="{{ ic }}">{% icon 'mail' 'size-4' %}</span><span class="min-w-0"><small class="block text-xs text-muted">Email</small><b class="break-all">{{ CONTACTS.email }}</b></span></a></li>
+                    {% endwith %}
+                </ul>
+                <a href="{{ CONTACTS.whatsapp.link }}" target="_blank" rel="noopener" class="btn btn-gold mt-6 w-full">{% icon 'brand-whatsapp' %}{% trans 'Написать в WhatsApp' %}</a>
+            </div>
+        </aside>
+    </div>
 {% endblock %}

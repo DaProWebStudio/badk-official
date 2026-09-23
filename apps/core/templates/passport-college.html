@@ -1,35 +1,39 @@
 {% extends 'base/base.html' %}
-{% load static i18n %}
+{% load static i18n icons %}
 
 {% block title %}
     {% trans 'Паспорт колледжа' %}
 {% endblock %}
 
 {% block links %}
-    <link rel="stylesheet" href="{% static 'dist/libs/flipbook/flipbook.style.min.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/flipbook/flipbook.style.css' %}">
+    {# Иконки панели flipbook; сама библиотека тянет шрифт с устаревшего адреса #}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 {% endblock %}
 
 {% block content %}
-    <section class="section password_college">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="title">
-                        <span>{% trans 'О колледже' %}</span>
-                        <h3>{% trans 'Паспорт колледжа' %}</h3>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div id="flip_book" style="height: 600px; position: relative;">
-                        <input type="hidden" id="url_pdf" value="{% static 'dist/documents/college-passport-official.pdf' %}">
-                    </div>
-                </div>
+    {% trans 'О колледже' as eyebrow %}
+    {% trans 'Паспорт колледжа' as title %}
+    {% include 'core/_page_head.html' with eyebrow=eyebrow title=title parent_title=eyebrow %}
+
+    <section class="px-1 pb-16 sm:px-4">
+        <div class="overflow-hidden rounded-section bg-tint p-2 sm:p-4">
+            <div id="flip_book" class="relative h-[70vh] min-h-[420px] w-full sm:h-[640px]">
+                <input type="hidden" id="url_pdf" value="{% static 'documents/college-passport-official.pdf' %}">
             </div>
+        </div>
+        <div class="mt-5 flex flex-wrap items-center justify-between gap-3">
+            <p class="text-sm text-muted">{% trans 'Листайте страницы или откройте документ целиком' %}</p>
+            <a href="{% static 'documents/college-passport-official.pdf' %}" target="_blank" rel="noopener" class="btn btn-outline h-11">
+                {% icon 'file-text' %}PDF{% icon 'arrow-up-right' %}
+            </a>
         </div>
     </section>
 {% endblock %}
 
 {% block scripts %}
-    <script src="{% static 'dist/libs/flipbook/js/flipbook.min.js' %}"></script>
-    <script src="{% static 'dist/libs/flipbook/js/book.js' %}"></script>
+    {# flipbook работает на jQuery — подключаем только на этой странице #}
+    <script src="{% static 'libs/jquery/jquery.js' %}"></script>
+    <script src="{% static 'libs/flipbook/js/flipbook.min.js' %}"></script>
+    <script src="{% static 'libs/flipbook/js/book.js' %}"></script>
 {% endblock %}

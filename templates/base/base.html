@@ -1,28 +1,29 @@
 <!doctype html>
-{% load static i18n %}
+{% load static i18n icons %}
 {% get_current_language as LANGUAGE_CODE %}
 <html lang="{{ LANGUAGE_CODE }}">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}{% trans 'Бишкекский автомобильно-дорожный колледж - имени Кусаина Кольбаева' %}{% endblock %} | БАДК</title>
+    <meta name="theme-color" content="#0f1d3a">
     {% include 'base/links.html' %}
     {% block links %}{% endblock %}
-    <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
-    <meta name="theme-color" content="#ffffff">
 </head>
-<body>
-    <div class="main-wrapper">
+<body class="min-h-dvh">
+    <div class="site">
         {% include 'base/menu.html' %}
-        {% block content %}{% endblock %}
+        <main id="content">
+            {% block content %}{% endblock %}
+        </main>
         {% include 'base/footer.html' %}
     </div>
-    <button id="button_up" class="upShow upShow__hide">
-        <i class="fa fa-arrow-up"></i>
+
+    <button type="button" id="to-top" aria-label="{% trans 'Наверх' %}"
+            class="fixed right-5 bottom-5 z-40 grid size-12 translate-y-4 cursor-pointer place-items-center rounded-full bg-navy text-white opacity-0 shadow-[0_10px_24px_rgb(15_29_58/.25)] transition duration-300 hover:bg-gold [&.is-visible]:translate-y-0 [&.is-visible]:opacity-100 pointer-events-none [&.is-visible]:pointer-events-auto">
+        {% icon 'arrow-up' 'size-5' %}
     </button>
+
     {% include 'base/scripts.html' %}
     {% block scripts %}{% endblock %}
 </body>

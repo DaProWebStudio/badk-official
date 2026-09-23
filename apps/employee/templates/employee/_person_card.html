@@ -1,0 +1,15 @@
+{% load static %}
+{# Карточка человека: person — Employee или StudentCouncil, role — подпись под именем #}
+<a href="{{ person.get_absolute_url }}" class="group block" data-reveal>
+    <div class="aspect-square overflow-hidden rounded-card bg-line">
+        {% if person.image %}
+            <img src="{{ person.image.url }}" alt="{{ person.get_full_name }}" loading="lazy" class="size-full object-cover object-[center_20%] transition-transform duration-[600ms] ease-(--ease-soft) group-hover:scale-105">
+        {% elif person.gender == 'men' %}
+            <img src="{% static 'images/more/avatar_men.webp' %}" alt="" loading="lazy" class="size-full object-cover">
+        {% else %}
+            <img src="{% static 'images/more/avatar_women.webp' %}" alt="" loading="lazy" class="size-full object-cover">
+        {% endif %}
+    </div>
+    <h2 class="mt-4 text-base leading-snug font-bold text-navy transition-colors group-hover:text-gold">{{ person.get_full_name }}</h2>
+    {% if role %}<p class="mt-1 text-sm leading-snug text-muted">{{ role }}</p>{% endif %}
+</a>

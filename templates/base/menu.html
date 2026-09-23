@@ -1,111 +1,116 @@
-{% load static i18n %}
-<header class="toolbar">
-    <div class="toolbar__area">
-        <div class="container">
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="toolbar__area-contacts">
-                    <a href="{% url 'contacts' %}"><i class="fa fa-address-book"></i> {% trans 'Контакты' %}</a>
-                </div>
-                <form action="{% url 'set_language' %}" method="post" class="toolbar__area-languages ">{% csrf_token %}
-                    <input name="next" type="hidden" value="{{ redirect_to }}">
-                    <select name="language" class="form-select select_send_language">
-                        {% get_available_languages as LANGUAGES %}
-                        {% get_language_info_list for LANGUAGES as languages %}
-                        {% for language in languages %}
-                            <option value="{{ language.code }}" {% if language.code == LANGUAGE_CODE %}selected{% endif %}>
-                                {% if language.code == 'ru' %}
-                                    🇷🇺 {{ language.name_local }}
-                                {% elif language.code == 'ky' %}
-                                    🇰🇬 {{ language.name_local }}
-                                {% elif language.code == 'en' %}
-                                    🇺🇸 {{ language.name_local }}
-                                {% endif %}
-                            </option>
-                        {% endfor %}
-                    </select>
-                </form>
-            </div>
-        </div>
+{% load static i18n icons %}
+{% get_current_language as LANGUAGE_CODE %}
+
+
+<div class="flex h-10 items-center justify-between gap-6 px-1 text-[13px] text-muted sm:h-11 sm:px-2">
+    <div class="flex min-w-0 items-center gap-6">
+        <a href="tel:{{ CONTACTS.phone.link }}" class="inline-flex items-center gap-2 transition-colors hover:text-navy">
+            {% icon 'phone' 'size-3.5 text-gold' %}{{ CONTACTS.phone.value }}
+        </a>
+        <a href="mailto:{{ CONTACTS.email }}" class="hidden items-center gap-2 transition-colors hover:text-navy sm:inline-flex">
+            {% icon 'mail' 'size-3.5 text-gold' %}{{ CONTACTS.email }}
+        </a>
+        <a href="https://go.2gis.com/6t1t2" target="_blank" rel="noopener" class="hidden min-w-0 items-center gap-2 transition-colors hover:text-navy xl:inline-flex">
+            {% icon 'map-pin' 'size-3.5 shrink-0 text-gold' %}<span class="truncate">{% trans 'г. Бишкек, проспект Чынгыза Айтматова 52' %}</span>
+        </a>
     </div>
-    <nav class="nav">
-        <div class="container">
-            <div class="nav__menu">
-                <div class="nav__menu-logo">
-                    <a href="{% url 'index' %}"><img src="{% static 'dist/images/logo/logo-official-badk.webp' %}" alt="logo"></a>
-                </div>
-                <div class="nav__menu-icon"><span></span></div>
-                <div class="nav__menu-body">
-                    <ul class="nav__menu-list">
-                        <li><a href="{% url 'index' %}" class="nav__menu-link">{% trans 'Главная' %}</a></li>
-                        <li>
-                            <a href="#" class="nav__menu-link">
-                                {% trans 'О колледже' %}
-                                <span class="nav__menu-arrow"></span>
-                            </a>
-                            <ul class="nav__menu__sub-list">
-                                <li><a href="{% url 'history' %}" class="nav__menu__sub-link">{% trans 'История' %}</a></li>
-                                <li><a href="{% url 'password_college' %}" class="nav__menu__sub-link">{% trans 'Паспорт колледжа' %}</a></li>
-                                <li><a href="{% url 'employees' %}" class="nav__menu__sub-link">{% trans 'Структура' %}</a></li>
-                                <li><a href="{% url 'news_list' %}" class="nav__menu__sub-link">{% trans 'Новости' %}</a></li>
-                                <li><a href="{% url 'documents_list' %}" class="nav__menu__sub-link">{% trans 'Нормативные документы' %}</a></li>
-                                <li><a href="https://www.ebs.el-kitep.kg/" target="_blank" class="nav__menu__sub-link">{% trans 'Библиотека' %}</a></li>
-                                <li><a href="{% url 'cooperation' %}" class="nav__menu__sub-link">{% trans 'Сотрудничество' %}</a></li>
-                                <li><a href="{% url 'internationals' %}" class="nav__menu__sub-link">{% trans 'Международное сотрудничество' %}</a></li>
-                            </ul>
-                        </li>
-                        {% if edu_processes %}
-                        <li>
-                            <a href="#" class="nav__menu-link">
-                                {% trans 'Учебный процесс' %}
-                                <span class="nav__menu-arrow"></span>
-                            </a>
-                            <ul class="nav__menu__sub-list">
-                                {% for edu_process in edu_processes %}
-                                    <li>
-                                        <a href="{% url 'edu_process_detail' edu_process.pk %}" class="nav__menu__sub-link">{{ edu_process }}</a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        </li>
-                        {% endif %}
-                        <li>
-                            <a href="#" class="nav__menu-link">
-                                {% trans 'Абитуриентам' %}
-                                <span class="nav__menu-arrow"></span>
-                            </a>
-                            <ul class="nav__menu__sub-list">
-                                <li>
-                                    <a href="{% url 'reception' %}" class="nav__menu__sub-link">{% trans 'Приемная комиссия' %}</a>
-                                </li>
-                                <li>
-                                    <a href="{% url 'specialties_list' %}"
-                                       class="nav__menu__sub-link">{% trans 'Наши Специальности' %}</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="#" class="nav__menu-link">
-                               {% trans 'Студентам' %}
-                                <span class="nav__menu-arrow"></span>
-                            </a>
-                            <ul class="nav__menu__sub-list">
-                                <li>
-                                    <a href="https://avn.badk.kg/" target="_blank" class="nav__menu__sub-link">{% trans 'Дистанционное обучение «AVN»' %}</a>
-                                </li>
-                                <li>
-                                    <a href="{% url 'students' %}" class="nav__menu__sub-link">{% trans 'Студенческий совет' %}</a>
-                                </li>
-                                <li>
-                                    <a href="{% url 'student_live_list' %}" class="nav__menu__sub-link">{% trans 'Студенческая жизнь' %}</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="{% url 'contacts' %}" class="nav__menu-link">{% trans 'Контакты' %}</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+    <div class="flex items-center gap-6">
+        <a href="https://avn.badk.kg/" target="_blank" rel="noopener" class="hidden items-center gap-2 font-bold text-navy sm:inline-flex">
+            {% icon 'laptop' 'size-3.5 text-gold' %}AVN
+        </a>
+        <form action="{% url 'set_language' %}" method="post" class="flex gap-0.5 rounded-full bg-tint p-[3px]">{% csrf_token %}
+            <input name="next" type="hidden" value="{{ request.get_full_path }}">
+            {% get_available_languages as LANGUAGES %}
+            {% for code, name in LANGUAGES %}
+                <button type="submit" name="language" value="{{ code }}" title="{{ name }}"
+                        class="h-[26px] min-w-9 cursor-pointer rounded-full px-2.5 text-xs font-bold tracking-wide transition-colors {% if code == LANGUAGE_CODE %}bg-white text-navy shadow-[0_1px_3px_rgb(15_29_58/.12)]{% else %}text-muted hover:text-navy{% endif %}"
+                        {% if code == LANGUAGE_CODE %}aria-current="true"{% endif %}>{{ code|upper }}</button>
+            {% endfor %}
+        </form>
+    </div>
+</div>
+
+<header id="site-header"
+        class="group/header sticky top-2 z-50 flex h-16 items-center gap-3 rounded-2xl border border-line bg-white px-2.5 transition-[box-shadow,border-color] duration-300 sm:h-[68px] xl:top-2.5 xl:h-[76px] xl:gap-6 xl:rounded-[20px] xl:bg-white/90 xl:pr-5 xl:pl-3.5 xl:backdrop-blur-md xl:backdrop-saturate-150 [&.is-scrolled]:border-transparent [&.is-scrolled]:shadow-float">
+
+    <a href="{% url 'index' %}" class="flex shrink-0 items-center gap-3" aria-label="{% trans 'Главная' %}">
+        <img src="{% static 'images/logo/logo-official-badk.webp' %}" alt="" width="52" height="52" class="size-11 object-contain xl:size-[52px]">
+        <span class="flex flex-col leading-[1.15]">
+            <strong class="text-xl font-extrabold tracking-wide text-navy">{% trans 'БАДК' %}</strong>
+            <small class="mt-0.5 hidden max-w-[170px] text-xs font-medium text-muted sm:block">{% trans 'Автомобильно-дорожный колледж' %}</small>
+        </span>
+    </a>
+
+    {# На мобильных nav — полноэкранная панель под шапкой (-z-10 внутри контекста шапки) #}
+    <nav id="site-nav" aria-label="{% trans 'Главное меню' %}"
+         class="flex flex-1 justify-center max-xl:invisible max-xl:fixed max-xl:inset-0 max-xl:-z-10 max-xl:flex-col max-xl:justify-between max-xl:gap-6 max-xl:overflow-y-auto max-xl:bg-white max-xl:px-5 max-xl:pt-[104px] max-xl:pb-7 max-xl:opacity-0 max-xl:-translate-y-2 max-xl:transition max-xl:duration-300 [&.is-open]:visible [&.is-open]:translate-y-0 [&.is-open]:opacity-100">
+        <ul class="flex items-center gap-1 max-xl:flex-col max-xl:items-stretch max-xl:gap-0">
+            {# Классы пунктов, подменю и шеврона общие для всех выпадающих пунктов #}
+            {% with link='inline-flex h-[42px] cursor-pointer items-center gap-1.5 rounded-full px-3 text-[15px] font-semibold whitespace-nowrap text-navy transition-colors hover:bg-tint 2xl:px-3.5 max-xl:h-[60px] max-xl:w-full max-xl:justify-between max-xl:rounded-none max-xl:px-1 max-xl:text-lg max-xl:font-bold max-xl:hover:bg-transparent' %}
+            {% with drop='xl:invisible xl:absolute xl:top-[calc(100%+10px)] xl:left-1/2 xl:min-w-64 xl:-translate-x-1/2 xl:translate-y-1.5 xl:rounded-2xl xl:border xl:border-line xl:bg-white xl:p-2 xl:opacity-0 xl:shadow-[0_20px_50px_rgb(15_29_58/.14)] xl:transition xl:duration-200 xl:before:absolute xl:before:inset-x-0 xl:before:-top-3 xl:before:h-3 xl:group-hover/dd:visible xl:group-hover/dd:translate-y-0 xl:group-hover/dd:opacity-100 xl:group-focus-within/dd:visible xl:group-focus-within/dd:translate-y-0 xl:group-focus-within/dd:opacity-100 xl:group-[.is-open]/dd:visible xl:group-[.is-open]/dd:translate-y-0 xl:group-[.is-open]/dd:opacity-100 max-xl:grid max-xl:grid-rows-[0fr] max-xl:transition-[grid-template-rows] max-xl:duration-300 max-xl:group-[.is-open]/dd:grid-rows-[1fr]' %}
+            {% with sub='block rounded-[10px] px-3.5 py-2.5 text-sm font-medium leading-snug text-navy transition-colors hover:bg-tint hover:text-gold max-xl:px-1 max-xl:text-base max-xl:text-muted' %}
+            {% with chevron='size-4 text-gold transition-transform duration-200 group-[.is-open]/dd:rotate-180 xl:group-hover/dd:rotate-180' %}
+
+            <li class="group/dd relative max-xl:border-b max-xl:border-line" data-dropdown>
+                <button type="button" class="{{ link }}" aria-expanded="false">{% trans 'О колледже' %}{% icon 'chevron-down' chevron %}</button>
+                <div class="{{ drop }}"><ul class="overflow-hidden max-xl:group-[.is-open]/dd:pb-3">
+                    <li><a class="{{ sub }}" href="{% url 'history' %}">{% trans 'История' %}</a></li>
+                    <li><a class="{{ sub }}" href="{% url 'password_college' %}">{% trans 'Паспорт колледжа' %}</a></li>
+                    <li><a class="{{ sub }}" href="{% url 'employees' %}">{% trans 'Структура' %}</a></li>
+                    <li><a class="{{ sub }}" href="{% url 'news_list' %}">{% trans 'Новости' %}</a></li>
+                    <li><a class="{{ sub }}" href="{% url 'documents_list' %}">{% trans 'Нормативные документы' %}</a></li>
+                    <li><a class="{{ sub }}" href="https://www.ebs.el-kitep.kg/" target="_blank" rel="noopener">{% trans 'Библиотека' %}</a></li>
+                    <li><a class="{{ sub }}" href="{% url 'cooperation' %}">{% trans 'Сотрудничество' %}</a></li>
+                    <li><a class="{{ sub }}" href="{% url 'internationals' %}">{% trans 'Международное сотрудничество' %}</a></li>
+                </ul></div>
+            </li>
+
+            {% if edu_processes %}
+            <li class="group/dd relative max-xl:border-b max-xl:border-line" data-dropdown>
+                <button type="button" class="{{ link }}" aria-expanded="false">{% trans 'Учебный процесс' %}{% icon 'chevron-down' chevron %}</button>
+                <div class="{{ drop }}"><ul class="overflow-hidden max-xl:group-[.is-open]/dd:pb-3">
+                    {% for edu_process in edu_processes %}
+                        <li><a class="{{ sub }}" href="{% url 'edu_process_detail' edu_process.pk %}">{{ edu_process }}</a></li>
+                    {% endfor %}
+                </ul></div>
+            </li>
+            {% endif %}
+
+            <li class="group/dd relative max-xl:border-b max-xl:border-line" data-dropdown>
+                <button type="button" class="{{ link }}" aria-expanded="false">{% trans 'Абитуриентам' %}{% icon 'chevron-down' chevron %}</button>
+                <div class="{{ drop }}"><ul class="overflow-hidden max-xl:group-[.is-open]/dd:pb-3">
+                    <li><a class="{{ sub }}" href="{% url 'reception' %}">{% trans 'Приемная комиссия' %}</a></li>
+                    <li><a class="{{ sub }}" href="{% url 'specialties_list' %}">{% trans 'Наши Специальности' %}</a></li>
+                </ul></div>
+            </li>
+
+            <li class="group/dd relative max-xl:border-b max-xl:border-line" data-dropdown>
+                <button type="button" class="{{ link }}" aria-expanded="false">{% trans 'Студентам' %}{% icon 'chevron-down' chevron %}</button>
+                <div class="{{ drop }}"><ul class="overflow-hidden max-xl:group-[.is-open]/dd:pb-3">
+                    <li><a class="{{ sub }}" href="https://avn.badk.kg/" target="_blank" rel="noopener">{% trans 'Дистанционное обучение «AVN»' %}</a></li>
+                    <li><a class="{{ sub }}" href="{% url 'students' %}">{% trans 'Студенческий совет' %}</a></li>
+                    <li><a class="{{ sub }}" href="{% url 'student_live_list' %}">{% trans 'Студенческая жизнь' %}</a></li>
+                </ul></div>
+            </li>
+
+            <li class="max-xl:border-b max-xl:border-line"><a href="{% url 'contacts' %}" class="{{ link }}">{% trans 'Контакты' %}</a></li>
+
+            {% endwith %}{% endwith %}{% endwith %}{% endwith %}
+        </ul>
+
+        <div class="flex flex-col gap-4 xl:hidden">
+            <a href="{% url 'reception' %}" class="btn btn-dark h-14 text-base">{% trans 'Поступить' %}{% icon 'arrow-right' 'arrow text-gold-2' %}</a>
+            <a href="tel:{{ CONTACTS.phone.link }}" class="inline-flex items-center justify-center gap-2.5 font-bold text-navy">{% icon 'phone' 'size-4 text-gold' %}{{ CONTACTS.phone.value }}</a>
         </div>
     </nav>
+
+    <div class="ml-auto flex shrink-0 items-center gap-2.5 xl:ml-0">
+        <a href="{% url 'reception' %}" class="btn btn-dark hidden h-[46px] px-[22px] hover:bg-gold xl:inline-flex">{% trans 'Поступить' %}{% icon 'arrow-right' 'arrow text-gold-2' %}</a>
+        <button type="button" id="site-burger" aria-controls="site-nav" aria-expanded="false" aria-label="{% trans 'Меню' %}"
+                class="group/burger relative size-[46px] cursor-pointer rounded-[14px] bg-tint xl:hidden">
+            <span class="absolute top-4 left-[13px] h-0.5 w-5 rounded-full bg-navy transition-all duration-300 group-[.is-open]/burger:top-[22px] group-[.is-open]/burger:rotate-45"></span>
+            <span class="absolute top-[22px] left-[13px] h-0.5 w-5 rounded-full bg-navy transition-opacity duration-200 group-[.is-open]/burger:opacity-0"></span>
+            <span class="absolute top-7 left-[13px] h-0.5 w-5 rounded-full bg-navy transition-all duration-300 group-[.is-open]/burger:top-[22px] group-[.is-open]/burger:-rotate-45"></span>
+        </button>
+    </div>
 </header>

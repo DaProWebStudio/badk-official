@@ -1,33 +1,35 @@
 {% extends 'base/base.html' %}
-{% load static i18n imagekit %}
+{% load static i18n imagekit icons %}
 
 {% block title %}
     {% trans 'Международное сотрудничество' %}
 {% endblock %}
 
 {% block content %}
-    <section class="section cooperation">
-        <div class="container">
-            <div class="row">
-                <div class="title">
-                    <span>{% trans 'Сотрудничество' %}</span>
-                    <h3>{% trans 'Международное сотрудничество' %}</h3>
-                </div>
-                <div class="cooperation__wrap">
-                    {% for international in internationals %}
-                        <div class="card international-card">
-                            <a href="{{ international.get_absolute_url }}" class="card-link">
-                                <div class="card-img">
-                                    {% generateimage 'main:thumbnail' source=international.image -- class="mypicture" %}
-                                </div>
-                                <div class="card-body">
-                                    <h4 class="card-title">{{ international.title|truncatechars:63 }}</h4>
-                                </div>
-                            </a>
+    {% trans 'Сотрудничество' as eyebrow %}
+    {% trans 'Международное сотрудничество' as title %}
+    {% include 'core/_page_head.html' with eyebrow=eyebrow title=title parent_title=eyebrow %}
+
+    <section class="px-1 pb-16 sm:px-4">
+        {% if internationals %}
+            <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {% for international in internationals %}
+                    <a href="{{ international.get_absolute_url }}" class="card-lift group flex flex-col" data-reveal>
+                        <div class="aspect-[16/10] overflow-hidden bg-tint">
+                            {% generateimage 'main:thumbnail' source=international.image -- alt=international.title loading="lazy" class="zoom size-full object-cover" %}
                         </div>
-                    {% endfor %}
-                </div>
+                        <div class="flex flex-1 items-end justify-between gap-4 px-[22px] pt-5 pb-[22px]">
+                            <h2 class="line-clamp-3 text-[17px] leading-snug font-bold text-navy transition-colors group-hover:text-gold">{{ international.title }}</h2>
+                            {% icon 'arrow-right' 'size-5 shrink-0 text-gold transition-transform group-hover:translate-x-1' %}
+                        </div>
+                    </a>
+                {% endfor %}
             </div>
-        </div>
+        {% else %}
+            <div class="rounded-card bg-tint px-6 py-14 text-center text-muted">
+                {% icon 'globe' 'mx-auto mb-3 size-8 text-gold' %}
+                {% trans 'Материалы скоро появятся' %}
+            </div>
+        {% endif %}
     </section>
 {% endblock %}

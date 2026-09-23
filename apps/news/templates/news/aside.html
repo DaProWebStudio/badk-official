@@ -1,9 +1,17 @@
-{% load i18n %}
-
-<div class="widget">
-    <h4 class="widget-title">{% trans 'Поиск новостей' %}</h4>
-    <form method="get" class="widget-form-search">
-        <input placeholder="{% trans 'Поиск по ключевому слову...' %}" type="text" name="q">
-        <button type="submit">{% trans 'Поиск' %}</button>
+{% load i18n icons %}
+{# Поиск ведёт на список своего раздела: новости или студенческая жизнь #}
+{% if request.resolver_match.url_name == 'student_live_list' or request.resolver_match.url_name == 'student_live_detail' %}
+    {% url 'student_live_list' as search_url %}
+{% else %}
+    {% url 'news_list' as search_url %}
+{% endif %}
+<div class="rounded-card bg-tint p-5 sm:p-6">
+    <h2 class="mb-4 text-base font-extrabold text-navy">{% trans 'Поиск новостей' %}</h2>
+    <form method="get" action="{{ search_url }}" class="relative" role="search">
+        <label for="news-search" class="sr-only">{% trans 'Поиск по ключевому слову...' %}</label>
+        <span class="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-muted">{% icon 'search' 'size-[18px]' %}</span>
+        <input id="news-search" type="search" name="q" value="{{ query|default:'' }}" placeholder="{% trans 'Поиск по ключевому слову...' %}"
+               class="h-12 w-full rounded-full border border-line bg-white pr-24 pl-11 text-[15px] text-ink outline-none transition placeholder:text-muted/70 focus:border-gold focus:ring-4 focus:ring-gold/15">
+        <button type="submit" class="absolute top-1 right-1 h-10 cursor-pointer rounded-full bg-navy px-4 text-sm font-bold text-white transition-colors hover:bg-gold">{% trans 'Поиск' %}</button>
     </form>
 </div>

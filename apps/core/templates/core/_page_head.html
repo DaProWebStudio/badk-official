@@ -1,0 +1,18 @@
+{% load i18n icons %}
+{# Шапка внутренней страницы. Параметры: eyebrow, title, parent_url, parent_title (необязательные) #}
+<section class="px-1 pt-10 pb-8 sm:px-4 sm:pt-14 sm:pb-10">
+    <nav class="mb-5 flex flex-wrap items-center gap-2 text-sm text-muted" aria-label="{% trans 'Навигация' %}">
+        <a href="{% url 'index' %}" class="transition-colors hover:text-gold">{% trans 'Главная' %}</a>
+        {% if parent_url %}
+            {% icon 'chevron-right' 'size-3.5' %}
+            <a href="{{ parent_url }}" class="transition-colors hover:text-gold">{{ parent_title }}</a>
+        {% elif parent_title %}
+            {% icon 'chevron-right' 'size-3.5' %}
+            <span>{{ parent_title }}</span>
+        {% endif %}
+        {% icon 'chevron-right' 'size-3.5' %}
+        <span class="line-clamp-1 font-semibold text-navy" aria-current="page">{{ title }}</span>
+    </nav>
+    {% if eyebrow %}<p class="eyebrow">{{ eyebrow }}</p>{% endif %}
+    <h1 class="page-title max-w-4xl">{{ title }}</h1>
+</section>

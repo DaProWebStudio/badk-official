@@ -1,0 +1,28 @@
+{% load i18n icons %}
+{# Список файлов-карточек. Параметр: files — итерируемое с .title и .file #}
+{% if files %}
+    <ul class="grid gap-3 md:grid-cols-2">
+        {% for item in files %}
+            <li data-reveal>
+                <a href="{{ item.file.url }}" target="_blank" rel="noopener"
+                   class="group flex h-full items-center gap-4 rounded-card border border-line bg-white p-4 transition duration-300 ease-(--ease-soft) hover:-translate-y-0.5 hover:border-transparent hover:shadow-lift sm:p-5">
+                    <span class="grid size-12 shrink-0 place-items-center rounded-[14px] bg-gold-soft text-gold transition-colors group-hover:bg-gold group-hover:text-white">
+                        {% icon 'file-text' 'size-5' %}
+                    </span>
+                    <span class="min-w-0 flex-1">
+                        <span class="block text-[15px] leading-snug font-bold text-navy transition-colors group-hover:text-gold">{{ item.title }}</span>
+                        <span class="mt-1 block text-xs font-semibold tracking-wide text-muted uppercase">{{ item.file.name|slice:"-4:"|cut:"." }}</span>
+                    </span>
+                    <span class="hidden shrink-0 items-center gap-1.5 text-sm font-bold text-navy sm:inline-flex">
+                        {% trans 'Открыть' %}{% icon 'arrow-up-right' 'size-4 text-gold transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5' %}
+                    </span>
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <div class="rounded-card bg-tint px-6 py-14 text-center text-muted">
+        {% icon 'file' 'mx-auto mb-3 size-8 text-gold' %}
+        {% trans 'Документы пока не добавлены' %}
+    </div>
+{% endif %}

@@ -6,24 +6,12 @@
 {% endblock %}
 
 {% block content %}
-    <section class="section documents">
-        <div class="container">
-            <div class="row">
-                <div class="title col-12 m-auto">
-                    <span>{% trans 'О Колледже' %}</span>
-                    <h3>{{ document.title }}</h3>
-                </div>
-                <ul class="cooperation-list col-12 m-auto">
-                    {% for item in document.files.all %}
-                        <li>
-                            <a href="{{ item.file.url }}">
-                                <i class="fa fa-file mr-2"></i>
-                                {{ item.title }}
-                            </a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
+    {% trans 'Нормативные документы' as parent %}
+    {% url 'documents_list' as parent_url %}
+    {% trans 'О Колледже' as eyebrow %}
+    {% include 'core/_page_head.html' with eyebrow=eyebrow title=document.title parent_url=parent_url parent_title=parent %}
+
+    <section class="px-1 pb-16 sm:px-4">
+        {% include 'core/_file_list.html' with files=document.files.all %}
     </section>
 {% endblock %}

@@ -1,34 +1,52 @@
 {% extends 'base/base.html' %}
-{% load static i18n %}
+{% load static i18n icons %}
 
 {% block title %}{% trans 'История создания и развития учебного заведения' %}{% endblock %}
 
 {% block content %}
-    <section class="section history">
-        <div class="container">
-            <div class="title animate__animated animate__fadeInUp">
-                <span>{% trans 'О колледже' %}</span>
-                <h3>{% trans 'История создания и развития учебного заведения' %}</h3>
+    {% trans 'О колледже' as eyebrow %}
+    {% trans 'История создания и развития учебного заведения' as title %}
+    {% include 'core/_page_head.html' with eyebrow=eyebrow title=title parent_title=eyebrow %}
+
+    <section class="grid gap-10 px-1 pb-16 sm:px-4 lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-16">
+        <article class="rich text-[17px]">
+            <p>{{ site_content.history_paragraph_1|safe }}</p>
+            <p>{{ site_content.history_paragraph_2|safe }}</p>
+
+            <div class="flow-root">
+                <img src="{% static 'images/college/HY2343.webp' %}" alt="" loading="lazy"
+                     class="!mt-1 !mb-5 w-full rounded-card sm:float-left sm:mr-8 sm:max-w-[420px]">
+                <p>{{ site_content.history_paragraph_3|safe }}</p>
             </div>
-            <div class="history-text animate__animated animate__fadeInUp">
-                <p>{{ site_content.history_paragraph_1|safe }}</p>
-                <p>{{ site_content.history_paragraph_2|safe }}</p>
-                <div style="overflow:hidden">
-                    <img src="{% static 'dist/images/college/HY2343.webp' %}" style="max-width: 500px; width: 100%; float:left" class="mr-4 mt-3" alt="">
-                    <p>{{ site_content.history_paragraph_3|safe }}</p>
-                </div>
-                <div style="overflow:hidden">
-                    <img src="{% static 'dist/images/college/HY3423.webp' %}" style="max-width: 300px; width: 100%; float:left" class="mr-4 mt-3" alt="">
-                    <p>{{ site_content.history_paragraph_4|safe }}</p>
-                    <p>{{ site_content.history_paragraph_5|safe }}</p>
-                </div>
-                <div style="overflow:hidden">
-                    <img src="{% static 'dist/images/college/HY3422.webp' %}" style="max-width: 300px; width: 100%; float:left" class="mr-4 mt-3" alt="">
-                    <p>{{ site_content.history_paragraph_6|safe }}</p>
-                    <p>{{ site_content.history_paragraph_7|safe }}</p>
-                    <p>{{ site_content.history_paragraph_8|safe }}</p>
-                </div>
+
+            <div class="flow-root">
+                <img src="{% static 'images/college/HY3423.webp' %}" alt="" loading="lazy"
+                     class="!mt-1 !mb-5 w-full rounded-card sm:float-right sm:ml-8 sm:max-w-[300px]">
+                <p>{{ site_content.history_paragraph_4|safe }}</p>
+                <p>{{ site_content.history_paragraph_5|safe }}</p>
             </div>
-        </div>
+
+            <div class="flow-root">
+                <img src="{% static 'images/college/HY3422.webp' %}" alt="" loading="lazy"
+                     class="!mt-1 !mb-5 w-full rounded-card sm:float-left sm:mr-8 sm:max-w-[280px]">
+                <p>{{ site_content.history_paragraph_6|safe }}</p>
+                <p>{{ site_content.history_paragraph_7|safe }}</p>
+                <p>{{ site_content.history_paragraph_8|safe }}</p>
+            </div>
+        </article>
+
+        <aside class="lg:sticky lg:top-28 lg:self-start">
+            <div class="rounded-card bg-navy p-7 text-white">
+                <p class="text-[44px] leading-none font-extrabold tracking-tight text-gold-2">1939</p>
+                <p class="mt-2 text-sm text-white/70">{% trans 'год основания' %}</p>
+                <div class="my-6 h-px bg-white/10"></div>
+                <a href="{% url 'password_college' %}" class="group flex items-center justify-between gap-3 font-bold">
+                    {% trans 'Паспорт колледжа' %}{% icon 'arrow-right' 'size-4 text-gold-2 transition-transform group-hover:translate-x-1' %}
+                </a>
+                <a href="{% url 'employees' %}" class="group mt-4 flex items-center justify-between gap-3 font-bold">
+                    {% trans 'Структура' %}{% icon 'arrow-right' 'size-4 text-gold-2 transition-transform group-hover:translate-x-1' %}
+                </a>
+            </div>
+        </aside>
     </section>
 {% endblock %}

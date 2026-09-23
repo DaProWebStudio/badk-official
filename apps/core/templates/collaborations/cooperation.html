@@ -6,19 +6,11 @@
 {% endblock %}
 
 {% block content %}
-    <section class="section cooperation">
-        <div class="container">
-            <div class="row">
-                <div class="title">
-                    <span>{% trans 'О Колледже' %}</span>
-                    <h3>{% trans 'Сотрудничество' %}</h3>
-                </div>
-                <ul class="cooperation-list">
-                    {% for item in cooperation %}
-                        <li><a href="{{ item.file.url }}">{{ item.title }}</a></li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
+    {% trans 'О Колледже' as eyebrow %}
+    {% trans 'Сотрудничество' as title %}
+    {% include 'core/_page_head.html' with eyebrow=eyebrow title=title parent_title=eyebrow %}
+
+    <section class="px-1 pb-16 sm:px-4">
+        {% include 'core/_file_list.html' with files=cooperation %}
     </section>
 {% endblock %}
