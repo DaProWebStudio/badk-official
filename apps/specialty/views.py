@@ -6,11 +6,13 @@ from apps.specialty.models import Specialty
 
 class SpecialtyListView(ListView):
     model = Specialty
+    queryset = model.active.all()
     context_object_name = 'specialties'
     template_name = 'specialty/list.html'
 
 
 class SpecialtyDetailView(DetailView):
     model = Specialty
+    queryset = model.active.all()
     context_object_name = 'specialty'
     template_name = 'specialty/detail.html'

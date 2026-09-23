@@ -10,11 +10,20 @@ class NewsListView(ListView):
     queryset = model.active.all()
     context_object_name = 'news'
     template_name = 'news/list.html'
+    paginate_by = 12
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        query = self.request.GET.get('q', '').strip()
+        if query:
+            queryset = queryset.filter(title__icontains=query)
+        return queryset
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['title'] = _('Новости')
         context['sub_title'] = _('Новости колледжа')
+        context['query'] = self.request.GET.get('q', '').strip()
         return context
 
 
