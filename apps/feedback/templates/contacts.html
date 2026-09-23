@@ -4,6 +4,7 @@
 {% block title %}{% trans 'Контакты' %}{% endblock %}
 
 {% block content %}
+    {% get_current_language as LANGUAGE_CODE %}
     <section class="px-1 pt-10 pb-8 sm:px-4 sm:pt-14 sm:pb-10">
         <nav class="mb-5 flex flex-wrap items-center gap-2 text-sm text-muted" aria-label="breadcrumb">
             <a href="{% url 'index' %}" class="transition-colors hover:text-gold">{% trans 'Главная' %}</a>
@@ -108,7 +109,7 @@
     </div>
 
     <div class="mt-8 overflow-hidden rounded-[20px] border border-line sm:mx-4 sm:rounded-section">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1114.8044281000011!2d74.58600367585336!3d42.85031137620761!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x389ec9d0d339b2e1%3A0xb1def427157531a2!2z0JHQuNGI0LrQtdC60YHQutC40Lkg0LDQstGC0L7QvNC-0LHQuNC70YzQvdC-LdC00L7RgNC-0LbQvdGL0Lkg0LrQvtC70LvQtdC00LYg0LjQvC4g0JouINCa0L7Qu9GM0LHQsNC10LLQsA!5e0!3m2!1sru!2skg!4v1710350050415!5m2!1sru!2skg"
+        <iframe src="https://maps.google.com/maps?q=42.850539,74.587549&amp;z=17&amp;hl={{ LANGUAGE_CODE }}&amp;output=embed"
                 title="{% trans 'Наш адрес: ' %}" class="block h-[380px] w-full sm:h-[480px]" style="border:0" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
 {% endblock %}
