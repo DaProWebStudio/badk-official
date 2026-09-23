@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
 
-from ckeditor.fields import RichTextField
+from common.richtext import RichTextField
 from common.utils import get_english_translit as get_slug
 
 from common import constants as cons

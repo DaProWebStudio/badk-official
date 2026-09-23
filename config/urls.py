@@ -8,7 +8,6 @@ from services.seo.urls import urlpatterns as seo_urlpatterns
 
 urlpatterns = [
     path('', include(seo_urlpatterns)),
-    path('ckeditor/', include('ckeditor_uploader.urls')),
     path('rosetta/', include('rosetta.urls')),
 ]
 
