@@ -4,7 +4,7 @@
 
 <div class="flex h-10 items-center justify-between gap-6 px-1 text-[13px] text-muted sm:h-11 sm:px-2">
     <div class="flex min-w-0 items-center gap-6">
-        <a href="tel:{{ CONTACTS.phone.link }}" class="inline-flex items-center gap-2 transition-colors hover:text-navy">
+        <a href="tel:{{ CONTACTS.phone.link }}" class="inline-flex items-center gap-2 py-2 transition-colors hover:text-navy">
             {% icon 'phone' 'size-3.5 text-gold' %}{{ CONTACTS.phone.value }}
         </a>
         <a href="mailto:{{ CONTACTS.email }}" class="hidden items-center gap-2 transition-colors hover:text-navy sm:inline-flex">
@@ -23,7 +23,7 @@
             {% get_available_languages as LANGUAGES %}
             {% for code, name in LANGUAGES %}
                 <button type="submit" name="language" value="{{ code }}" title="{{ name }}"
-                        class="h-[26px] min-w-9 cursor-pointer rounded-full px-2.5 text-xs font-bold tracking-wide transition-colors {% if code == LANGUAGE_CODE %}bg-white text-navy shadow-[0_1px_3px_rgb(15_29_58/.12)]{% else %}text-muted hover:text-navy{% endif %}"
+                        class="h-8 min-w-10 cursor-pointer rounded-full px-2.5 sm:h-[26px] sm:min-w-9 text-xs font-bold tracking-wide transition-colors {% if code == LANGUAGE_CODE %}bg-white text-navy shadow-[0_1px_3px_rgb(15_29_58/.12)]{% else %}text-muted hover:text-navy{% endif %}"
                         {% if code == LANGUAGE_CODE %}aria-current="true"{% endif %}>{{ code|upper }}</button>
             {% endfor %}
         </form>

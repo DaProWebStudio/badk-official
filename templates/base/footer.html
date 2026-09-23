@@ -1,5 +1,5 @@
 {% load static i18n icons %}
-{% with col_title='mb-[18px] text-[13px] font-bold tracking-[.08em] text-gold-2 uppercase' col_link='text-[15px] leading-snug text-white/75 transition-colors hover:text-gold-2' %}
+{% with col_title='mb-[18px] text-[13px] font-bold tracking-[.08em] text-gold-2 uppercase' col_link='inline-block py-1 text-[15px] leading-snug text-white/75 transition-colors hover:text-gold-2' %}
 <footer class="mt-4 mb-5 rounded-[20px] bg-navy px-4 pt-10 pb-7 text-white/70 sm:rounded-section sm:px-8 sm:pt-14 xl:px-12">
     <div class="grid grid-cols-2 gap-x-5 gap-y-8 border-b border-white/10 pb-10 md:grid-cols-3 xl:grid-cols-[minmax(0,1.5fr)_repeat(3,minmax(0,1fr))] xl:gap-10">
         <div class="col-span-full xl:col-span-1">
@@ -22,7 +22,7 @@
 
         <div>
             <h3 class="{{ col_title }}">{% trans 'О колледже' %}</h3>
-            <ul class="space-y-3">
+            <ul class="space-y-1.5">
                 <li><a class="{{ col_link }}" href="{% url 'history' %}">{% trans 'История' %}</a></li>
                 <li><a class="{{ col_link }}" href="{% url 'employees' %}">{% trans 'Структура' %}</a></li>
                 <li><a class="{{ col_link }}" href="{% url 'news_list' %}">{% trans 'Новости' %}</a></li>
@@ -33,7 +33,7 @@
 
         <div>
             <h3 class="{{ col_title }}">{% trans 'Обучение' %}</h3>
-            <ul class="space-y-3">
+            <ul class="space-y-1.5">
                 <li><a class="{{ col_link }}" href="{% url 'reception' %}">{% trans 'Приемная комиссия' %}</a></li>
                 <li><a class="{{ col_link }}" href="{% url 'specialties_list' %}">{% trans 'Наши специальности' %}</a></li>
                 <li><a class="{{ col_link }}" href="{% url 'students' %}">{% trans 'Студенческий совет' %}</a></li>
@@ -44,11 +44,11 @@
 
         <div class="col-span-full md:col-span-1">
             <h3 class="{{ col_title }}">{% trans 'Контакты' %}</h3>
-            <ul class="space-y-3">
-                <li><a class="{{ col_link }} flex gap-3" href="tel:{{ CONTACTS.phone.link }}">{% icon 'phone' 'mt-0.5 size-4 shrink-0 text-gold-2' %}{{ CONTACTS.phone.value }}</a></li>
-                <li><a class="{{ col_link }} flex gap-3" href="{{ CONTACTS.whatsapp.link }}" target="_blank" rel="noopener">{% icon 'brand-whatsapp' 'mt-0.5 size-4 shrink-0 text-gold-2' %}{{ CONTACTS.whatsapp.value }}</a></li>
-                <li><a class="{{ col_link }} flex gap-3" href="mailto:{{ CONTACTS.email }}">{% icon 'mail' 'mt-0.5 size-4 shrink-0 text-gold-2' %}{{ CONTACTS.email }}</a></li>
-                <li><a class="{{ col_link }} flex gap-3" href="https://go.2gis.com/6t1t2" target="_blank" rel="noopener">{% icon 'map-pin' 'mt-0.5 size-4 shrink-0 text-gold-2' %}{% trans 'г. Бишкек, проспект Чынгыза Айтматова 52' %}</a></li>
+            <ul class="space-y-1.5">
+                <li><a class="flex gap-3 py-1 text-[15px] leading-snug text-white/75 transition-colors hover:text-gold-2" href="tel:{{ CONTACTS.phone.link }}">{% icon 'phone' 'mt-0.5 size-4 shrink-0 text-gold-2' %}{{ CONTACTS.phone.value }}</a></li>
+                <li><a class="flex gap-3 py-1 text-[15px] leading-snug text-white/75 transition-colors hover:text-gold-2" href="{{ CONTACTS.whatsapp.link }}" target="_blank" rel="noopener">{% icon 'brand-whatsapp' 'mt-0.5 size-4 shrink-0 text-gold-2' %}{{ CONTACTS.whatsapp.value }}</a></li>
+                <li><a class="flex gap-3 py-1 text-[15px] leading-snug text-white/75 transition-colors hover:text-gold-2" href="mailto:{{ CONTACTS.email }}">{% icon 'mail' 'mt-0.5 size-4 shrink-0 text-gold-2' %}{{ CONTACTS.email }}</a></li>
+                <li><a class="flex gap-3 py-1 text-[15px] leading-snug text-white/75 transition-colors hover:text-gold-2" href="https://go.2gis.com/6t1t2" target="_blank" rel="noopener">{% icon 'map-pin' 'mt-0.5 size-4 shrink-0 text-gold-2' %}{% trans 'г. Бишкек, проспект Чынгыза Айтматова 52' %}</a></li>
             </ul>
         </div>
     </div>
