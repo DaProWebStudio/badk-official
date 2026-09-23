@@ -73,32 +73,7 @@
         {% include 'components/section_head.html' with eyebrow=t_eyebrow title=t_title link=specialties_url link_text=t_link %}
         <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {% for specialty in specialties|slice:":6" %}
-                <a href="{{ specialty.get_absolute_url }}" data-reveal
-                   class="group flex flex-col overflow-hidden rounded-3xl border border-line bg-white transition duration-300 ease-(--ease-soft) hover:-translate-y-1 hover:border-transparent hover:shadow-lift">
-                    <div class="relative aspect-[16/10] overflow-hidden bg-tint">
-                        {% generateimage 'main:thumbnail' source=specialty.image -- alt="" loading="lazy" class="size-full object-cover transition-transform duration-700 ease-(--ease-soft) group-hover:scale-105" %}
-                        <div class="absolute inset-0 bg-[linear-gradient(180deg,rgb(10_20_42/.45)_0%,rgb(10_20_42/0)_40%)]"></div>
-                        {% if specialty.code %}
-                            <span class="absolute top-4 left-4 rounded-lg bg-navy/80 px-2.5 py-1 font-mono text-[13px] font-bold tracking-wider text-gold-2 backdrop-blur-sm">{{ specialty.code }}</span>
-                        {% endif %}
-                    </div>
-                    <div class="flex flex-1 flex-col p-6">
-                        <h3 class="text-lg leading-snug font-bold text-navy text-balance transition-colors group-hover:text-gold">{{ specialty.name }}</h3>
-                        <div class="mt-4 flex flex-wrap gap-2">
-                            <span class="chip">{% icon 'clock' 'mr-1.5 size-3.5' %}{{ specialty.form_verbose }}</span>
-                            <span class="chip">{% icon 'wallet' 'mr-1.5 size-3.5' %}{{ specialty.basis_verbose }}</span>
-                        </div>
-                        <div class="mt-auto pt-6"><div class="flex items-end justify-between gap-4 border-t border-line pt-5">
-                            <div>
-                                <span class="block text-xs font-semibold text-muted">{% trans 'Сумма контракта' %}</span>
-                                <span class="mt-0.5 block text-xl leading-none font-extrabold text-navy">{{ specialty.contract }} <span class="text-sm font-bold text-muted">{% trans 'сом' %}</span></span>
-                            </div>
-                            <span class="grid size-11 shrink-0 place-items-center rounded-full bg-tint text-navy transition duration-300 group-hover:bg-gold group-hover:text-white">
-                                {% icon 'arrow-up-right' 'size-5 transition-transform duration-300 group-hover:rotate-45' %}
-                            </span>
-                        </div></div>
-                    </div>
-                </a>
+                {% include 'components/specialty_card.html' %}
             {% endfor %}
         </div>
     </section>
@@ -287,7 +262,7 @@
                 </div>
                 {# Подпись: имя наведённого участника #}
                 <p id="council-caption" class="min-h-12 text-sm text-white/60 lg:text-right" aria-live="polite">
-                    <span class="block text-base font-bold text-white" data-caption-name>{% trans 'Наведите на участника' %}</span>
+                    <span class="block text-base font-bold text-white" data-caption-name>{% trans 'Участников совета' %}: {{ students|length }}</span>
                     <span data-caption-role></span>
                 </p>
             </div>
@@ -315,7 +290,6 @@
 
     {# ================= CTA ================= #}
     <section class="gradient-pan relative isolate flex flex-col items-start justify-between gap-8 overflow-hidden rounded-[20px] bg-[linear-gradient(120deg,#f2c25a,#e3a624,#c9880b,#e3a624,#f2c25a)] px-4 sm:px-8 xl:px-12 py-10 sm:py-14 sm:rounded-section lg:flex-row lg:items-center" data-reveal>
-        <div class="pointer-events-none absolute -right-10 -bottom-24 -z-10 text-[220px] leading-none font-extrabold tracking-tighter text-white/15 select-none sm:text-[300px]" aria-hidden="true">{{ founded_year }}</div>
         <div>
             <h2 class="text-[clamp(28px,3.4vw,46px)] leading-[1.08] font-extrabold tracking-[-.025em] text-navy text-balance">{% trans 'Хотите поступить в БАДК?' %}</h2>
             <p class="mt-3 max-w-[560px] text-base leading-relaxed text-navy/80 sm:text-lg">{% trans 'Приемная комиссия ответит на вопросы о специальностях, документах и стоимости обучения.' %}</p>

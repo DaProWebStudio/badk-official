@@ -1,7 +1,7 @@
 {% extends 'base/base.html' %}
 {% load static i18n icons %}
 
-{% block title %}{{ specialty.title }}{% endblock %}
+{% block title %}{{ specialty.name }}{% endblock %}
 
 {% block content %}
     <section class="px-1 pt-10 pb-8 sm:px-4 sm:pt-14 sm:pb-10">
@@ -10,8 +10,8 @@
             {% icon 'chevron-right' 'size-3.5' %}
             <a href="{% url 'specialties_list' %}" class="transition-colors hover:text-gold">{% trans 'Наши специальности' %}</a>
         </nav>
-        <p class="eyebrow">{% trans 'Специальность' %}</p>
-        <h1 class="page-title max-w-4xl">{{ specialty.title }}</h1>
+        <p class="eyebrow">{% trans 'Специальность' %}{% if specialty.code %} · {{ specialty.code }}{% endif %}</p>
+        <h1 class="page-title max-w-4xl">{{ specialty.name }}</h1>
         <div class="mt-6 flex flex-wrap gap-2">
             <span class="chip bg-gold-soft text-gold-dark">{{ specialty.form_verbose }}</span>
             <span class="chip bg-gold-soft text-gold-dark">{{ specialty.basis_verbose }}</span>

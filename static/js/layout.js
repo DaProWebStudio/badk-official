@@ -88,10 +88,18 @@
     // ---------- Появление при прокрутке: атрибут data-reveal ----------
     var targets = document.querySelectorAll('[data-reveal]');
     if (targets.length && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        // Что видно сразу при загрузке, не прячем — анимируем только то, что ниже экрана
+        targets = Array.prototype.filter.call(targets, function (el) {
+            if (el.getBoundingClientRect().top < window.innerHeight) {
+                el.removeAttribute('data-reveal');
+                return false;
+            }
+            return true;
+        });
         targets.forEach(function (el) {
             // Соседние карточки появляются по очереди
             var i = el.parentElement ? Array.prototype.indexOf.call(el.parentElement.children, el) : 0;
-            el.style.setProperty('--i', Math.min(i, 5));
+            el.style.setProperty('--i', Math.min(i, 3));
         });
         document.documentElement.classList.add('reveal-on');
         var io = new IntersectionObserver(function (entries) {
@@ -101,13 +109,13 @@
                 el.classList.add('is-in');
                 io.unobserve(el);
                 // После появления возвращаем элементу его собственные transition и hover
-                var delay = 800 + 70 * (Number(el.style.getPropertyValue('--i')) || 0);
+                var delay = 550 + 50 * (Number(el.style.getPropertyValue('--i')) || 0);
                 setTimeout(function () {
                     el.removeAttribute('data-reveal');
                     el.classList.remove('is-in');
                 }, delay);
             });
-        }, {rootMargin: '0px 0px -8% 0px', threshold: 0.08});
+        }, {rootMargin: '0px 0px 25% 0px', threshold: 0});
         targets.forEach(function (el) { io.observe(el); });
     }
 })();
