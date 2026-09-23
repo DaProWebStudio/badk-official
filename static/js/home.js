@@ -3,9 +3,12 @@
     var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     // ---------- Texts reveal ----------
+    // rAF не срабатывает в фоновой вкладке — дублируем таймером, чтобы текст не остался скрытым
     document.querySelectorAll('.t-stagger').forEach(function (block) {
+        var show = function () { block.classList.add('is-shown'); };
         void block.offsetHeight;
-        requestAnimationFrame(function () { block.classList.add('is-shown'); });
+        requestAnimationFrame(show);
+        setTimeout(show, 100);
     });
 
     // ---------- Spinning counter: <span class="t-reel" data-reel="87"></span> ----------
