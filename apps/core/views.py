@@ -1,7 +1,7 @@
 import os
 from datetime import date
 
-from django.db.models import Prefetch
+from django.db.models import F, Prefetch
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, FormView, ListView, DetailView
 from django.utils.translation import gettext_lazy as _
@@ -22,7 +22,10 @@ class IndexView(TemplateView):
         context["specialties"] = Specialty.active.all()
         context["news"] = [n for n in News.active.all()[:9] if n.image and os.path.exists(n.image.path)]
         context["lives"] = StudentLive.active.all()[:9]
-        context["employees"] = Employee.active.select_related('position')[:9]
+        # Как на странице «Структура»: руководство первым по порядковому номеру
+        context["employees"] = Employee.active.select_related('position').order_by(
+            F('number').asc(nulls_last=True), 'last_name'
+        )[:4]
         context["students"] = StudentCouncil.active.all()[:9]
         context["internationals"] = InternationalCooperation.objects.all()
         context["specialties_count"] = Specialty.active.count()

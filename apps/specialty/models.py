@@ -1,3 +1,5 @@
+import re
+
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -38,6 +40,19 @@ class Specialty(models.Model):
 
     created = models.DateTimeField(auto_now=True)
     updated = models.DateTimeField(auto_now_add=True)
+
+    # «190605 – Название» -> код и название по отдельности
+    _CODE_RE = re.compile(r'^\s*(\d{6})\s*[–—-]\s*(.+)$', re.S)
+
+    @property
+    def code(self):
+        match = self._CODE_RE.match(self.title or '')
+        return match.group(1) if match else ''
+
+    @property
+    def name(self):
+        match = self._CODE_RE.match(self.title or '')
+        return ' '.join(match.group(2).split()) if match else self.title
 
     def form_verbose(self):
         return dict(Specialty.TRAINING)[self.form_of_training]

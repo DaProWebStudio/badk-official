@@ -6,6 +6,7 @@
 {% endblock %}
 
 {% block content %}
+<div class="flex flex-col gap-4 pt-4">
     {% url 'specialties_list' as specialties_url %}
     {% url 'news_list' as news_url %}
     {% url 'student_live_list' as lives_url %}
@@ -13,134 +14,89 @@
     {% url 'students' as students_url %}
     {% url 'internationals' as internationals_url %}
 
-    {# ---------- Hero ---------- #}
-    <section class="relative isolate mt-2 flex min-h-[min(720px,calc(100dvh-140px))] flex-col justify-end overflow-hidden rounded-[20px] text-white sm:rounded-section">
+    {# ================= Hero ================= #}
+    <section class="t-stagger relative isolate flex min-h-[min(720px,calc(100dvh-140px))] flex-col justify-end overflow-hidden rounded-[20px] text-white sm:rounded-section">
         <img src="{% static 'images/college/MY6H2343.webp' %}" alt="" fetchpriority="high"
              class="absolute inset-0 -z-20 size-full scale-[1.02] animate-hero-in object-cover object-[center_35%]">
         <div class="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgb(10_20_42/.92)_0%,rgb(10_20_42/.72)_45%,rgb(10_20_42/.25)_100%),linear-gradient(0deg,rgb(10_20_42/.85)_0%,rgb(10_20_42/0)_45%)]"></div>
 
-        <div class="max-w-[880px] px-6 pt-14 pb-10 sm:px-[clamp(24px,5vw,72px)] sm:pt-[clamp(40px,6vw,88px)]">
-            <p class="eyebrow eyebrow-light">{% trans 'С' %} {{ founded_year }} {% trans 'года' %}</p>
-            <h1 class="text-[clamp(32px,3.9vw,52px)] leading-[1.06] font-extrabold tracking-[-.025em] text-balance">
+        <div class="max-w-[936px] px-4 pt-12 pb-8 sm:px-8 sm:pt-[clamp(40px,6vw,80px)] xl:px-12">
+            <span class="t-stagger-line t-stagger-line--1"><span class="eyebrow eyebrow-light">{% trans 'С' %} {{ founded_year }} {% trans 'года' %}</span></span>
+            <h1 class="t-stagger-line t-stagger-line--2 text-[clamp(32px,3.9vw,52px)] leading-[1.06] font-extrabold tracking-[-.025em] text-balance">
                 {% trans 'Бишкекский автомобильно-дорожный колледж имени Кусаина Кольбаева' %}
             </h1>
-            <p class="mt-5 max-w-[580px] text-base leading-relaxed text-white/80 sm:text-[clamp(16px,1.3vw,19px)]">
+            <p class="t-stagger-line t-stagger-line--3 mt-5 max-w-[580px] text-base leading-relaxed text-white/80 sm:text-[clamp(16px,1.3vw,19px)]">
                 {% blocktrans %}Обеспечить высокое качество образования, вдохновляя студентов и преподавателей к постоянному развитию и достижению успеха.{% endblocktrans %}
             </p>
-            <div class="mt-8 flex flex-wrap gap-3.5 max-sm:[&>*]:flex-1">
-                <a href="{{ specialties_url }}" class="btn btn-gold">{% trans 'Специальности' %}{% icon 'arrow-right' 'arrow' %}</a>
-                <a href="{% url 'reception' %}" class="btn btn-ghost">{% trans 'Абитуриентам' %}</a>
-            </div>
+            <span class="t-stagger-line t-stagger-line--4">
+                <span class="mt-8 flex flex-wrap gap-3.5 max-sm:[&>*]:flex-1">
+                    <a href="{{ specialties_url }}" class="btn btn-gold">{% trans 'Специальности' %}{% icon 'arrow-right' 'arrow' %}</a>
+                    <a href="{% url 'reception' %}" class="btn btn-ghost">{% trans 'Абитуриентам' %}</a>
+                </span>
+            </span>
         </div>
 
-        <dl class="mx-6 mb-6 grid max-w-[880px] grid-cols-3 border-t border-white/20 sm:mx-[clamp(24px,5vw,72px)] sm:mb-[clamp(24px,4vw,48px)]">
-            {% with item='min-w-0 pt-5 pr-2.5 sm:pt-6 sm:pr-6 [&+&]:border-l [&+&]:border-white/15 [&+&]:pl-3 sm:[&+&]:pl-6' %}
-            <div class="{{ item }}">
-                <dt class="text-[26px] leading-none font-extrabold tracking-tight text-gold-2 sm:text-[clamp(28px,3vw,40px)]">{{ years_count }}</dt>
-                <dd class="mt-2 text-xs leading-snug text-white/70 hyphens-auto sm:text-sm">{% trans 'лет готовим специалистов' %}</dd>
-            </div>
-            <div class="{{ item }}">
-                <dt class="text-[26px] leading-none font-extrabold tracking-tight text-gold-2 sm:text-[clamp(28px,3vw,40px)]">{{ specialties_count }}</dt>
-                <dd class="mt-2 text-xs leading-snug text-white/70 hyphens-auto sm:text-sm">{% trans 'специальностей' %}</dd>
-            </div>
-            <div class="{{ item }}">
-                <dt class="text-[26px] leading-none font-extrabold tracking-tight text-gold-2 sm:text-[clamp(28px,3vw,40px)]">{{ employees_count }}</dt>
-                <dd class="mt-2 text-xs leading-snug text-white/70 hyphens-auto sm:text-sm">{% trans 'преподавателей' %}</dd>
-            </div>
+        {# Цифры прокручиваются барабаном, когда попадают в экран #}
+        <div class="t-stagger-line t-stagger-line--5">
+        <dl class="mx-4 mb-6 grid max-w-[880px] grid-cols-3 border-t border-white/20 sm:mx-8 sm:mb-[clamp(24px,4vw,40px)] xl:mx-12">
+            {% with item='min-w-0 pt-5 pr-2.5 sm:pt-6 sm:pr-6 [&+&]:border-l [&+&]:border-white/15 [&+&]:pl-3 sm:[&+&]:pl-6' num='t-reel text-[26px] leading-none font-extrabold tracking-tight text-gold-2 [--reel-cell:30px] sm:text-[clamp(28px,3vw,40px)] sm:[--reel-cell:46px]' lbl='mt-2 text-xs leading-snug text-white/70 hyphens-auto sm:text-sm' %}
+            <div class="{{ item }}"><dt class="{{ num }}" data-reel="{{ years_count }}">{{ years_count }}</dt><dd class="{{ lbl }}">{% trans 'лет готовим специалистов' %}</dd></div>
+            <div class="{{ item }}"><dt class="{{ num }}" data-reel="{{ specialties_count }}">{{ specialties_count }}</dt><dd class="{{ lbl }}">{% trans 'специальностей' %}</dd></div>
+            <div class="{{ item }}"><dt class="{{ num }}" data-reel="{{ employees_count }}">{{ employees_count }}</dt><dd class="{{ lbl }}">{% trans 'преподавателей' %}</dd></div>
             {% endwith %}
         </dl>
+        </div>
     </section>
 
-    {# ---------- Быстрые ссылки ---------- #}
-    <nav class="mt-4 grid grid-cols-2 gap-2.5 xl:grid-cols-4 xl:gap-3" aria-label="{% trans 'Быстрое меню' %}">
-        {% with tile='group flex gap-3 rounded-card border border-line bg-white p-4 transition duration-300 ease-(--ease-soft) hover:-translate-y-[3px] hover:border-transparent hover:shadow-lift max-sm:flex-col sm:items-center sm:gap-4 sm:px-[22px] sm:py-5' tile_icon='grid size-10 shrink-0 place-items-center rounded-xl bg-gold-soft text-gold transition-colors group-hover:bg-gold group-hover:text-white sm:size-12 sm:rounded-[14px]' %}
-        <a class="{{ tile }}" href="{% url 'reception' %}" data-reveal>
-            <span class="{{ tile_icon }}">{% icon 'graduation-cap' %}</span>
-            <span><strong class="block text-sm leading-tight font-bold text-navy sm:text-[15px]">{% trans 'Приемная комиссия' %}</strong><small class="mt-0.5 block text-[13px] text-muted">{% trans 'Поступление и документы' %}</small></span>
-        </a>
-        <a class="{{ tile }}" href="{% url 'documents_list' %}" data-reveal>
-            <span class="{{ tile_icon }}">{% icon 'file-text' %}</span>
-            <span><strong class="block text-sm leading-tight font-bold text-navy sm:text-[15px]">{% trans 'Нормативные документы' %}</strong><small class="mt-0.5 block text-[13px] text-muted">{% trans 'Положения и приказы' %}</small></span>
-        </a>
-        <a class="{{ tile }}" href="https://ebs.el-kitep.kg/" target="_blank" rel="noopener" data-reveal>
-            <span class="{{ tile_icon }}">{% icon 'book-open' %}</span>
-            <span><strong class="block text-sm leading-tight font-bold text-navy sm:text-[15px]">{% trans 'Эл-Китеп' %}</strong><small class="mt-0.5 block text-[13px] text-muted">{% trans 'Электронная библиотека' %}</small></span>
-        </a>
-        <a class="{{ tile }}" href="{% url 'contacts' %}" data-reveal>
-            <span class="{{ tile_icon }}">{% icon 'phone' %}</span>
-            <span><strong class="block text-sm leading-tight font-bold text-navy sm:text-[15px]">{% trans 'Контакты' %}</strong><small class="mt-0.5 block text-[13px] text-muted">{{ CONTACTS.phone.value }}</small></span>
-        </a>
-        {% endwith %}
-    </nav>
-
-    {# ---------- Специальности ---------- #}
+    {# ================= Бегущая строка ================= #}
     {% if specialties %}
-    <section class="py-14 sm:px-[clamp(20px,4vw,56px)] sm:py-[clamp(56px,7vw,96px)]">
+    <div class="marquee relative overflow-hidden rounded-2xl border border-line py-5 [mask-image:linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)]" aria-label="{% trans 'Специальности' %}">
+        <div class="marquee-track flex w-max">
+            {% for pass in '12' %}
+                <ul class="flex shrink-0 items-center" {% if forloop.last %}aria-hidden="true"{% endif %}>
+                    {% for specialty in specialties %}
+                        <li class="flex items-center">
+                            <a href="{{ specialty.get_absolute_url }}" class="px-6 text-[15px] font-bold whitespace-nowrap text-navy transition-colors hover:text-gold" {% if forloop.parentloop.last %}tabindex="-1"{% endif %}>{{ specialty.title }}</a>
+                            <span class="size-1.5 rotate-45 bg-gold"></span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {# ================= Специальности: бенто ================= #}
+    {% if specialties %}
+    <section class="px-4 sm:px-8 xl:px-12 py-10 sm:py-14">
         {% trans 'Наши специальности' as t_eyebrow %}{% trans 'Специальности' as t_title %}{% trans 'Все специальности' as t_link %}
         {% include 'components/section_head.html' with eyebrow=t_eyebrow title=t_title link=specialties_url link_text=t_link %}
-        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {% for specialty in specialties|slice:":6" %}
-                <a href="{{ specialty.get_absolute_url }}" class="card-lift group flex flex-col" data-reveal>
+                <a href="{{ specialty.get_absolute_url }}" data-reveal
+                   class="group flex flex-col overflow-hidden rounded-3xl border border-line bg-white transition duration-300 ease-(--ease-soft) hover:-translate-y-1 hover:border-transparent hover:shadow-lift">
                     <div class="relative aspect-[16/10] overflow-hidden bg-tint">
-                        {% generateimage 'main:thumbnail' source=specialty.image -- alt=specialty.title loading="lazy" class="zoom size-full object-cover" %}
-                        <span class="absolute bottom-3.5 left-3.5 rounded-full bg-white/95 px-3 py-1.5 text-[13px] font-bold text-navy backdrop-blur-sm">{{ specialty.contract }} {% trans 'сом' %}</span>
-                    </div>
-                    <div class="flex flex-1 flex-col gap-4 px-[22px] pt-5 pb-[22px]">
-                        <h3 class="line-clamp-3 text-[17px] leading-snug font-bold text-navy transition-colors group-hover:text-gold">{{ specialty.title }}</h3>
-                        <div class="mt-auto flex flex-wrap gap-2">
-                            <span class="chip">{{ specialty.form_verbose }}</span>
-                            <span class="chip">{{ specialty.basis_verbose }}</span>
-                        </div>
-                    </div>
-                </a>
-            {% endfor %}
-        </div>
-    </section>
-    {% endif %}
-
-    {# ---------- История ---------- #}
-    <section class="grid items-center gap-10 py-14 sm:px-[clamp(20px,4vw,56px)] sm:py-[clamp(56px,7vw,96px)] lg:grid-cols-2 lg:gap-[clamp(32px,5vw,80px)]">
-        <div class="relative" data-reveal>
-            <img src="{% static 'images/college/MY6H2223.webp' %}" alt="" loading="lazy" class="aspect-[4/3.4] w-full rounded-3xl object-cover">
-            <a href="https://youtu.be/VG6la-KzZkg?si=4m3Zl63XV-3EgVtJ" aria-label="{% trans 'Смотреть видео' %}"
-               class="glightbox absolute top-1/2 left-1/2 grid size-[84px] -translate-1/2 place-items-center rounded-full bg-white/90 text-navy shadow-[0_0_0_12px_rgb(255_255_255/.25)] transition duration-300 ease-(--ease-soft) hover:scale-110 hover:shadow-[0_0_0_18px_rgb(255_255_255/.2)]">
-                {% icon 'play' 'ml-1 size-7 fill-current' %}
-            </a>
-            <div class="absolute right-4 bottom-8 rounded-[18px] bg-navy px-6 py-[18px] text-white shadow-lift lg:-right-4">
-                <strong class="block text-[32px] leading-none font-extrabold text-gold-2">{{ founded_year }}</strong>
-                <span class="mt-1.5 block text-[13px] text-white/70">{% trans 'год основания' %}</span>
-            </div>
-        </div>
-        <div data-reveal>
-            <p class="eyebrow">{% trans 'История колледжа' %}</p>
-            <h2 class="section-title">{% trans 'История развития учебного заведения' %}</h2>
-            <div class="mt-6 space-y-4 text-base leading-[1.75] text-muted">
-                <p>{{ site_content.index_paragraph_1|safe }}</p>
-                <p>{{ site_content.index_paragraph_2|safe }}</p>
-            </div>
-            <a href="{% url 'history' %}" class="btn btn-dark mt-8">{% trans 'Подробно' %}{% icon 'arrow-right' 'arrow text-gold-2' %}</a>
-        </div>
-    </section>
-
-    {# ---------- Новости ---------- #}
-    {% if news %}
-    <section class="-mx-4 bg-tint px-4 py-14 sm:mx-0 sm:rounded-section sm:px-[clamp(20px,4vw,56px)] sm:py-[clamp(56px,7vw,96px)]">
-        {% trans 'Новости колледжа' as t_eyebrow %}{% trans 'Новости' as t_title %}{% trans 'Все новости' as t_link %}
-        {% include 'components/section_head.html' with eyebrow=t_eyebrow title=t_title link=news_url link_text=t_link %}
-        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-[1.25fr_1fr_1fr]">
-            {% for item in news|slice:":5" %}
-                <a href="{{ item.get_absolute_url }}" data-reveal
-                   class="group flex flex-col overflow-hidden rounded-card bg-white transition duration-300 ease-(--ease-soft) hover:-translate-y-1 hover:shadow-lift {% if forloop.first %}md:col-span-2 lg:col-span-1 lg:row-span-2{% endif %}">
-                    <div class="overflow-hidden bg-line {% if forloop.first %}aspect-video lg:aspect-auto lg:min-h-[280px] lg:flex-1{% else %}aspect-[16/10]{% endif %}">
-                        {% if forloop.first %}
-                            <img src="{{ item.image.url }}" alt="{{ item.title }}" loading="lazy" class="size-full object-cover transition-transform duration-[600ms] group-hover:scale-105">
-                        {% else %}
-                            {% generateimage 'main:thumbnail' source=item.image -- alt=item.title loading="lazy" class="size-full object-cover transition-transform duration-[600ms] group-hover:scale-105" %}
+                        {% generateimage 'main:thumbnail' source=specialty.image -- alt="" loading="lazy" class="size-full object-cover transition-transform duration-700 ease-(--ease-soft) group-hover:scale-105" %}
+                        <div class="absolute inset-0 bg-[linear-gradient(180deg,rgb(10_20_42/.45)_0%,rgb(10_20_42/0)_40%)]"></div>
+                        {% if specialty.code %}
+                            <span class="absolute top-4 left-4 rounded-lg bg-navy/80 px-2.5 py-1 font-mono text-[13px] font-bold tracking-wider text-gold-2 backdrop-blur-sm">{{ specialty.code }}</span>
                         {% endif %}
                     </div>
-                    <div class="{% if forloop.first %}px-7 pt-6 pb-7{% else %}px-5 pt-[18px] pb-[22px]{% endif %}">
-                        <time class="mb-2 block text-[13px] font-semibold text-gold" datetime="{{ item.created|date:'c' }}">{{ item.created|date:"j E Y" }}</time>
-                        <h3 class="font-bold leading-snug text-navy transition-colors group-hover:text-gold {% if forloop.first %}line-clamp-3 text-xl sm:text-2xl{% else %}line-clamp-2 text-base{% endif %}">{{ item.title }}</h3>
+                    <div class="flex flex-1 flex-col p-6">
+                        <h3 class="text-lg leading-snug font-bold text-navy text-balance transition-colors group-hover:text-gold">{{ specialty.name }}</h3>
+                        <div class="mt-4 flex flex-wrap gap-2">
+                            <span class="chip">{% icon 'clock' 'mr-1.5 size-3.5' %}{{ specialty.form_verbose }}</span>
+                            <span class="chip">{% icon 'wallet' 'mr-1.5 size-3.5' %}{{ specialty.basis_verbose }}</span>
+                        </div>
+                        <div class="mt-auto pt-6"><div class="flex items-end justify-between gap-4 border-t border-line pt-5">
+                            <div>
+                                <span class="block text-xs font-semibold text-muted">{% trans 'Сумма контракта' %}</span>
+                                <span class="mt-0.5 block text-xl leading-none font-extrabold text-navy">{{ specialty.contract }} <span class="text-sm font-bold text-muted">{% trans 'сом' %}</span></span>
+                            </div>
+                            <span class="grid size-11 shrink-0 place-items-center rounded-full bg-tint text-navy transition duration-300 group-hover:bg-gold group-hover:text-white">
+                                {% icon 'arrow-up-right' 'size-5 transition-transform duration-300 group-hover:rotate-45' %}
+                            </span>
+                        </div></div>
                     </div>
                 </a>
             {% endfor %}
@@ -148,9 +104,96 @@
     </section>
     {% endif %}
 
-    {# ---------- Эл-Китеп ---------- #}
-    <section class="relative isolate my-6 grid items-center gap-6 overflow-hidden rounded-[20px] bg-navy px-6 py-12 text-white sm:rounded-section sm:px-[clamp(24px,5vw,72px)] sm:py-[clamp(48px,6vw,80px)] lg:grid-cols-[1.4fr_1fr] lg:gap-12" data-reveal>
-        <div class="absolute -top-[200px] -right-[120px] -z-10 size-[560px] rounded-full bg-[radial-gradient(circle,rgb(227_166_36/.28)_0%,rgb(227_166_36/0)_65%)]"></div>
+    {# ================= История: таймлайн ================= #}
+    <section class="rounded-[20px] bg-tint px-4 sm:px-8 xl:px-12 py-10 sm:py-14 sm:rounded-section">
+        <div class="grid gap-12 lg:grid-cols-2 lg:gap-[clamp(40px,6vw,96px)]">
+            <div class="lg:sticky lg:top-32 lg:self-start" data-reveal>
+                <p class="eyebrow">{% trans 'История колледжа' %}</p>
+                <h2 class="section-title">{% trans 'История развития учебного заведения' %}</h2>
+                <div class="mt-6 space-y-4 text-base leading-[1.75] text-muted">
+                    {{ site_content.index_paragraph_1|safe }}
+                </div>
+                <a href="https://youtu.be/VG6la-KzZkg?si=4m3Zl63XV-3EgVtJ" class="glightbox group relative mt-8 block overflow-hidden rounded-3xl" aria-label="{% trans 'Смотреть видео' %}">
+                    <img src="{% static 'images/college/MY6H2223.webp' %}" alt="" loading="lazy" class="aspect-video w-full object-cover transition-transform duration-700 ease-(--ease-soft) group-hover:scale-105">
+                    <span class="absolute inset-0 bg-navy/25 transition-colors group-hover:bg-navy/40"></span>
+                    <span class="absolute top-1/2 left-1/2 grid size-20 -translate-1/2 place-items-center rounded-full bg-white/90 text-navy">
+                        <span class="ping-soft absolute inset-0 rounded-full bg-white/60"></span>
+                        {% icon 'play' 'relative ml-1 size-7 fill-current' %}
+                    </span>
+                </a>
+            </div>
+
+            {# Таймлайн: линия прорисовывается по мере прокрутки #}
+            <ol class="relative ml-2 border-l-2 border-line pl-10 sm:ml-4 sm:pl-14">
+                <span class="scroll-draw absolute top-0 -left-[2px] h-full w-0.5 bg-gold" aria-hidden="true"></span>
+                {% with dot='absolute -left-[51px] grid size-[22px] place-items-center rounded-full bg-tint ring-2 ring-gold sm:-left-[67px] after:size-2.5 after:rounded-full after:bg-gold' year='text-[clamp(40px,5vw,64px)] leading-none font-extrabold tracking-tight text-navy' %}
+                <li class="relative pb-10" data-reveal>
+                    <span class="{{ dot }} top-4"></span>
+                    <p class="{{ year }}">1939</p>
+                    <p class="mt-3 max-w-md text-lg leading-relaxed text-muted">{% trans 'При Фрунзенском индустриальном техникуме открыто автомобильное отделение из одной группы.' %}</p>
+                </li>
+                <li class="relative pb-10" data-reveal>
+                    <span class="{{ dot }} top-4"></span>
+                    <p class="{{ year }}">1942</p>
+                    <p class="mt-3 max-w-md text-lg leading-relaxed text-muted">{% trans 'Первый выпуск — 14 механиков по обслуживанию и ремонту автомобилей.' %}</p>
+                </li>
+                <li class="relative" data-reveal>
+                    <span class="{{ dot }} top-4"></span>
+                    <p class="{{ year }} text-gold">{% trans 'Сегодня' %}</p>
+                    <p class="mt-3 max-w-md text-lg leading-relaxed text-muted">
+                        {% blocktrans with specialties=specialties_count employees=employees_count %}{{ specialties }} специальностей и {{ employees }} преподавателей. Колледж носит имя Кусаина Кольбаева.{% endblocktrans %}
+                    </p>
+                    <a href="{% url 'history' %}" class="btn btn-dark mt-7">{% trans 'Подробно' %}{% icon 'arrow-right' 'arrow text-gold-2' %}</a>
+                </li>
+                {% endwith %}
+            </ol>
+        </div>
+    </section>
+
+    {# ================= Новости ================= #}
+    {% if news %}
+    <section class="px-4 sm:px-8 xl:px-12 py-10 sm:py-14">
+        {% trans 'Новости колледжа' as t_eyebrow %}{% trans 'Новости' as t_title %}{% trans 'Все новости' as t_link %}
+        {% include 'components/section_head.html' with eyebrow=t_eyebrow title=t_title link=news_url link_text=t_link %}
+        <div class="grid gap-5 lg:grid-cols-[1.2fr_1fr] lg:gap-6">
+            {# Главная новость: текст поверх фото, растягивается на высоту списка #}
+            {% with lead=news.0 %}
+            <a href="{{ lead.get_absolute_url }}" class="group relative isolate flex min-h-[340px] flex-col justify-end overflow-hidden rounded-3xl bg-navy p-6 text-white sm:min-h-[420px] sm:p-8" data-reveal>
+                <img src="{{ lead.image.url }}" alt="" loading="lazy" class="absolute inset-0 -z-10 size-full object-cover transition-transform duration-700 ease-(--ease-soft) group-hover:scale-105">
+                <div class="absolute inset-0 -z-10 bg-[linear-gradient(0deg,rgb(10_20_42/.92)_0%,rgb(10_20_42/.45)_45%,rgb(10_20_42/0)_75%)]"></div>
+                <time class="inline-flex w-fit items-center gap-2 rounded-full bg-white/15 px-3 py-1.5 text-[13px] font-semibold backdrop-blur-sm" datetime="{{ lead.created|date:'c' }}">{% icon 'calendar' 'size-3.5' %}{{ lead.created|date:"j E Y" }}</time>
+                <h3 class="mt-4 max-w-xl text-2xl leading-tight font-extrabold text-balance sm:text-[32px]">{{ lead.title }}</h3>
+                <span class="mt-5 inline-flex items-center gap-2 text-[15px] font-bold text-gold-2">
+                    {% trans 'Подробно' %}{% icon 'arrow-right' 'size-4 transition-transform duration-300 group-hover:translate-x-1' %}
+                </span>
+            </a>
+            {% endwith %}
+
+            <ul class="grid gap-3 lg:grid-rows-4">
+                {% for item in news|slice:"1:5" %}
+                    <li data-reveal>
+                        <a href="{{ item.get_absolute_url }}" class="group flex h-full items-center gap-4 rounded-2xl border border-line bg-white p-3 pr-4 transition duration-300 ease-(--ease-soft) hover:-translate-y-0.5 hover:border-transparent hover:shadow-lift sm:gap-5">
+                            <div class="aspect-[4/3] w-28 shrink-0 overflow-hidden rounded-xl bg-line sm:w-32">
+                                {% generateimage 'main:thumbnail' source=item.image -- alt="" loading="lazy" class="size-full object-cover transition-transform duration-700 group-hover:scale-110" %}
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <time class="text-[13px] font-semibold text-gold" datetime="{{ item.created|date:'c' }}">{{ item.created|date:"j E Y" }}</time>
+                                <h3 class="mt-1 line-clamp-2 text-[15px] leading-snug font-bold text-navy transition-colors group-hover:text-gold sm:text-base">{{ item.title }}</h3>
+                            </div>
+                            <span class="grid size-9 shrink-0 place-items-center rounded-full bg-tint text-navy transition-colors duration-300 group-hover:bg-gold group-hover:text-white max-sm:hidden">
+                                {% icon 'arrow-up-right' 'size-4' %}
+                            </span>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </section>
+    {% endif %}
+
+    {# ================= Эл-Китеп ================= #}
+    <section class="relative isolate grid items-center gap-6 overflow-hidden rounded-[20px] bg-navy px-4 sm:px-8 xl:px-12 py-10 sm:py-14 text-white sm:rounded-section lg:grid-cols-[1.4fr_1fr] lg:gap-12" data-reveal>
+        <div class="glow-drift absolute -top-[200px] -right-[120px] -z-10 size-[560px] rounded-full bg-[radial-gradient(circle,rgb(227_166_36/.3)_0%,rgb(227_166_36/0)_65%)]"></div>
         <div>
             <p class="eyebrow eyebrow-light">{% trans 'О библиотеке' %}</p>
             <h2 class="section-title text-white">{% trans 'Электронно-библиотечная система «Эл-Китеп»' %}</h2>
@@ -159,78 +202,102 @@
             </p>
             <a class="btn btn-gold" target="_blank" rel="noopener" href="https://ebs.el-kitep.kg/">{% trans 'Перейти' %}{% icon 'external-link' %}</a>
         </div>
-        {# Декоративная стопка книг #}
         <div class="flex justify-center" aria-hidden="true">
             <div class="relative -my-8 h-[220px] w-[260px] scale-75 sm:my-0 sm:h-[300px] sm:scale-100">
                 {% with book='absolute top-5 left-1/2 -ml-[85px] flex h-60 w-[170px] items-end rounded-[6px_16px_16px_6px] p-5 shadow-[inset_10px_0_0_rgb(0_0_0/.18),0_24px_48px_rgb(0_0_0/.35)] after:absolute after:top-7 after:right-5 after:left-7 after:h-11 after:border-y-[3px] after:border-t-white/55 after:border-b-white/25' %}
-                <span class="{{ book }} -translate-x-[70px] -rotate-10 bg-[linear-gradient(160deg,#2d4a8a,#1c2d57)] text-white/90">{% icon 'book-open' 'size-8' %}</span>
-                <span class="{{ book }} translate-x-[70px] rotate-9 bg-[linear-gradient(160deg,#3c8d7f,#1f5d53)] text-white/90">{% icon 'wrench' 'size-8' %}</span>
-                <span class="{{ book }} z-10 -translate-y-2 bg-[linear-gradient(160deg,#f0b93e,#c9880b)] text-navy">{% icon 'car' 'size-8' %}</span>
+                <span class="{{ book }} float-y -translate-x-[70px] -rotate-10 bg-[linear-gradient(160deg,#2d4a8a,#1c2d57)] text-white/90 [animation-delay:-2s]">{% icon 'book-open' 'size-8' %}</span>
+                <span class="{{ book }} float-y translate-x-[70px] rotate-9 bg-[linear-gradient(160deg,#3c8d7f,#1f5d53)] text-white/90 [animation-delay:-4s]">{% icon 'wrench' 'size-8' %}</span>
+                <span class="{{ book }} float-y z-10 -translate-y-2 bg-[linear-gradient(160deg,#f0b93e,#c9880b)] text-navy">{% icon 'car' 'size-8' %}</span>
                 {% endwith %}
             </div>
         </div>
     </section>
 
-    {# ---------- Студенческая жизнь ---------- #}
+    {# ================= Студенческая жизнь: журнальная сетка ================= #}
     {% if lives %}
-    <section class="py-14 sm:px-[clamp(20px,4vw,56px)] sm:py-[clamp(56px,7vw,96px)]">
+    <section class="px-4 sm:px-8 xl:px-12 py-10 sm:py-14">
         {% trans 'Студентам' as t_eyebrow %}{% trans 'Студенческая жизнь' as t_title %}{% trans 'Смотреть все' as t_link %}
-        {% include 'components/section_head.html' with eyebrow=t_eyebrow title=t_title link=lives_url link_text=t_link rail='rail-lives' %}
-        <div class="rail" id="rail-lives">
-            {% for live in lives %}
-                <a href="{{ live.get_absolute_url }}" class="group relative aspect-[4/5] overflow-hidden rounded-card bg-navy after:absolute after:inset-0 after:bg-[linear-gradient(0deg,rgb(10_20_42/.9)_0%,rgb(10_20_42/.1)_55%)]">
-                    {% generateimage 'main:thumbnail' source=live.image -- alt=live.title loading="lazy" class="size-full object-cover transition-transform duration-[600ms] group-hover:scale-105" %}
-                    <div class="absolute inset-x-0 bottom-0 z-10 p-5 text-white">
-                        <time class="text-xs font-semibold text-gold-2">{{ live.created|date:"j E Y" }}</time>
-                        <h3 class="mt-1.5 line-clamp-3 text-base leading-snug font-bold">{{ live.title }}</h3>
+        {% include 'components/section_head.html' with eyebrow=t_eyebrow title=t_title link=lives_url link_text=t_link %}
+        <div class="grid auto-rows-[220px] gap-4 sm:grid-cols-2 sm:auto-rows-[240px] lg:grid-cols-4 lg:auto-rows-[250px]">
+            {% for live in lives|slice:":4" %}
+                <a href="{{ live.get_absolute_url }}" data-reveal
+                   class="group relative isolate overflow-hidden rounded-3xl bg-navy {% if forloop.first %}sm:col-span-2 sm:row-span-2{% elif forloop.counter == 2 %}lg:col-span-2{% endif %}">
+                    {% if forloop.first or forloop.counter == 2 %}
+                        <img src="{{ live.image.url }}" alt="" loading="lazy" class="absolute inset-0 -z-10 size-full object-cover transition-transform duration-700 ease-(--ease-soft) group-hover:scale-105">
+                    {% else %}
+                        {% generateimage 'main:thumbnail' source=live.image -- alt="" loading="lazy" class="absolute inset-0 -z-10 size-full object-cover transition-transform duration-700 ease-(--ease-soft) group-hover:scale-105" %}
+                    {% endif %}
+                    <div class="absolute inset-0 -z-10 bg-[linear-gradient(0deg,rgb(10_20_42/.9)_0%,rgb(10_20_42/.25)_50%,rgb(10_20_42/0)_75%)]"></div>
+                    <div class="flex h-full flex-col justify-end p-5 text-white {% if forloop.first %}sm:p-8{% endif %}">
+                        <time class="inline-flex w-fit items-center gap-1.5 rounded-full bg-white/15 px-2.5 py-1 text-xs font-semibold backdrop-blur-sm" datetime="{{ live.created|date:'c' }}">{{ live.created|date:"j E Y" }}</time>
+                        <h3 class="mt-3 font-bold leading-snug text-balance {% if forloop.first %}text-xl sm:text-[28px] sm:leading-tight{% else %}line-clamp-2 text-base{% endif %}">{{ live.title }}</h3>
                     </div>
+                    <span class="absolute top-4 right-4 grid size-10 -translate-y-1 place-items-center rounded-full bg-white text-navy opacity-0 transition duration-300 ease-(--ease-soft) group-hover:translate-y-0 group-hover:opacity-100">{% icon 'arrow-up-right' 'size-4' %}</span>
                 </a>
             {% endfor %}
         </div>
     </section>
     {% endif %}
 
-    {# ---------- Структура ---------- #}
+    {# ================= Структура: руководство ================= #}
     {% if employees %}
-    <section class="-mx-4 bg-tint px-4 py-14 sm:mx-0 sm:rounded-section sm:px-[clamp(20px,4vw,56px)] sm:py-[clamp(56px,7vw,96px)]">
+    <section class="rounded-[20px] bg-tint px-4 sm:px-8 xl:px-12 py-10 sm:py-14 sm:rounded-section">
         {% trans 'О колледже' as t_eyebrow %}{% trans 'Структура' as t_title %}{% trans 'Все преподаватели' as t_link %}
-        {% include 'components/section_head.html' with eyebrow=t_eyebrow title=t_title link=employees_url link_text=t_link rail='rail-team' %}
-        <div class="rail" id="rail-team">
+        {% include 'components/section_head.html' with eyebrow=t_eyebrow title=t_title link=employees_url link_text=t_link %}
+        <div class="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
             {% for employee in employees %}
-                <a href="{{ employee.get_absolute_url }}" class="group block">
-                    <div class="aspect-square overflow-hidden rounded-card bg-line">
-                        <img src="{{ employee.image.url }}" alt="{{ employee.get_full_name }}" loading="lazy" class="size-full object-cover object-[center_20%] transition-transform duration-[600ms] group-hover:scale-105">
+                <a href="{{ employee.get_absolute_url }}" data-reveal
+                   class="group relative isolate block aspect-[3/4] overflow-hidden rounded-3xl bg-navy">
+                    <img src="{{ employee.image.url }}" alt="{{ employee.get_full_name }}" loading="lazy"
+                         class="absolute inset-0 -z-10 size-full object-cover object-[center_25%] transition-transform duration-700 ease-(--ease-soft) group-hover:scale-105">
+                    <div class="absolute inset-0 -z-10 bg-[linear-gradient(0deg,rgb(10_20_42/.92)_0%,rgb(10_20_42/.4)_38%,rgb(10_20_42/0)_60%)]"></div>
+                    <div class="flex h-full flex-col justify-end p-4 text-white sm:p-6">
+                        <span class="text-xs font-bold tracking-[.06em] text-gold-2 uppercase sm:text-[13px]">{{ employee.position.get_short_name }}</span>
+                        <h3 class="mt-1.5 text-[15px] leading-snug font-bold text-balance sm:text-lg">{{ employee.get_full_name }}</h3>
+                        <span class="mt-3 block h-0.5 w-8 rounded-full bg-gold transition-[width] duration-500 ease-(--ease-soft) group-hover:w-16"></span>
                     </div>
-                    <h3 class="mt-4 text-base leading-snug font-bold text-navy transition-colors group-hover:text-gold">{{ employee.get_full_name }}</h3>
-                    <p class="mt-1 text-sm leading-snug text-muted">{{ employee.position.get_short_name }}</p>
+                    <span class="absolute top-3 right-3 grid size-10 -translate-y-1 place-items-center rounded-full bg-white text-navy opacity-0 transition duration-300 ease-(--ease-soft) group-hover:translate-y-0 group-hover:opacity-100 sm:top-4 sm:right-4">{% icon 'arrow-up-right' 'size-4' %}</span>
                 </a>
             {% endfor %}
         </div>
     </section>
     {% endif %}
 
-    {# ---------- Студсовет ---------- #}
+    {# ================= Студсовет: баннер с группой аватаров ================= #}
     {% if students %}
-    <section class="py-14 sm:px-[clamp(20px,4vw,56px)] sm:py-[clamp(56px,7vw,96px)]">
-        {% trans 'Студентам' as t_eyebrow %}{% trans 'Члены студенческого совета' as t_title %}{% trans 'Весь совет' as t_link %}
-        {% include 'components/section_head.html' with eyebrow=t_eyebrow title=t_title link=students_url link_text=t_link rail='rail-council' %}
-        <div class="rail xl:auto-cols-[calc((100%-4*20px)/5)]" id="rail-council">
-            {% for student in students %}
-                <a href="{{ student.get_absolute_url }}" class="group block">
-                    <div class="aspect-square overflow-hidden rounded-card bg-line">
-                        <img src="{{ student.image.url }}" alt="{{ student.get_full_name }}" loading="lazy" class="size-full object-cover object-[center_20%] transition-transform duration-[600ms] group-hover:scale-105">
-                    </div>
-                    <h3 class="mt-4 text-base leading-snug font-bold text-navy transition-colors group-hover:text-gold">{{ student.get_full_name }}</h3>
-                    <p class="mt-1 text-sm leading-snug text-muted">{{ student.position }}</p>
-                </a>
-            {% endfor %}
+    <section class="relative isolate overflow-hidden rounded-[20px] bg-navy px-4 sm:px-8 xl:px-12 py-10 sm:py-14 text-white sm:rounded-section" data-reveal>
+        <div class="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-16">
+            <div>
+                <p class="eyebrow eyebrow-light">{% trans 'Студентам' %}</p>
+                <h2 class="section-title text-white">{% trans 'Члены студенческого совета' %}</h2>
+                <p class="mt-4 max-w-xl text-base leading-relaxed text-white/70">
+                    {% trans 'Студенты, которые организуют мероприятия, спорт и творческую жизнь колледжа.' %}
+                </p>
+                <a href="{{ students_url }}" class="btn btn-gold mt-7">{% trans 'Весь совет' %}{% icon 'arrow-right' 'arrow' %}</a>
+            </div>
+
+            <div class="flex flex-col items-start gap-5 lg:items-end">
+                <div class="t-avatar-group flex flex-wrap pl-3" data-avatar-caption="council-caption">
+                    {% for student in students %}
+                        <a href="{{ student.get_absolute_url }}" class="t-avatar relative -ml-3 block size-16 overflow-hidden rounded-full ring-4 ring-navy hover:z-10 sm:size-20"
+                           data-name="{{ student.get_full_name }}" data-role="{{ student.position }}" aria-label="{{ student.get_full_name }}">
+                            <img src="{{ student.image.url }}" alt="" loading="lazy" class="size-full object-cover object-[center_20%]">
+                        </a>
+                    {% endfor %}
+                </div>
+                {# Подпись: имя наведённого участника #}
+                <p id="council-caption" class="min-h-12 text-sm text-white/60 lg:text-right" aria-live="polite">
+                    <span class="block text-base font-bold text-white" data-caption-name>{% trans 'Наведите на участника' %}</span>
+                    <span data-caption-role></span>
+                </p>
+            </div>
         </div>
     </section>
     {% endif %}
 
-    {# ---------- Международное сотрудничество ---------- #}
+    {# ================= Международное сотрудничество ================= #}
     {% if internationals %}
-    <section class="-mx-4 bg-tint px-4 py-14 sm:mx-0 sm:rounded-section sm:px-[clamp(20px,4vw,56px)] sm:py-[clamp(56px,7vw,96px)]">
+    <section class="rounded-[20px] bg-tint px-4 sm:px-8 xl:px-12 py-10 sm:py-14 sm:rounded-section">
         {% trans 'Сотрудничество' as t_eyebrow %}{% trans 'Международное сотрудничество' as t_title %}{% trans 'Смотреть все' as t_link %}
         {% include 'components/section_head.html' with eyebrow=t_eyebrow title=t_title link=internationals_url link_text=t_link %}
         <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -246,20 +313,23 @@
     </section>
     {% endif %}
 
-    {# ---------- CTA ---------- #}
-    <section class="mt-6 flex flex-col items-start justify-between gap-8 rounded-[20px] bg-[linear-gradient(120deg,#f2c25a_0%,var(--color-gold-2)_45%,var(--color-gold)_100%)] px-6 py-9 sm:rounded-section sm:px-[clamp(24px,5vw,72px)] sm:py-[clamp(36px,5vw,56px)] lg:flex-row lg:items-center" data-reveal>
+    {# ================= CTA ================= #}
+    <section class="gradient-pan relative isolate flex flex-col items-start justify-between gap-8 overflow-hidden rounded-[20px] bg-[linear-gradient(120deg,#f2c25a,#e3a624,#c9880b,#e3a624,#f2c25a)] px-4 sm:px-8 xl:px-12 py-10 sm:py-14 sm:rounded-section lg:flex-row lg:items-center" data-reveal>
+        <div class="pointer-events-none absolute -right-10 -bottom-24 -z-10 text-[220px] leading-none font-extrabold tracking-tighter text-white/15 select-none sm:text-[300px]" aria-hidden="true">{{ founded_year }}</div>
         <div>
-            <h2 class="text-[clamp(24px,2.6vw,34px)] leading-tight font-extrabold tracking-[-.02em] text-navy">{% trans 'Хотите поступить в БАДК?' %}</h2>
-            <p class="mt-2.5 max-w-[560px] text-base leading-relaxed text-navy/80">{% trans 'Приемная комиссия ответит на вопросы о специальностях, документах и стоимости обучения.' %}</p>
+            <h2 class="text-[clamp(28px,3.4vw,46px)] leading-[1.08] font-extrabold tracking-[-.025em] text-navy text-balance">{% trans 'Хотите поступить в БАДК?' %}</h2>
+            <p class="mt-3 max-w-[560px] text-base leading-relaxed text-navy/80 sm:text-lg">{% trans 'Приемная комиссия ответит на вопросы о специальностях, документах и стоимости обучения.' %}</p>
         </div>
         <div class="flex shrink-0 flex-wrap gap-3">
-            <a href="{% url 'reception' %}" class="btn btn-dark">{% trans 'Абитуриентам' %}{% icon 'arrow-right' 'arrow text-gold-2' %}</a>
-            <a href="{{ CONTACTS.whatsapp.link }}" target="_blank" rel="noopener" class="btn bg-white/35 text-navy hover:bg-white">{% icon 'brand-whatsapp' 'size-[18px]' %}WhatsApp</a>
+            <a href="{% url 'reception' %}" class="btn btn-dark h-14 px-7 text-base">{% trans 'Абитуриентам' %}{% icon 'arrow-right' 'arrow text-gold-2' %}</a>
+            <a href="{{ CONTACTS.whatsapp.link }}" target="_blank" rel="noopener" class="btn h-14 bg-white/40 px-7 text-base text-navy hover:bg-white">{% icon 'brand-whatsapp' 'size-[18px]' %}WhatsApp</a>
         </div>
     </section>
+</div>
 {% endblock %}
 
 {% block scripts %}
     <script src="{% static 'libs/glightbox/glightbox.min.js' %}"></script>
     <script>GLightbox({selector: '.glightbox', autoplayVideos: true, width: '900px'});</script>
+    <script src="{% static 'js/home.js' %}" defer></script>
 {% endblock %}

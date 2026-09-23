@@ -52,7 +52,7 @@
   }
   .btn svg { @apply size-4 transition-transform duration-200 ease-(--ease-soft); }
   .btn:hover svg.arrow { @apply translate-x-[3px]; }
-  .btn-gold { @apply bg-gold text-white shadow-[0_8px_20px_rgb(201_136_11/.35)] hover:bg-gold-dark; }
+  .btn-gold { @apply bg-gold text-white hover:bg-gold-dark; }
   .btn-dark { @apply bg-navy text-white hover:bg-navy-2; }
   .btn-ghost { @apply border-white/45 bg-white/10 text-white backdrop-blur-sm hover:border-white hover:bg-white/20; }
   .btn-outline { @apply border-navy/20 text-navy hover:border-navy; }
@@ -90,13 +90,215 @@
 /* Появление блоков при прокрутке. Скрываем, только когда JS добавил .reveal-on */
 .reveal-on [data-reveal] {
   opacity: 0;
-  transform: translateY(24px);
-  transition: opacity .7s var(--ease-soft), transform .7s var(--ease-soft);
-  transition-delay: calc(var(--i, 0) * 70ms);
+  transform: translateY(28px);
+  filter: blur(6px);
+  transition: opacity .8s var(--ease-soft), transform .8s var(--ease-soft), filter .8s var(--ease-soft);
+  transition-delay: calc(var(--i, 0) * 80ms);
 }
-.reveal-on [data-reveal].is-in { opacity: 1; transform: none; }
+.reveal-on [data-reveal].is-in { opacity: 1; transform: none; filter: none; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
-  .reveal-on [data-reveal] { opacity: 1; transform: none; }
+  .reveal-on [data-reveal] { opacity: 1; transform: none; filter: none; }
+}
+
+/* ======================================================================
+   Главная: паттерны transitions.dev (texts reveal, card tilt, spinning
+   counter, learn-more) и эффекты страницы. Значения — из motion-токенов.
+   ====================================================================== */
+:root {
+  --stagger-dur: 700ms;
+  --stagger-distance: 18px;
+  --stagger-stagger: 90ms;
+  --stagger-blur: 6px;
+  --stagger-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --tilt-perspective: 1000px;
+  --tilt-return: 1000ms;
+  --tilt-return-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --tilt-follow: 400ms;
+  --tilt-follow-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --tilt-glare-opacity: 0.32;
+  --tilt-glare-fade: 300ms;
+  --tilt-glare-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --learn-shift: 2px;
+  --learn-spread: 8deg;
+  --learn-in: 350ms;
+  --learn-out: 350ms;
+  --learn-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --reel-dur: 1400ms;
+  --reel-cell: 30px;
+  --reel-spin-blur: 3px;
+  --reel-stagger: 90ms;
+  --reel-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ---------- Texts reveal ---------- */
+.t-stagger-line {
+  display: block;
+  opacity: 0;
+  transform: translateY(var(--stagger-distance));
+  filter: blur(var(--stagger-blur));
+  transition:
+    opacity   var(--stagger-dur) var(--stagger-ease),
+    transform var(--stagger-dur) var(--stagger-ease),
+    filter    var(--stagger-dur) var(--stagger-ease);
+  will-change: transform, opacity, filter;
+}
+.t-stagger-line--2 { transition-delay: var(--stagger-stagger); }
+.t-stagger-line--3 { transition-delay: calc(var(--stagger-stagger) * 2); }
+.t-stagger-line--4 { transition-delay: calc(var(--stagger-stagger) * 3); }
+.t-stagger-line--5 { transition-delay: calc(var(--stagger-stagger) * 4); }
+.t-stagger.is-shown .t-stagger-line {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+/* Без JS текст должен быть виден */
+html:not(.js) .t-stagger-line { opacity: 1; transform: none; filter: none; }
+
+/* ---------- Card hover tilt ---------- */
+@media (hover: hover) and (pointer: fine) {
+  .t-tilt { touch-action: none; }
+}
+.t-tilt-card {
+  position: relative;
+  overflow: hidden;
+  transform:
+    perspective(var(--tilt-perspective))
+    rotateX(var(--tilt-rx, 0deg))
+    rotateY(var(--tilt-ry, 0deg));
+  transform-style: preserve-3d;
+  transition: transform var(--tilt-return) var(--tilt-return-ease);
+  will-change: transform;
+}
+.t-tilt-card.is-tilting {
+  transition: transform var(--tilt-follow) var(--tilt-follow-ease);
+}
+.t-tilt-glare {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: screen;
+  background:
+    radial-gradient(circle 95px at var(--tilt-gx, 50%) var(--tilt-gy, 50%),
+      rgba(255,255,255,0.48), rgba(255,255,255,0.06) 52%, rgba(255,255,255,0) 84%),
+    radial-gradient(circle 200px at var(--tilt-gx, 50%) var(--tilt-gy, 50%),
+      rgba(255,255,255,0.22), rgba(255,255,255,0.04) 58%, rgba(255,255,255,0) 78%),
+    radial-gradient(circle 360px at var(--tilt-gx, 50%) var(--tilt-gy, 50%),
+      rgba(255,255,255,0.10), rgba(255,255,255,0) 88%);
+  transition: opacity var(--tilt-glare-fade) var(--tilt-glare-ease);
+}
+.t-tilt.is-hover .t-tilt-glare { opacity: var(--tilt-glare-opacity); }
+
+/* ---------- Spinning counter ---------- */
+.t-reel { display: inline-flex; align-items: center; height: var(--reel-cell); font-variant-numeric: tabular-nums; }
+.t-reel-col {
+  position: relative; height: var(--reel-cell); overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 22%, #000 78%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 22%, #000 78%, transparent 100%);
+}
+.t-reel-strip { display: flex; flex-direction: column; will-change: transform, filter; }
+.t-reel-digit { height: var(--reel-cell); display: flex; align-items: center; justify-content: center; }
+
+/* ---------- Avatar group hover ---------- */
+:root {
+  --avatar-lift: -10px;
+  --avatar-dur: 320ms;
+  --avatar-scale: 1.12;
+  --avatar-falloff: 0.45;
+  --avatar-ease-in: cubic-bezier(0.22, 1, 0.36, 1);
+  --avatar-ease-out: cubic-bezier(0.34, 3.85, 0.64, 1);
+}
+.t-avatar {
+  transform-origin: center;
+  transform:
+    translateY(var(--shift, 0px))
+    scale(var(--scale-active, 1));
+  transition: transform var(--avatar-dur) var(--avatar-ease-in);
+  will-change: transform;
+}
+
+/* ---------- Learn more hover ---------- */
+.t-learn-chevron {
+  display: inline-flex;
+  transform: translateX(0);
+  transition: transform var(--learn-out) var(--learn-ease);
+}
+.t-learn-arm {
+  transform-box: view-box;
+  transform-origin: 10px 8px;
+  vector-effect: non-scaling-stroke;
+  transition: transform var(--learn-out) var(--learn-ease);
+}
+.t-learn:hover .t-learn-chevron { transform: translateX(var(--learn-shift)); transition-duration: var(--learn-in); }
+.t-learn:hover .t-learn-arm { transition-duration: var(--learn-in); }
+.t-learn:hover .t-learn-arm-top { transform: rotate(var(--learn-spread)); }
+.t-learn:hover .t-learn-arm-bot { transform: rotate(calc(var(--learn-spread) * -1)); }
+
+/* ---------- Эффекты главной ---------- */
+
+/* Медленно дрейфующее свечение в hero и CTA */
+@keyframes glow-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-6%, 8%) scale(1.08); }
+  66% { transform: translate(5%, -4%) scale(.95); }
+}
+.glow-drift { animation: glow-drift 18s ease-in-out infinite; }
+
+/* Пульсирующая точка «онлайн» */
+@keyframes ping-soft {
+  0% { transform: scale(1); opacity: .7; }
+  80%, 100% { transform: scale(2.6); opacity: 0; }
+}
+.ping-soft { animation: ping-soft 2s cubic-bezier(0, 0, .2, 1) infinite; }
+
+/* Плавающие элементы: книги, бейджи. Через transform, чтобы не затирать
+   translate/rotate из утилит Tailwind (они пишут в отдельные свойства) */
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.float-y { animation: float-y 6s ease-in-out infinite; }
+
+/* Бегущая строка: содержимое продублировано, сдвигаем на половину */
+@keyframes marquee { to { transform: translateX(-50%); } }
+.marquee-track { animation: marquee 45s linear infinite; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+
+/* Переливающийся градиент CTA */
+@keyframes gradient-pan {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.gradient-pan { background-size: 200% 200%; animation: gradient-pan 10s ease-in-out infinite; }
+
+/* Scroll-driven: параллакс фото в hero и прорисовка линии таймлайна */
+@supports (animation-timeline: view()) {
+  @keyframes parallax-down { to { transform: translateY(12%) scale(1.06); } }
+  .scroll-parallax {
+    animation: parallax-down linear both;
+    animation-timeline: view();
+    animation-range: exit 0% exit 100%;
+  }
+  @keyframes draw-line { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+  .scroll-draw {
+    transform-origin: top;
+    animation: draw-line linear both;
+    animation-timeline: view();
+    animation-range: entry 30% cover 55%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-stagger-line { transition: none !important; }
+  .t-tilt-card { transform: none !important; transition: none !important; }
+  .t-reel-strip { transition: none !important; filter: none !important; }
+  .t-learn-chevron, .t-learn-arm { transition: none !important; }
+  .t-avatar { transition: none !important; transform: none !important; }
+  .glow-drift, .ping-soft, .float-y, .marquee-track, .gradient-pan, .scroll-parallax, .scroll-draw { animation: none !important; }
 }
