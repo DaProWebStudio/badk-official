@@ -4,73 +4,91 @@
 {% block title %}{{ specialty.name }}{% endblock %}
 
 {% block content %}
-    <section class="px-1 pt-10 pb-8 sm:px-4 sm:pt-14 sm:pb-10">
-        <nav class="mb-5 flex flex-wrap items-center gap-2 text-sm text-muted" aria-label="breadcrumb">
-            <a href="{% url 'index' %}" class="transition-colors hover:text-gold">{% trans 'Главная' %}</a>
-            {% icon 'chevron-right' 'size-3.5' %}
-            <a href="{% url 'specialties_list' %}" class="transition-colors hover:text-gold">{% trans 'Наши специальности' %}</a>
-        </nav>
-        <p class="eyebrow">{% trans 'Специальность' %}{% if specialty.code %} · {{ specialty.code }}{% endif %}</p>
-        <h1 class="page-title max-w-4xl">{{ specialty.name }}</h1>
-        <div class="mt-6 flex flex-wrap gap-2">
-            <span class="chip bg-gold-soft text-gold-dark">{{ specialty.form_verbose }}</span>
-            <span class="chip bg-gold-soft text-gold-dark">{{ specialty.basis_verbose }}</span>
+<div class="flex flex-col gap-4 pt-4">
+
+    {# ---------- Шапка: фото с названием поверх ---------- #}
+    <section class="relative isolate flex min-h-[460px] flex-col justify-end overflow-hidden rounded-[20px] text-white sm:min-h-[520px] sm:rounded-section">
+        <img src="{{ specialty.image.url }}" alt="" fetchpriority="high" class="absolute inset-0 -z-20 size-full animate-hero-in object-cover">
+        <div class="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgb(10_20_42/.92)_0%,rgb(10_20_42/.7)_50%,rgb(10_20_42/.2)_100%),linear-gradient(0deg,rgb(10_20_42/.8)_0%,rgb(10_20_42/0)_50%)]"></div>
+
+        <div class="max-w-[860px] px-4 pt-10 pb-8 sm:px-8 sm:pb-10 xl:px-12 xl:pb-12">
+            <nav class="mb-6 flex flex-wrap items-center gap-2 text-sm text-white/60" aria-label="breadcrumb">
+                <a href="{% url 'index' %}" class="transition-colors hover:text-gold-2">{% trans 'Главная' %}</a>
+                {% icon 'chevron-right' 'size-3.5' %}
+                <a href="{% url 'specialties_list' %}" class="transition-colors hover:text-gold-2">{% trans 'Наши специальности' %}</a>
+            </nav>
+            {% if specialty.code %}
+                <span class="inline-flex rounded-lg bg-white/10 px-2.5 py-1 font-mono text-sm font-bold tracking-wider text-gold-2 backdrop-blur-sm">{{ specialty.code }}</span>
+            {% endif %}
+            <h1 class="mt-4 text-[clamp(28px,3.6vw,48px)] leading-[1.08] font-extrabold tracking-[-.025em] text-balance">{{ specialty.name }}</h1>
+            <div class="mt-8 flex flex-wrap gap-3 max-sm:[&>*]:flex-1">
+                <a href="{% url 'reception' %}" class="btn btn-gold">{% trans 'Приемная комиссия' %}{% icon 'arrow-right' 'arrow' %}</a>
+                <a href="{{ CONTACTS.whatsapp.link }}" target="_blank" rel="noopener" class="btn btn-ghost">{% icon 'brand-whatsapp' 'size-[18px]' %}WhatsApp</a>
+            </div>
         </div>
     </section>
 
-    <div class="grid gap-10 px-1 pb-6 sm:px-4 lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-12">
-        <article class="min-w-0">
-            <figure class="overflow-hidden rounded-card bg-tint sm:rounded-section">
-                <img src="{{ specialty.image.url }}" alt="{{ specialty.title }}" class="aspect-[16/9] w-full object-cover">
-            </figure>
-            {% if specialty.description %}
-                <div class="rich mt-8 sm:mt-10 [&_*]:[font-family:inherit]! [&_span]:[font-size:inherit]!">
-                    {% autoescape off %}{{ specialty.description }}{% endautoescape %}
-                </div>
-            {% endif %}
-        </article>
+    {# ---------- Ключевые факты ---------- #}
+    <dl class="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
+        {% with card='rounded-3xl border border-line bg-white p-5 sm:p-6' ico='grid size-11 place-items-center rounded-xl bg-gold-soft text-gold' label='mt-4 text-[13px] font-semibold text-muted' value='mt-1 text-lg leading-snug font-extrabold text-navy sm:text-xl' %}
+        <div class="{{ card }}">
+            <span class="{{ ico }}">{% icon 'graduation-cap' 'size-5' %}</span>
+            <dt class="{{ label }}">{% trans 'Форма обучения' %}</dt>
+            <dd class="{{ value }}">{{ specialty.form_verbose }}</dd>
+        </div>
+        <div class="{{ card }}">
+            <span class="{{ ico }}">{% icon 'briefcase' 'size-5' %}</span>
+            <dt class="{{ label }}">{% trans 'Основа обучения' %}</dt>
+            <dd class="{{ value }}">{{ specialty.basis_verbose }}</dd>
+        </div>
+        <div class="rounded-3xl bg-navy p-5 text-white sm:p-6">
+            <span class="grid size-11 place-items-center rounded-xl bg-white/10 text-gold-2">{% icon 'wallet' 'size-5' %}</span>
+            <dt class="mt-4 text-[13px] font-semibold text-white/60">{% trans 'Сумма контракта' %}</dt>
+            <dd class="mt-1 text-2xl leading-none font-extrabold text-gold-2 sm:text-[28px]">{{ specialty.contract }} <span class="text-sm font-bold text-white/60">{% trans 'сом' %}</span></dd>
+        </div>
+        <div class="{{ card }} col-span-2 lg:col-span-1">
+            <span class="{{ ico }}">{% icon 'clock' 'size-5' %}</span>
+            <dt class="{{ label }}">{% trans 'Срок обучения' %}</dt>
+            <dd class="mt-1 space-y-1 text-[15px] leading-snug text-navy">
+                <span class="block"><b class="font-extrabold">{% trans '2 года 10 месяцев' %}</b> <span class="text-muted">— {% trans 'на базе 9 класса' %}</span></span>
+                <span class="block"><b class="font-extrabold">{% trans '1 год 10 месяцев' %}</b> <span class="text-muted">— {% trans 'на базе 11 класса' %}</span></span>
+            </dd>
+        </div>
+        {% endwith %}
+    </dl>
 
-        <aside class="flex flex-col gap-5 lg:sticky lg:top-28 lg:self-start">
-            <div class="rounded-card bg-navy p-6 text-white sm:p-7">
-                <h2 class="text-[13px] font-bold tracking-[.08em] text-gold-2 uppercase">{% trans 'Полезные информации' %}</h2>
-                <dl class="mt-5 divide-y divide-white/10">
-                    <div class="flex items-start gap-3.5 pb-4">
-                        <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-white/10 text-gold-2">{% icon 'graduation-cap' 'size-5' %}</span>
-                        <div><dt class="text-[13px] text-white/60">{% trans 'Форма обучения' %}</dt><dd class="font-bold">{{ specialty.form_verbose }}</dd></div>
-                    </div>
-                    <div class="flex items-start gap-3.5 py-4">
-                        <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-white/10 text-gold-2">{% icon 'briefcase' 'size-5' %}</span>
-                        <div><dt class="text-[13px] text-white/60">{% trans 'Основа обучения' %}</dt><dd class="font-bold">{{ specialty.basis_verbose }}</dd></div>
-                    </div>
-                    <div class="flex items-start gap-3.5 pt-4">
-                        <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-white/10 text-gold-2">{% icon 'wallet' 'size-5' %}</span>
-                        <div><dt class="text-[13px] text-white/60">{% trans 'Контракт' %}</dt><dd class="text-2xl font-extrabold text-gold-2">{{ specialty.contract }} {% trans 'сом' %}</dd></div>
-                    </div>
-                </dl>
-            </div>
+    {# ---------- Описание (если заполнено) ---------- #}
+    {% if specialty.description %}
+    <section class="rounded-[20px] border border-line px-4 py-10 sm:rounded-section sm:px-8 sm:py-14 xl:px-12">
+        <p class="eyebrow">{% trans 'О специальности' %}</p>
+        <div class="rich mt-4 max-w-3xl">{% autoescape off %}{{ specialty.description }}{% endautoescape %}</div>
+    </section>
+    {% endif %}
 
-            <div class="rounded-card bg-tint p-6 sm:p-7">
-                <h2 class="flex items-center gap-2 font-extrabold text-navy">{% icon 'clock' 'size-5 text-gold' %}{% trans 'Срок обучение' %}</h2>
-                <dl class="mt-4 grid grid-cols-2 gap-3">
-                    <div class="rounded-2xl bg-white p-4">
-                        <dt class="text-[13px] leading-snug text-muted">{% trans 'На базе 9 класса' %}</dt>
-                        <dd class="mt-1 font-bold text-navy">{% trans '2 года 10 месяцев' %}</dd>
-                    </div>
-                    <div class="rounded-2xl bg-white p-4">
-                        <dt class="text-[13px] leading-snug text-muted">{% trans 'На базе 11 класса' %}</dt>
-                        <dd class="mt-1 font-bold text-navy">{% trans '1 год 10 месяцев' %}</dd>
-                    </div>
-                </dl>
-            </div>
+    {# ---------- Другие специальности ---------- #}
+    {% if others %}
+    <section class="rounded-[20px] bg-tint px-4 py-10 sm:rounded-section sm:px-8 sm:py-14 xl:px-12">
+        {% url 'specialties_list' as specialties_url %}
+        {% trans 'Наши специальности' as t_eyebrow %}{% trans 'Другие специальности' as t_title %}{% trans 'Все специальности' as t_link %}
+        {% include 'components/section_head.html' with eyebrow=t_eyebrow title=t_title link=specialties_url link_text=t_link %}
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {% for specialty in others %}
+                {% include 'components/specialty_card.html' %}
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
 
-            <div class="rounded-card border border-line p-6 sm:p-7">
-                <h2 class="font-extrabold text-navy">{% trans 'Часто задаваемые вопросы' %}</h2>
-                <ul class="mt-3 divide-y divide-line">
-                    <li><a href="{% url 'reception' %}" class="group flex items-center justify-between gap-3 py-3 text-[15px] font-semibold text-navy transition-colors hover:text-gold">{% trans 'Как поступить в колледж?' %}{% icon 'arrow-right' 'size-4 shrink-0 text-gold transition-transform group-hover:translate-x-1' %}</a></li>
-                    <li><a href="{% url 'reception' %}" class="group flex items-center justify-between gap-3 pt-3 text-[15px] font-semibold text-navy transition-colors hover:text-gold">{% trans 'Какие документы нужны для поступления?' %}{% icon 'arrow-right' 'size-4 shrink-0 text-gold transition-transform group-hover:translate-x-1' %}</a></li>
-                </ul>
-                <a href="{% url 'reception' %}" class="btn btn-gold mt-6 w-full">{% trans 'Приемная комиссия' %}{% icon 'arrow-right' 'arrow' %}</a>
-            </div>
-        </aside>
-    </div>
+    {# ---------- CTA ---------- #}
+    <section class="flex flex-col items-start justify-between gap-6 rounded-[20px] bg-gold px-4 py-10 sm:rounded-section sm:px-8 sm:py-12 lg:flex-row lg:items-center xl:px-12" data-reveal>
+        <div>
+            <h2 class="text-[clamp(24px,2.6vw,34px)] leading-tight font-extrabold tracking-[-.02em] text-navy">{% trans 'Хотите поступить в БАДК?' %}</h2>
+            <p class="mt-2 max-w-[560px] text-base leading-relaxed text-navy/80">{% trans 'Приемная комиссия ответит на вопросы о специальностях, документах и стоимости обучения.' %}</p>
+        </div>
+        <div class="flex shrink-0 flex-wrap gap-3">
+            <a href="{% url 'reception' %}" class="btn btn-dark">{% trans 'Абитуриентам' %}{% icon 'arrow-right' 'arrow text-gold-2' %}</a>
+            <a href="tel:{{ CONTACTS.phone.link }}" class="btn bg-white/40 text-navy hover:bg-white">{% icon 'phone' 'size-4' %}{{ CONTACTS.phone.value }}</a>
+        </div>
+    </section>
+</div>
 {% endblock %}

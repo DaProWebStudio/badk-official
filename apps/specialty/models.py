@@ -52,7 +52,8 @@ class Specialty(models.Model):
     @property
     def name(self):
         match = self._CODE_RE.match(self.title or '')
-        return ' '.join(match.group(2).split()) if match else self.title
+        name = ' '.join(match.group(2).split()) if match else self.title
+        return re.sub(r'\(\s+', '(', re.sub(r'\s+\)', ')', name))
 
     def form_verbose(self):
         return dict(Specialty.TRAINING)[self.form_of_training]

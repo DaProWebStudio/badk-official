@@ -16,3 +16,8 @@ class SpecialtyDetailView(DetailView):
     queryset = model.active.all()
     context_object_name = 'specialty'
     template_name = 'specialty/detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['others'] = Specialty.active.exclude(pk=self.object.pk)[:3]
+        return context
