@@ -1,0 +1,11 @@
+.git
+.env
+.env.*
+**/__pycache__
+**/*.pyc
+media
+staticfiles
+static/node_modules
+static/dist
+backups
+prod_exports
