@@ -1,5 +1,5 @@
 {% extends 'base/base.html' %}
-{% load static i18n imagekit icons %}
+{% load static i18n imagekit icons richtext %}
 
 {% block title %}{{ item.title }}{% endblock %}
 
@@ -14,67 +14,104 @@
         {% url 'news_list' as list_url %}
     {% endif %}
 
-    <section class="px-1 pt-10 pb-8 sm:px-4 sm:pt-14 sm:pb-10">
-        <nav class="mb-5 flex flex-wrap items-center gap-2 text-sm text-muted" aria-label="breadcrumb">
-            <a href="{% url 'index' %}" class="transition-colors hover:text-gold">{% trans 'Главная' %}</a>
-            {% icon 'chevron-right' 'size-3.5' %}
-            <a href="{{ list_url }}" class="transition-colors hover:text-gold">{{ title }}</a>
-        </nav>
-        <p class="eyebrow">{{ title }}</p>
-        <h1 class="page-title max-w-4xl">{{ item.title }}</h1>
-        <p class="mt-5 inline-flex items-center gap-2 text-[15px] font-semibold text-muted">
-            {% icon 'calendar' 'size-4 text-gold' %}
-            {% trans 'Добавлено' %}: <time datetime="{{ item.created|date:'c' }}" class="text-navy">{{ item.created|date:"j E Y" }}</time>
-        </p>
-    </section>
+<div class="flex flex-col gap-4 pt-4">
+    <article>
+        {# ---------- Шапка: фото с заголовком поверх, как у специальности ---------- #}
+        <section class="relative isolate flex min-h-[340px] flex-col justify-end overflow-hidden rounded-[20px] text-white sm:min-h-[400px] sm:rounded-section">
+            <img src="{{ item.image.url }}" alt="" fetchpriority="high" class="absolute inset-0 -z-20 size-full animate-hero-in object-cover">
+            <div class="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgb(10_20_42/.9)_0%,rgb(10_20_42/.65)_50%,rgb(10_20_42/.15)_100%),linear-gradient(0deg,rgb(10_20_42/.85)_0%,rgb(10_20_42/0)_55%)]"></div>
 
-    <div class="grid gap-10 px-1 pb-6 sm:px-4 lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-12">
-        <article class="min-w-0">
-            <figure class="overflow-hidden rounded-card bg-tint sm:rounded-section">
-                <img src="{{ item.image.url }}" alt="{{ item.title }}" class="aspect-[16/9] w-full object-cover">
-            </figure>
+            <div class="max-w-[760px] px-4 pt-10 pb-7 sm:px-8 sm:pb-9 xl:px-12 xl:pb-10">
+                <nav class="mb-6 flex flex-wrap items-center gap-2 text-sm text-white/60" aria-label="breadcrumb">
+                    <a href="{% url 'index' %}" class="transition-colors hover:text-gold-2">{% trans 'Главная' %}</a>
+                    {% icon 'chevron-right' 'size-3.5' %}
+                    <a href="{{ list_url }}" class="transition-colors hover:text-gold-2">{{ title }}</a>
+                </nav>
+                <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm font-semibold text-white/75">
+                    <span class="rounded-lg bg-gold px-2.5 py-1 text-[13px] font-bold text-white">{{ title }}</span>
+                    <time class="inline-flex items-center gap-1.5" datetime="{{ item.created|date:'c' }}">{% icon 'calendar' 'size-4 text-gold-2' %}{{ item.created|date:"j E Y" }}</time>
+                    <span class="inline-flex items-center gap-1.5">{% icon 'clock' 'size-4 text-gold-2' %}{{ read_minutes }} {% trans 'мин чтения' %}</span>
+                </div>
+                <h1 class="mt-3 text-[clamp(22px,2.3vw,32px)] leading-[1.2] font-extrabold tracking-[-.015em] text-balance">{{ item.title }}</h1>
+            </div>
+        </section>
 
+        {# ---------- Текст ---------- #}
+        <div class="mx-auto max-w-[70ch] px-1 pt-10 pb-4 sm:pt-12">
             {% if item.youtube %}
-                <a href="{{ item.youtube }}" class="glightbox-video group mt-6 flex items-center gap-4 rounded-card bg-navy p-4 text-white transition-colors hover:bg-navy-2 sm:p-5">
-                    <span class="grid size-14 shrink-0 place-items-center rounded-full bg-white text-navy shadow-[0_0_0_8px_rgb(255_255_255/.15)] transition-transform group-hover:scale-105">{% icon 'play' 'size-6 translate-x-0.5' %}</span>
+                <a href="{{ item.youtube }}" class="glightbox-video group mb-8 flex items-center gap-4 rounded-3xl bg-navy p-4 text-white transition-colors hover:bg-navy-2 sm:p-5">
+                    <span class="relative grid size-14 shrink-0 place-items-center rounded-full bg-white text-navy">
+                        <span class="ping-soft absolute inset-0 rounded-full bg-white/50"></span>
+                        {% icon 'play' 'relative ml-0.5 size-6 fill-current' %}
+                    </span>
                     <span class="font-bold">{% trans 'Смотреть видео' %}</span>
                 </a>
             {% endif %}
 
             {% if item.description %}
-                <div class="rich mt-8 sm:mt-10 [&_*]:[font-family:inherit]! [&_span]:[font-size:inherit]!">
-                    {% autoescape off %}{{ item.description }}{% endautoescape %}
+                <div class="rich text-base leading-[1.8] sm:text-[17px] [&_*]:[font-family:inherit]! [&_span]:[font-size:inherit]! [&>p:first-child]:text-lg [&>p:first-child]:font-semibold [&>p:first-child]:text-navy sm:[&>p:first-child]:text-xl">
+                    {{ item.description|as_paragraphs }}
                 </div>
             {% endif %}
 
-            {% if item.images.all %}
-                <section class="mt-12">
-                    <h2 class="section-title mb-6 !text-[clamp(24px,2.4vw,32px)]">{% trans 'Фотогалерея' %}</h2>
-                    <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
-                        {% for foo in item.images.all %}
-                            <a class="glightbox group relative block aspect-[4/3] overflow-hidden rounded-2xl bg-tint" href="{{ foo.image.url }}" data-gallery="item-{{ item.pk }}" data-reveal>
-                                {% generateimage 'main:thumbnail' source=foo.image -- alt=item.title loading="lazy" class="size-full object-cover transition-transform duration-[600ms] ease-(--ease-soft) group-hover:scale-105" %}
-                                <span class="absolute inset-0 grid place-items-center bg-navy/0 text-sm font-bold text-white opacity-0 transition duration-300 group-hover:bg-navy/45 group-hover:opacity-100">
-                                    <span class="inline-flex items-center gap-2">{% icon 'image' 'size-4' %}{% trans 'Посмотреть' %}</span>
-                                </span>
-                            </a>
-                        {% endfor %}
-                    </div>
-                </section>
-            {% endif %}
-        </article>
+            {# Поделиться #}
+            <div class="mt-10 flex flex-wrap items-center gap-3 border-t border-line pt-6">
+                <span class="mr-1 inline-flex items-center gap-2 text-sm font-bold text-navy">{% icon 'share-2' 'size-4 text-gold' %}{% trans 'Поделиться' %}</span>
+                {% with share='grid size-10 place-items-center rounded-full bg-tint text-navy transition-colors hover:bg-navy hover:text-white' page_url=request.build_absolute_uri %}
+                <a class="{{ share }}" href="https://wa.me/?text={{ page_url|urlencode:'' }}" target="_blank" rel="noopener" aria-label="WhatsApp">{% icon 'brand-whatsapp' 'size-[18px]' %}</a>
+                <a class="{{ share }}" href="https://t.me/share/url?url={{ page_url|urlencode:'' }}" target="_blank" rel="noopener" aria-label="Telegram">{% icon 'brand-telegram' 'size-[18px]' %}</a>
+                <a class="{{ share }}" href="https://www.facebook.com/sharer/sharer.php?u={{ page_url|urlencode:'' }}" target="_blank" rel="noopener" aria-label="Facebook">{% icon 'brand-facebook' 'size-[18px]' %}</a>
+                <button type="button" class="{{ share }} cursor-pointer" data-copy-link aria-label="{% trans 'Скопировать ссылку' %}">
+                    <span data-copy-icon>{% icon 'link' 'size-[18px]' %}</span>
+                    <span data-copy-done class="hidden text-gold">{% icon 'check' 'size-[18px]' %}</span>
+                </button>
+                {% endwith %}
+            </div>
+        </div>
+    </article>
 
-        <aside class="flex flex-col gap-5 lg:sticky lg:top-28 lg:self-start">
-            {% include 'news/aside.html' %}
-            <a href="{{ list_url }}" class="group flex items-center justify-between gap-4 rounded-card border border-line p-5 transition hover:border-transparent hover:shadow-lift sm:p-6">
-                <span>
-                    <span class="block text-[13px] font-bold tracking-[.08em] text-gold uppercase">{{ title }}</span>
-                    <span class="mt-1 block font-bold text-navy">{% trans 'Смотреть все' %}</span>
-                </span>
-                <span class="grid size-11 shrink-0 place-items-center rounded-full bg-tint text-navy transition-colors group-hover:bg-navy group-hover:text-white">{% icon 'arrow-right' 'size-4' %}</span>
-            </a>
-        </aside>
-    </div>
+    {# ---------- Фотогалерея: мозаика ---------- #}
+    {% if gallery %}
+    <section class="rounded-[20px] bg-tint px-4 py-10 sm:rounded-section sm:px-8 sm:py-14 xl:px-12">
+        <header class="mb-6 flex items-end justify-between gap-4 sm:mb-8">
+            <div>
+                <p class="eyebrow">{% trans 'Фотогалерея' %}</p>
+                <h2 class="section-title">{{ gallery|length }} {% trans 'фото' %}</h2>
+            </div>
+        </header>
+        <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+            {% for photo in gallery %}
+                <a class="glightbox group relative block aspect-[4/3] overflow-hidden rounded-2xl bg-line"
+                   href="{{ photo.image.url }}" data-gallery="item-{{ item.pk }}" data-reveal>
+                    {% generateimage 'main:thumbnail' source=photo.image -- alt="" loading="lazy" class="size-full object-cover transition-transform duration-700 ease-(--ease-soft) group-hover:scale-105" %}
+                    <span class="absolute inset-0 grid place-items-center bg-navy/0 text-white opacity-0 transition duration-300 group-hover:bg-navy/40 group-hover:opacity-100">{% icon 'images' 'size-6' %}</span>
+                </a>
+            {% endfor %}
+    </section>
+    {% endif %}
+
+    {# ---------- Другие материалы раздела ---------- #}
+    {% if others %}
+    <section class="px-4 py-10 sm:px-8 sm:py-14 xl:px-12">
+        {% trans 'Читайте также' as t_eyebrow %}{% trans 'Смотреть все' as t_link %}
+        {% include 'components/section_head.html' with eyebrow=t_eyebrow title=title link=list_url link_text=t_link %}
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {% for other in others %}
+                <a href="{{ other.get_absolute_url }}" data-reveal
+                   class="group flex flex-col overflow-hidden rounded-3xl border border-line bg-white transition duration-300 ease-(--ease-soft) hover:-translate-y-1 hover:border-transparent hover:shadow-lift">
+                    <div class="aspect-[16/10] overflow-hidden bg-tint">
+                        {% generateimage 'main:thumbnail' source=other.image -- alt="" loading="lazy" class="size-full object-cover transition-transform duration-700 ease-(--ease-soft) group-hover:scale-105" %}
+                    </div>
+                    <div class="flex flex-1 flex-col p-6">
+                        <time class="text-[13px] font-semibold text-gold" datetime="{{ other.created|date:'c' }}">{{ other.created|date:"j E Y" }}</time>
+                        <h3 class="mt-2 line-clamp-3 text-lg leading-snug font-bold text-navy transition-colors group-hover:text-gold">{{ other.title }}</h3>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+</div>
 {% endblock %}
 
 {% block scripts %}
@@ -83,5 +120,19 @@
         // GLightbox падает, если по селектору нет элементов
         if (document.querySelector('.glightbox')) GLightbox({selector: '.glightbox'});
         if (document.querySelector('.glightbox-video')) GLightbox({selector: '.glightbox-video', autoplayVideos: true, width: '900px'});
+
+        document.querySelectorAll('[data-copy-link]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                if (!navigator.clipboard) return;
+                navigator.clipboard.writeText(location.href).then(function () {
+                    btn.querySelector('[data-copy-icon]').classList.add('hidden');
+                    btn.querySelector('[data-copy-done]').classList.remove('hidden');
+                    setTimeout(function () {
+                        btn.querySelector('[data-copy-icon]').classList.remove('hidden');
+                        btn.querySelector('[data-copy-done]').classList.add('hidden');
+                    }, 1600);
+                });
+            });
+        });
     </script>
 {% endblock scripts %}

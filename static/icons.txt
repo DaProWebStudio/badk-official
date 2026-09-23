@@ -44,3 +44,6 @@ brand:instagram
 brand:facebook
 brand:youtube
 brand:telegram
+link
+share-2
+images

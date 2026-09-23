@@ -3,6 +3,7 @@ from django.views.generic import TemplateView, FormView, ListView, DetailView
 from django.utils.translation import gettext_lazy as _
 
 from apps.news.models import News, NewsImages
+from apps.news.utils import article_context
 
 
 class NewsListView(ListView):
@@ -38,4 +39,5 @@ class NewsDetailView(DetailView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = _('Новости')
+        context.update(article_context(self.object, News))
         return context
